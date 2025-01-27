@@ -1,0 +1,88 @@
+CREATE TABLE modeles (
+    ref_modele NUMBER(10) constraint pk_ref_modele PRIMARY KEY,
+    modele VARCHAR2(30) constraint nt_modele NOT NULL,
+    marque VARCHAR2(30) constraint nt_marque NOT NULL,
+    puissance VARCHAR2(30) constraint nt_puissance NOT NULL
+);
+
+
+
+CREATE TABLE personnes (
+    cin VARCHAR2(15) PRIMARY KEY,
+    nom VARCHAR2(30) constraint nt_nom NOT NULL constraint ck_nom CHECK (regExp_like(nom,'[a-z]')),
+    prenom VARCHAR2(30) NOT NULL,
+    email VARCHAR2(50) UNIQUE NOT NULL CHECK (email LIKE '%@%.%'),
+    num_tel number UNIQUE NOT NULL );
+
+
+CREATE TABLE vehicules (
+    immatriculation VARCHAR2(30) constraint pk_immatriculation PRIMARY KEY,
+    ref_modele VARCHAR2(30) constraint nt_ref_modele NOT NULL,
+    date_mise_circulation DATE constraint nt_date_mise_circulation  NOT NULL,
+    kilometrage NUMBER(10) constraint pk_kilometrage NOT NULL,
+    prix_demande NUMBER(10, 2) NOT NULL,
+    CONSTRAINT fk_ref_modele FOREIGN KEY (ref_modele) REFERENCES modeles(ref_modele)
+);
+
+CREATE TABLE acquisitions (
+    immatriculation VARCHAR2(30) NOT NULL,
+    cin VARCHAR2(15) NOT NULL,
+    date_debut DATE NOT NULL,
+    date_fin DATE NOT NULL,
+    CONSTRAINT fk_immatriculation FOREIGN KEY (immatriculation) REFERENCES vehicules(immatriculation),
+    CONSTRAINT fk_cin FOREIGN KEY (cin) REFERENCES personnes(cin),
+    CONSTRAINT pk_acquisitions PRIMARY KEY (immatriculation, cin),
+    CONSTRAINT check_dates CHECK (date_fin > date_debut)
+);
+
+CREATE TABLE contrat_vente (
+    ref_contrat VARCHAR2(30) ,
+    immatriculation VARCHAR2(30) NOT NULL,
+    cin VARCHAR2(15) NOT NULL,
+    date_vente DATE DEFAULT SYSDATE,
+    prix_vente NUMBER CHECK (prix_vente > 0) NOT NULL,
+    constraint pk_contrat PRIMARY KEY (ref_contrat,cin,imatriculation),
+    constraint fk_cin_immatriculation foreign key (cin,immatriculation) references acquisitions(cin,immatriculation));
+
+
+
+alter table modeles
+add CONSTRAINT check_puissance CHECK (puissance IN ('4CH', '5CH', '6CH'))
+
+ALTER TABLE vehicules
+ADD CONSTRAINT check_prix_demande CHECK (prix_demande BETWEEN 1000 AND 100000);
+
+
+ALTER TABLE personnes
+ADD CONSTRAINT check_nom_prenom CHECK (nom != prenom);
+
+alter table acquisitions modify date_debut NOT NULL;
+
+
+ALTER TABLE vehicules
+ADD chasis_number VARCHAR2(30) NOT NULL;
+
+
+prosit 2
+
+create sequence seq_ref_contrat
+start with 104
+increment by 1;
+
+insert into contrat_vente values(to char(seq_ref_contrat.nextval),'cin','immatriculation',sysdate,100000);
+
+
+CREATE VIEW vehicules_read_only AS
+SELECT immatriculation,ref_modele,date_mise_circulation,kilometrage,prix_demande,chasis_number
+FROM vehicules
+WHERE (prix_demande>10000)
+with read only;
+
+
+CREATE VIEW vehicules_3_ans_max AS
+SELECT immatriculation, ref_modele, date_mise_circulation, kilometrage, prix_demande, chasis_number
+FROM vehicules
+WHERE (SYSDATE - TO_DATE(date_mise_circulation, 'YYYY-MM-DD')) / 365 <= 3;
+
+
+CREATE INDEX idx_prix_demande ON vehicules(prix_demande);
