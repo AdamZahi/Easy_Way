@@ -9,9 +9,9 @@ public class Main {
 
         ServiceUser su = new ServiceUser();
         //su.add(new User(1,"Mejri","Eya","mejrieya384@gmail.com","eya123456",99556332, "https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR));
-        //User userToUpdate = new User(1,"Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332);
-       // su.update(userToUpdate);*
-        //User userToDelete = new User(1,"Mejri", "Eya", "mejrieya384@gmail.com", "eya123456",99556332);
+//        User userToUpdate = new User(3,"Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332,"https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR);
+//        su.update(userToUpdate);
+        //User userToDelete = new User(2,"Khalil", "Hlila", "khalilhlila@gmail.com", "kahlil89652",5236987,"https://upload.wikimedia.org/wikipedia/commons/5/56/00_2103_Pinguin_-_Petermann_Island_%28Antarktische_Halbinsel%29.jpg" , Role.PASSAGER);
         //su.delete(userToDelete);
 
         System.out.println(su.getAll());
