@@ -17,8 +17,7 @@ public class Main {
         System.out.println(su.getAll());
         //User u = su.getById(2);
         //System.out.println(u);
-
-
+        //test
     }
 
 }
