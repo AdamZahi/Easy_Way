@@ -1,23 +1,77 @@
 package tn.esprit.test;
 
-import tn.esprit.services.ServiceUser ;
+import tn.esprit.services.ServiceUser;
 import tn.esprit.models.User;
 import tn.esprit.models.Role;
+import tn.esprit.services.reclamationService;
+import tn.esprit.models.reclamations;
+import tn.esprit.services.categorieService;
+import tn.esprit.models.categories;
 
 public class Main {
     public static void main(String[] args) {
 
         ServiceUser su = new ServiceUser();
-        //su.add(new User(1,"Mejri","Eya","mejrieya384@gmail.com","eya123456",99556332, "https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR));
-//        User userToUpdate = new User(3,"Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332,"https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR);
-//        su.update(userToUpdate);
-        //User userToDelete = new User(2,"Khalil", "Hlila", "khalilhlila@gmail.com", "kahlil89652",5236987,"https://upload.wikimedia.org/wikipedia/commons/5/56/00_2103_Pinguin_-_Petermann_Island_%28Antarktische_Halbinsel%29.jpg" , Role.PASSAGER);
-        //su.delete(userToDelete);
+        categorieService cs = new categorieService();
+        reclamationService rs = new reclamationService();
 
-        System.out.println(su.getAll());
-        //User u = su.getById(2);
-        //System.out.println(u);
-        //test
+        // Ajouter un utilisateur
+         //su.add(new User(1, "Bennejma", "ines", "ines@gmail.com", "tayssir123456", 99556332, "https://example.com/image.jpg", Role.ADMINISTRATEUR));
+
+        // Modifier un utilisateur existant
+        // User userToUpdate = new User(3, "Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332, "https://example.com/image.jpg", Role.ADMINISTRATEUR);
+        // su.update(userToUpdate);
+
+        // Supprimer un utilisateur
+        // User userToDelete = new User(2, "Khalil", "Hlila", "khalilhlila@gmail.com", "kahlil89652", 5236987, "https://example.com/image.jpg", Role.PASSAGER);
+        // su.delete(userToDelete);
+
+        // Afficher tous les utilisateurs
+        // System.out.println(su.getAll());
+
+        // Afficher un utilisateur par ID
+        // System.out.println(su.getById(2));
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Ajouter une réclamation
+        // rs.add(new reclamations("ines@gmail.com", 4, "Sujet de test", "Description de test", "En attente", "2024-02-11"));
+
+        // Modifier une réclamation
+        // rs.update(new reclamations(1, "tayssir@gmail.com", 2, "Sujet modifié", "Description modifiée", "Traitée", "2024-02-11"));
+
+        // Supprimer une réclamation
+        // rs.delete(new reclamations(4, "tayssir@gmail.com", 3, "Sujet supprimé", "Description supprimée", "Rejetée", "2024-02-11"));
+
+        // Afficher toutes les réclamations
+       //  System.out.println("Liste des réclamations:");
+        // System.out.println(rs.getAll());
+
+        // Afficher une réclamation par ID
+        // System.out.println(rs.getById(3));
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Ajouter une catégorie
+        // cs.add(new categories("Retard"));
+        // cs.add(new categories("Problème de paiement"));
+        // cs.add(new categories("Chauffeur impoli"));
+        // cs.add(new categories("Propreté du véhicule"));
+        // cs.add(new categories("Autre"));
+
+        // Modifier une catégorie
+         // cs.update(new categories(7, "Retard modifié"));
+
+        // Supprimer une catégorie
+         //cs.delete(new categories(7, "Retard modifié"));
+
+        // Afficher toutes les catégories
+        // System.out.println("Liste des catégories:");
+        // System.out.println(cs.getAll());
+
+        // Afficher une catégorie par ID
+        // System.out.println(cs.getById(2));
     }
-
 }
