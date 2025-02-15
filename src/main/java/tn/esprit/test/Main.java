@@ -10,7 +10,9 @@ import tn.esprit.services.ServiceLigne;
 public class Main {
     public static void main(String[] args) {
 
+        Trajet trajet = new Trajet("01:00",50,"10:00","11:00","Tunis","Lac2","libre");
         ServiceTrajet t = new ServiceTrajet();
+        t.add(trajet);
         t.getAll();
         ServiceStation s = new ServiceStation();
         s.getAll();
