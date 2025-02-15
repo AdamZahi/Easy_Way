@@ -1,9 +1,9 @@
 package tn.esprit.services;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
-import tn.esprit.models.Role;
+import tn.esprit.models.user.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class ServiceUser implements IService<User> {
             pstm.setInt(5, user.getTelephonne());
             pstm.setString(6, user.getPhoto_profil());
             pstm.setString(7, user.getRole().name());
-            pstm.setInt(6, user.getId_user()); // Condition WHERE
+            pstm.setInt(8, user.getId_user()); // Condition WHERE
 
             int rowsUpdated = pstm.executeUpdate();
             if (rowsUpdated > 0) {

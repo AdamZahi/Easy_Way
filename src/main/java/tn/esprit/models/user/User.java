@@ -1,7 +1,4 @@
-package tn.esprit.models;
-
-import java.sql.Date;
-import tn.esprit.models.Role;
+package tn.esprit.models.user;
 
 
 public class User {

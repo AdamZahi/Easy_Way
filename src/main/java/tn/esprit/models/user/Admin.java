@@ -1,6 +1,4 @@
-package tn.esprit.models;
-
-import tn.esprit.models.User;
+package tn.esprit.models.user;
 
 public class Admin extends User{
 

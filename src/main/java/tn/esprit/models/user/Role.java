@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.user;
 
 public enum Role {
     CONDUCTEUR, PASSAGER, ADMINISTRATEUR;
