@@ -41,7 +41,7 @@ public class ServiceUser implements IService<User> {
             ResultSet  rs =stm.executeQuery(qry);
             while (rs.next()){
                 User u = new User();
-                u.setId_user(rs.getInt("id_user"));
+                //u.setId_user(rs.getInt("id_user"));
                 u.setNom(rs.getString("nom"));
                 u.setPrenom(rs.getString("prenom"));
                 u.setEmail(rs.getString("email"));
@@ -72,7 +72,7 @@ public class ServiceUser implements IService<User> {
             if (rs.next()) {
 
                 user = new User(
-                        //rs.getInt("id_user"),
+                      //  rs.getInt(1,id_user),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
@@ -90,9 +90,10 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ? ,photo_profil = ? , role = ? WHERE id_user = ?";
+        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ? ,photo_profil = ? WHERE id_user = ?";
 
         try {
+
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, user.getNom());
             pstm.setString(2, user.getPrenom());
@@ -100,8 +101,7 @@ public class ServiceUser implements IService<User> {
             pstm.setString(4, user.getMot_de_passe());
             pstm.setInt(5, user.getTelephonne());
             pstm.setString(6, user.getPhoto_profil());
-
-            pstm.setInt(8, user.getId_user()); // Condition WHERE
+            pstm.setInt(7, user.getId_user()); // Condition WHERE
 
             int rowsUpdated = pstm.executeUpdate();
             if (rowsUpdated > 0) {
