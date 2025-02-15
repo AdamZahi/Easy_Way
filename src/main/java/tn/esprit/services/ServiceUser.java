@@ -3,7 +3,6 @@ package tn.esprit.services;
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
-import tn.esprit.models.user.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void add(User user) {
-        String query = "INSERT INTO `user`(`nom`, `prenom`, `email`, `mot_de_passe`, `telephonne` , `photo_profil`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO `user`(`nom`, `prenom`, `email`, `mot_de_passe`, `telephonne` , `photo_profil`) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, user.getNom());
@@ -26,7 +25,6 @@ public class ServiceUser implements IService<User> {
             pstm.setString(4, user.getMot_de_passe());
             pstm.setInt(5, user.getTelephonne());
             pstm.setString(6, user.getPhoto_profil());
-            pstm.setString(7, user.getRole().name());
 
             pstm.executeUpdate();
         }catch (SQLException e){
@@ -50,7 +48,6 @@ public class ServiceUser implements IService<User> {
                 u.setMot_de_passe(rs.getString("mot_de_passe"));
                 u.setTelephonne(rs.getInt("telephonne"));
                 u.setPhoto_profil(rs.getString("photo_profil")); // Correction du setter
-                u.setRole(Role.fromString(rs.getString("role"))); // Correction de rs.geString()
 
                 users.add(u);
             }
@@ -81,9 +78,7 @@ public class ServiceUser implements IService<User> {
                         rs.getString("email"),
                         rs.getString("mot_de_passe"),
                         rs.getInt("telephonne"),
-                        rs.getString("photo_profil"),
-                        Role.fromString(rs.getString("role"))
-
+                        rs.getString("photo_profil")
                 );
             }
         } catch (SQLException e) {
@@ -95,7 +90,7 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ? ,photo_profil = ? , role = ? WHERE id_user = ?";
+        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ? ,photo_profil = ? WHERE id_user = ?";
 
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
@@ -105,8 +100,7 @@ public class ServiceUser implements IService<User> {
             pstm.setString(4, user.getMot_de_passe());
             pstm.setInt(5, user.getTelephonne());
             pstm.setString(6, user.getPhoto_profil());
-            pstm.setString(7, user.getRole().name());
-            pstm.setInt(8, user.getId_user()); // Condition WHERE
+            pstm.setInt(7, user.getId_user()); // Condition WHERE
 
             int rowsUpdated = pstm.executeUpdate();
             if (rowsUpdated > 0) {

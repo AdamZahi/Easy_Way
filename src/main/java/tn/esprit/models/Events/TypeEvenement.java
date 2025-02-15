@@ -1,7 +1,5 @@
 package tn.esprit.models.Events;
 
-import tn.esprit.models.user.Role;
-
 public enum TypeEvenement {
     RETARD, INCIDENT, GREVE ;
 
