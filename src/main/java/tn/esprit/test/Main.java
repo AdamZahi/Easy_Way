@@ -16,7 +16,7 @@ public class Main {
         reclamationService rs = new reclamationService();
 
         // Ajouter un utilisateur
-         //su.add(new User(1, "Bennejma", "ines", "ines@gmail.com", "tayssir123456", 99556332, "https://example.com/image.jpg", Role.ADMINISTRATEUR));
+        //su.add(new User(1, "Bennejma", "ines", "ines@gmail.com", "tayssir123456", 99556332, "https://example.com/image.jpg", Role.ADMINISTRATEUR));
 
         // Modifier un utilisateur existant
         // User userToUpdate = new User(3, "Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332, "https://example.com/image.jpg", Role.ADMINISTRATEUR);
@@ -36,8 +36,13 @@ public class Main {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Ajouter une réclamation
-        // rs.add(new reclamations("ines@gmail.com", 4, "Sujet de test", "Description de test", "En attente", "2024-02-11"));
-
+        int categorieId = 7; // ID de la catégorie choisie
+        categories categorieChoisie = cs.getById(categorieId);
+        if (categorieChoisie != null) {
+            rs.add(new reclamations("sana@gmail.com", categorieChoisie, "Sujet de test", "Description de test", "En attente", "2024-02-11"));
+        } else {
+            System.out.println("Erreur : La catégorie avec l'ID " + categorieId + " n'existe pas.");
+        }
         // Modifier une réclamation
         // rs.update(new reclamations(1, "tayssir@gmail.com", 2, "Sujet modifié", "Description modifiée", "Traitée", "2024-02-11"));
 
@@ -45,7 +50,7 @@ public class Main {
         // rs.delete(new reclamations(4, "tayssir@gmail.com", 3, "Sujet supprimé", "Description supprimée", "Rejetée", "2024-02-11"));
 
         // Afficher toutes les réclamations
-       //  System.out.println("Liste des réclamations:");
+        //  System.out.println("Liste des réclamations:");
         // System.out.println(rs.getAll());
 
         // Afficher une réclamation par ID
@@ -62,10 +67,10 @@ public class Main {
         // cs.add(new categories("Autre"));
 
         // Modifier une catégorie
-         // cs.update(new categories(7, "Retard modifié"));
+        // cs.update(new categories(7, "Retard modifié"));
 
         // Supprimer une catégorie
-         //cs.delete(new categories(7, "Retard modifié"));
+        //cs.delete(new categories(7, "Retard modifié"));
 
         // Afficher toutes les catégories
         // System.out.println("Liste des catégories:");

@@ -1,40 +1,39 @@
 package tn.esprit.models;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class reclamations {
 
     private int id;
-
     private String email;
-
-    private int categorieId;
-
+    private categories categorie; // Utilisation de l'objet `categories` au lieu de `int categorieId`
     private String sujet;
     private String statu;
     private String description;
     private String date_creation;
 
-    public reclamations(int id, String email, int categorieId, String sujet, String statu, String description, String date_creation) {
+    // Constructeur avec ID
+    public reclamations(int id, String email, categories categorie, String sujet, String statu, String description, String date_creation) {
         this.id = id;
         this.email = email;
-        this.categorieId = categorieId;
+        this.categorie = categorie;
         this.sujet = sujet;
         this.statu = statu;
         this.description = description;
         this.date_creation = date_creation;
     }
 
-    public reclamations(String email, int categorieId, String sujet, String statu, String description, String date_creation) {
+    // Constructeur sans ID (pour les insertions)
+    public reclamations(String email, categories categorie, String sujet, String statu, String description, String date_creation) {
         this.email = email;
-        this.categorieId = categorieId;
+        this.categorie = categorie;
         this.sujet = sujet;
         this.statu = statu;
         this.description = description;
         this.date_creation = date_creation;
     }
 
+    // Getters et Setters
     public int getId() {
         return id;
     }
@@ -51,12 +50,12 @@ public class reclamations {
         this.email = email;
     }
 
-    public int getCategorieId() {
-        return categorieId;
+    public categories getCategorie() {
+        return categorie;
     }
 
-    public void setCategorieId(int categorieId) {
-        this.categorieId = categorieId;
+    public void setCategorie(categories categorie) {
+        this.categorie = categorie;
     }
 
     public String getSujet() {
@@ -95,12 +94,17 @@ public class reclamations {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         reclamations that = (reclamations) o;
-        return categorieId == that.categorieId && Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(sujet, that.sujet) && Objects.equals(statu, that.statu) && Objects.equals(description, that.description) && Objects.equals(date_creation, that.date_creation);
+        return id == that.id && Objects.equals(email, that.email) &&
+                Objects.equals(categorie, that.categorie) &&
+                Objects.equals(sujet, that.sujet) &&
+                Objects.equals(statu, that.statu) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(date_creation, that.date_creation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, categorieId, sujet, statu, description, date_creation);
+        return Objects.hash(id, email, categorie, sujet, statu, description, date_creation);
     }
 
     @Override
@@ -108,11 +112,11 @@ public class reclamations {
         return "reclamations{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", categorieId=" + categorieId +
+                ", categorie=" + categorie +
                 ", sujet='" + sujet + '\'' +
                 ", statu='" + statu + '\'' +
                 ", description='" + description + '\'' +
-                ", date_creation=" + date_creation +
+                ", date_creation='" + date_creation + '\'' +
                 '}';
     }
 }
