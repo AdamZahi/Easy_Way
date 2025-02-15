@@ -2,6 +2,7 @@ package tn.esprit.services;
 
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.reclamations;
+import tn.esprit.models.categories;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
@@ -14,28 +15,38 @@ public class reclamationService implements IService<reclamations> {
 
     @Override
     public void add(reclamations reclamation) {
+        // Récupérer la catégorie depuis la base de données
+        categorieService cs = new categorieService();
+        categories categorie = cs.getById(reclamation.getCategorie().getId());
+
+        if (categorie == null) {
+            System.out.println("Catégorie introuvable !");
+            return;
+        }
+
         String req = "INSERT INTO reclamation (categorieId, email, sujet, description, statu, date_creation) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, reclamation.getCategorieId());
+            pst.setInt(1, categorie.getId()); // Utilisation de l'ID de la catégorie récupérée
             pst.setString(2, reclamation.getEmail());
             pst.setString(3, reclamation.getSujet());
             pst.setString(4, reclamation.getDescription());
             pst.setString(5, reclamation.getStatu());
             pst.setString(6, reclamation.getDate_creation());
             pst.executeUpdate();
-            System.out.println("Réclamation ajoutée");
+            System.out.println("Réclamation ajoutée avec la catégorie : " + categorie.getType());
         } catch (SQLException e) {
             System.out.println("Erreur lors de l'ajout : " + e.getMessage());
         }
     }
+
 
     @Override
     public void update(reclamations reclamation) {
         String req = "UPDATE reclamation SET categorieId=?, email=?, sujet=?, description=?, statu=?, date_creation=? WHERE id=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, reclamation.getCategorieId());
+            pst.setInt(1, reclamation.getCategorie().getId()); // Utilisation de l'objet categorie
             pst.setString(2, reclamation.getEmail());
             pst.setString(3, reclamation.getSujet());
             pst.setString(4, reclamation.getDescription());
@@ -65,15 +76,18 @@ public class reclamationService implements IService<reclamations> {
     @Override
     public List<reclamations> getAll() {
         List<reclamations> reclamationsList = new ArrayList<>();
-        String req = "SELECT * FROM reclamation";
+        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, " +
+                "c.id AS categorieId, c.type AS categorieType " +
+                "FROM reclamation r JOIN categories c ON r.categorieId = c.id";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
+                categories cat = new categories(rs.getInt("categorieId"), rs.getString("categorieType"));
                 reclamationsList.add(new reclamations(
                         rs.getInt("id"),
                         rs.getString("email"),
-                        rs.getInt("categorieId"),
+                        cat,
                         rs.getString("sujet"),
                         rs.getString("statu"),
                         rs.getString("description"),
@@ -88,17 +102,20 @@ public class reclamationService implements IService<reclamations> {
 
     @Override
     public reclamations getById(int id) {
-        String req = "SELECT * FROM reclamation WHERE id = ?";
+        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, " +
+                "c.id AS categorieId, c.type AS categorieType " +
+                "FROM reclamation r JOIN categories c ON r.categorieId = c.id WHERE r.id = ?";
         reclamations reclamation = null;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
+                categories cat = new categories(rs.getInt("categorieId"), rs.getString("categorieType"));
                 reclamation = new reclamations(
                         rs.getInt("id"),
                         rs.getString("email"),
-                        rs.getInt("categorieId"),
+                        cat,
                         rs.getString("sujet"),
                         rs.getString("statu"),
                         rs.getString("description"),
