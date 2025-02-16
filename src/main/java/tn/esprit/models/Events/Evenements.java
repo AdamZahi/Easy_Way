@@ -3,14 +3,14 @@ package tn.esprit.models.Events;
 import java.util.Date;
 
 public class Evenements {
-    private int id_event, id_ligne_affectee ;
+    private int id_event, id_ligne_affectee, id_createur ;
     private TypeEvenement type_evenement ;
     private String description ;
     private Date date_debut,date_fin;
     private StatusEvenement status_evenement ;
 
     public Evenements() {}
-    public Evenements(int id_event,TypeEvenement type_evenement, int id_ligne_affectee, String description, Date date_debut, Date date_fin, StatusEvenement status_evenement ) {
+    public Evenements(int id_event,TypeEvenement type_evenement, int id_ligne_affectee, String description, Date date_debut, Date date_fin, StatusEvenement status_evenement , int id_createur) {
         this.id_event = id_event;
         this.type_evenement = type_evenement;
         this.id_ligne_affectee = id_ligne_affectee;
@@ -18,6 +18,7 @@ public class Evenements {
         this.date_debut = date_debut;
         this.date_fin = date_fin;
         this.status_evenement = status_evenement ;
+        this.id_createur = id_createur;
     }
     public int getId_event() {
         return id_event;
@@ -88,4 +89,11 @@ public class Evenements {
     }
 
 
+    public int getId_createur() {
+        return id_createur;
+    }
+
+    public void setId_createur(int id_createur) {
+        this.id_createur = id_createur;
+    }
 }

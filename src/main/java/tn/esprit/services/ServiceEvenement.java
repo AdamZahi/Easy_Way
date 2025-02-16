@@ -19,7 +19,8 @@ public class ServiceEvenement implements IService<Evenements> {
 
     @Override
     public void add(Evenements evenements) {
-        String query = "INSERT INTO `evenement`(`type_evenement`, `description_evenement`, `date_debut`, `date_fin`, `ligne_affectee`, `statut_evenement`) VALUES (?,?,?,?,?,?)";
+        String query = "INSERT INTO `evenement`(`type`, `description`, `date_debut`, `date_fin`, `ligne_affectee`, `statut`, `id_createur`) " +
+                "VALUES (?,?,?,?,?,?,?)";
         try{
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1,evenements.getType_evenement().name());//type event
@@ -28,6 +29,8 @@ public class ServiceEvenement implements IService<Evenements> {
             pstm.setDate(4,evenements.getDate_fin());// date fin
             pstm.setInt(5,evenements.getId_ligne_affectee());// id ligne affected
             pstm.setString(6,evenements.getStatus_evenement().name()); // status event
+            pstm.setInt(7,evenements.getId_createur());
+
 
             int rowsAdd = pstm.executeUpdate();
             if (rowsAdd > 0) {
@@ -51,11 +54,11 @@ public class ServiceEvenement implements IService<Evenements> {
                 Evenements event = new Evenements();
                 event.setId_event(rs.getInt("id_evenement"));
                 event.setId_ligne_affectee(rs.getInt("ligne_affectee"));
-                event.setType_evenement(TypeEvenement.fromString(rs.getString("type_evenement")));
-                event.setDescription(rs.getString("description_evenement"));
+                event.setType_evenement(TypeEvenement.fromString(rs.getString("type")));
+                event.setDescription(rs.getString("description"));
                 event.setDate_debut(rs.getDate("date_debut"));
                 event.setDate_fin(rs.getDate("date_fin"));
-                event.setStatus_evenement(StatusEvenement.fromString(rs.getString("statut_evenement")));
+                event.setStatus_evenement(StatusEvenement.fromString(rs.getString("statut")));
 
                 events.add(event);
             }
@@ -76,12 +79,13 @@ public class ServiceEvenement implements IService<Evenements> {
             if (rs.next()) {
 
                 event = new Evenements(rs.getInt("id_evenement"),
-                        TypeEvenement.fromString(rs.getString("type_evenement")),
-                        rs.getInt("statut_evenement"),
-                        rs.getString("description_evenement"),
+                        TypeEvenement.fromString(rs.getString("type")),
+                        rs.getInt("ligne_affectee"),
+                        rs.getString("description"),
                         rs.getDate("date_debut"),
                         rs.getDate("date_fin"),
-                        StatusEvenement.fromString(rs.getString("statut_evenement"))
+                        StatusEvenement.fromString(rs.getString("statut")),
+                        rs.getInt("id_createur")
                 );
             }
         }catch (Exception e){
@@ -92,7 +96,7 @@ public class ServiceEvenement implements IService<Evenements> {
 
     @Override
     public void update(Evenements evenements) {
-        String query = "UPDATE `evenement` SET `type_evenement`= ?,`description_evenement`= ?,`date_debut`= ?,`date_fin`= ?,`ligne_affectee`= ?,`statut_evenement`= ? WHERE id_evenement = ?";
+        String query = "UPDATE `evenement` SET `type`=?,`description`=?,`date_debut`=?,`date_fin`=?,`ligne_affectee`=?,`statut`=? WHERE id_evenement = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1,evenements.getType_evenement().name());//type event

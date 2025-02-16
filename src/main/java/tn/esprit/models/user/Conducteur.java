@@ -1,6 +1,4 @@
-package tn.esprit.models;
-
-import tn.esprit.models.user.User;
+package tn.esprit.models.user;
 
 public class Conducteur extends User {
     private int id_conducteur ;
