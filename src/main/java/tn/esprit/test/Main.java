@@ -1,24 +1,89 @@
 package tn.esprit.test;
 
-import tn.esprit.services.ServiceUser ;
-import tn.esprit.models.User;
-import tn.esprit.models.Role;
+import tn.esprit.services.ServicePosts;
+import tn.esprit.services.ServiceCommentaire;
+import tn.esprit.models.Posts;
+import tn.esprit.models.Commentaire;
+
+import java.sql.Date;
 
 public class Main {
     public static void main(String[] args) {
 
-        ServiceUser su = new ServiceUser();
-        //su.add(new User(1,"Mejri","Eya","mejrieya384@gmail.com","eya123456",99556332, "https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR));
-//        User userToUpdate = new User(3,"Mejri", "Eya", "eya.updated@gmail.com", "newpassword123", 99556332,"https://scontent.ftun9-1.fna.fbcdn.net/v/t39.30808-6/476973258_479698575190094_7338888870042912014_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=Pp-S5DxMB6QQ7kNvgEKM2Jr&_nc_oc=Adhd_oxVUY92NYtQRlxEJuEhDwnGxgC-UERiarqQqg-AW94Q-U9VeC33G6oJ7pq-N98&_nc_zt=23&_nc_ht=scontent.ftun9-1.fna&_nc_gid=A9soiCDa2_K54-OGoc4MCHe&oh=00_AYB7GVFjptoWsQueX5wBlz3EQpjI45NWz8Z9iQdhXTLv8A&oe=67B2CE8E" , Role.ADMINISTRATEUR);
-//        su.update(userToUpdate);
-        //User userToDelete = new User(2,"Khalil", "Hlila", "khalilhlila@gmail.com", "kahlil89652",5236987,"https://upload.wikimedia.org/wikipedia/commons/5/56/00_2103_Pinguin_-_Petermann_Island_%28Antarktische_Halbinsel%29.jpg" , Role.PASSAGER);
-        //su.delete(userToDelete);
+        ServicePosts sp = new ServicePosts();
+        ServiceCommentaire sc = new ServiceCommentaire();
 
-        System.out.println(su.getAll());
-        //User u = su.getById(2);
-        //System.out.println(u);
+        // Ajouter un post
+        // Posts newPost = new Posts();
+        // newPost.setVilleDepart("Tunis");
+        // newPost.setVilleArrivee("Sfax");
+        // newPost.setDate(java.sql.Date.valueOf("2025-02-15"));
+        // newPost.setMessage("Covoiturage pour demain");
+        // sp.add(newPost);
+        // System.out.println("Post ajouté!");
+
+        // Mettre à jour un post
+        // Posts postToUpdate = new Posts();
+        // postToUpdate.setId_post(1);  // Assurez-vous que l'ID du post est valide
+        // postToUpdate.setId_user(3);  // Ajoutez un ID utilisateur valide
+        // postToUpdate.setVilleDepart("Tunis");
+        // postToUpdate.setVilleArrivee("Nabeul");
+        // postToUpdate.setDate(java.sql.Date.valueOf("2025-02-15")); // Ajoutez une date valide
+        // postToUpdate.setMessage("Message mis à jour");
+        // sp.update(postToUpdate);
+
+        // Supprimer un post
+        // Posts postToDelete = new Posts();
+        // postToDelete.setId_post(1);  // Assurez-vous que l'ID du post est valide
+        // sp.delete(postToDelete);
+        // System.out.println("Post supprimé!");
+
+        // Récupérer tous les posts
+        System.out.println("Liste des posts :");
+        sp.getAll().forEach(post -> System.out.println(post));
 
 
+        Commentaire newComment = new Commentaire();
+        newComment.setId_post(1);
+        newComment.setId_user(2);
+        newComment.setContenu("C'est un commentaire test !");
+        newComment.setDate_creat(new java.sql.Date(System.currentTimeMillis()));  // Date actuelle
+
+        sc.add(newComment);
+        System.out.println("Commentaire ajouté!");
+
+
+        System.out.println("Liste des commentaires ");
+        sc.getAll().forEach(commentaire -> System.out.println(commentaire));
+
+
+        System.out.println(" Test de la mise à jour ");
+        Commentaire commentaireToUpdate = new Commentaire();
+        commentaireToUpdate.setId_com(1);
+        commentaireToUpdate.setId_post(1);
+        commentaireToUpdate.setId_user(1);
+        commentaireToUpdate.setContenu("Commentaire mis à jour !");
+        commentaireToUpdate.setDate_creat(new Date(System.currentTimeMillis()));
+
+
+        sc.update(commentaireToUpdate);
+        System.out.println("Commentaire mis à jour !");
+
+
+        System.out.println("Liste des commentaires après mise à jour ");
+        sc.getAll().forEach(commentaire -> System.out.println(commentaire));
+
+
+        System.out.println("Test de suppression ");
+        Commentaire commentaireToDelete = new Commentaire();
+        commentaireToDelete.setId_com(1);
+        sc.delete(commentaireToDelete);
+        System.out.println("Commentaire supprimé !");
+
+
+        System.out.println("Liste des commentaires après suppression ");
+        sc.getAll().forEach(commentaire -> System.out.println(commentaire));
     }
-
 }
+
+

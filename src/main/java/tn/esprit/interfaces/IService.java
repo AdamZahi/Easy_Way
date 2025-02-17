@@ -2,6 +2,7 @@ package tn.esprit.interfaces;
 
 import java.util.List;
 import tn.esprit.models.User;
+import tn.esprit.models.Posts;
 
 public interface IService <T>{
 
@@ -9,7 +10,7 @@ public interface IService <T>{
 
     List<T> getAll();
 
-    User getById(int id_user);
+    //User getById(int id_user);
 
     void update(T t);
 
