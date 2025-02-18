@@ -6,11 +6,11 @@ public class Evenements {
     private int id_event, id_ligne_affectee, id_createur ;
     private TypeEvenement type_evenement ;
     private String description ;
-    private Date date_debut,date_fin;
+    private java.sql.Date date_debut,date_fin;
     private StatusEvenement status_evenement ;
 
     public Evenements() {}
-    public Evenements(int id_event,TypeEvenement type_evenement, int id_ligne_affectee, String description, Date date_debut, Date date_fin, StatusEvenement status_evenement , int id_createur) {
+    public Evenements(int id_event,TypeEvenement type_evenement, int id_ligne_affectee, String description, java.sql.Date date_debut, java.sql.Date date_fin, StatusEvenement status_evenement , int id_createur) {
         this.id_event = id_event;
         this.type_evenement = type_evenement;
         this.id_ligne_affectee = id_ligne_affectee;
@@ -53,18 +53,18 @@ public class Evenements {
     }
 
     public java.sql.Date getDate_debut() {
-        return (java.sql.Date) date_debut;
+        return date_debut;
     }
 
-    public void setDate_debut(Date date_debut) {
+    public void setDate_debut(java.sql.Date date_debut) {
         this.date_debut = date_debut;
     }
 
     public java.sql.Date getDate_fin() {
-        return (java.sql.Date) date_fin;
+        return date_fin;
     }
 
-    public void setDate_fin(Date date_fin) {
+    public void setDate_fin(java.sql.Date date_fin) {
         this.date_fin = date_fin;
     }
 

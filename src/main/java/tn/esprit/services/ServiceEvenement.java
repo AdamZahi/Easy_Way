@@ -25,8 +25,8 @@ public class ServiceEvenement implements IService<Evenements> {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1,evenements.getType_evenement().name());//type event
             pstm.setString(2,evenements.getDescription());// description
-            pstm.setDate(3,evenements.getDate_debut());// date debut
-            pstm.setDate(4,evenements.getDate_fin());// date fin
+            pstm.setDate(3,new java.sql.Date(evenements.getDate_debut().getTime()));// date debut
+            pstm.setDate(4,new java.sql.Date(evenements.getDate_fin().getTime()));// date fin
             pstm.setInt(5,evenements.getId_ligne_affectee());// id ligne affected
             pstm.setString(6,evenements.getStatus_evenement().name()); // status event
             pstm.setInt(7,evenements.getId_createur());
@@ -134,6 +134,23 @@ public class ServiceEvenement implements IService<Evenements> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getLigneInfo(int idLigne) {
+        String ligneInfo = "";
+        String query = "SELECT depart, arret FROM ligne WHERE id = ?";
+        try (PreparedStatement pst = cnx.prepareStatement(query)) {
+            pst.setInt(1, idLigne);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                String depart = rs.getString("depart");
+                String arret = rs.getString("arret");
+                ligneInfo = depart + " - " + arret;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ligneInfo;
     }
 
     public Connection getCnx() {

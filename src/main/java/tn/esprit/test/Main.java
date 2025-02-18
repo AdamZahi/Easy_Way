@@ -14,7 +14,9 @@ public class Main {
     public static void main(String[] args) {
          ServiceConducteur sc = new ServiceConducteur();
         ServiceEvenement se = new ServiceEvenement();
-        se.delete(new Evenements(1, TypeEvenement.RETARD,3,"update",new java.sql.Date(2025,03,01),new java.sql.Date(2025,03,02), StatusEvenement.RESOLU,4) );
+        se.delete(new Evenements(1, TypeEvenement.RETARD,3,"update",
+                new java.sql.Date(2025,03,01),
+                new java.sql.Date(2025,03,02), StatusEvenement.RESOLU,4) );
 
 
         //test Conducteur
