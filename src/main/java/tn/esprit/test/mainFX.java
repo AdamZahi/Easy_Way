@@ -14,14 +14,12 @@ public class mainFX extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/event/addEvenement.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/evenement/EvenementListView.fxml"));
         try {
             Parent root =loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("hello from the other side ");
+            stage.setScene(new Scene(root,1310,750));
+            stage.setTitle("Easy Way");
             stage.show();
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
