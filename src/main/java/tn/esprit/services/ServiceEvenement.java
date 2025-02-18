@@ -1,5 +1,6 @@
 package tn.esprit.services;
 
+import tn.esprit.interfaces.IEvent;
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.models.Events.StatusEvenement;
@@ -10,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceEvenement implements IService<Evenements> {
+public class ServiceEvenement implements IEvent<Evenements> {
     private Connection cnx;
 
     public ServiceEvenement() {
@@ -120,16 +121,16 @@ public class ServiceEvenement implements IService<Evenements> {
     }
 
     @Override
-    public void delete(Evenements evenements) {
+    public void delete(int id_evenements) {
         String query = "DELETE FROM `evenement` WHERE id_evenement = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
-            pstm.setInt(1, evenements.getId_event()); // Suppression basée sur l'ID
+            pstm.setInt(1, id_evenements); // Suppression basée sur l'ID
             int rowsDeleted = pstm.executeUpdate();
             if (rowsDeleted > 0) {
-                System.out.println("L'evenement" + evenements.getId_event() + " a été supprimé avec succès.");
+                System.out.println("L'evenement" + id_evenements + " a été supprimé avec succès.");
             } else {
-                System.out.println("Aucune evenement trouvé avec l'ID " + evenements.getId_event());
+                System.out.println("Aucune evenement trouvé avec l'ID " + id_evenements);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
