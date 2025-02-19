@@ -36,10 +36,10 @@
                </font>
             </Text>
             <Text fill="#847474" layoutX="42.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="un code d'authentification a été envoyé à votre email" />
-            <TextField layoutX="42.0" layoutY="202.0" prefHeight="38.0" prefWidth="308.0" promptText="Entrer votre code " />
+            <TextField fx:id="entrercode" layoutX="42.0" layoutY="202.0" prefHeight="38.0" prefWidth="308.0" promptText="Entrer votre code " />
             <Text layoutX="42.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vous n'avez reçu aucun code ?" />
             <Text fill="#ec0707" layoutX="207.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Renvoyer" />
-            <Button layoutX="42.0" layoutY="303.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="308.0" style="-fx-background-color: #ec0707;" text="Vérifier" textFill="#e7e7e7">
+            <Button fx:id="verifieremail" layoutX="42.0" layoutY="303.0" mnemonicParsing="false" onAction="#checkcode" prefHeight="38.0" prefWidth="308.0" style="-fx-background-color: #ec0707;" text="Vérifier" textFill="#e7e7e7">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
