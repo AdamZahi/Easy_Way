@@ -13,7 +13,7 @@
    <children>
       <AnchorPane prefHeight="70.0" prefWidth="863.0" style="-fx-background-color: #ffffff;">
          <children>
-            <Button layoutX="757.0" layoutY="24.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="92.0" style="-fx-background-color: #000000;" text="Se connecter" textFill="WHITE">
+            <Button fx:id="seconnecter" layoutX="757.0" layoutY="24.0" mnemonicParsing="false" onAction="#directionpageconnexion" prefHeight="34.0" prefWidth="92.0" style="-fx-background-color: #000000;" text="Se connecter" textFill="WHITE">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -58,7 +58,7 @@
                </font>
             </Text>
             <Separator layoutX="14.0" layoutY="66.0" prefHeight="7.0" prefWidth="124.0" style="-fx-background-color: #CD1818;" />
-            <Text layoutX="633.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un compte ">
+            <Text fx:id="creercompte" layoutX="633.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un compte ">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
