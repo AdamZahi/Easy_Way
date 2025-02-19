@@ -28,6 +28,7 @@ public class Commentaire {
         this.date_creat = date_creat;  // Attribuer la date de création
     }
 
+
     // Getters et Setters
     public int getId_com() {
         return id_com;

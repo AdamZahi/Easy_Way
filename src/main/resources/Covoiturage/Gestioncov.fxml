@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1070.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AddCovoiturageController">
+   <children>
+      <BorderPane layoutX="-3.0" prefHeight="83.0" prefWidth="1074.0" style="-fx-background-color: #DDDEC6;">
+         <left>
+            <ImageView fitHeight="74.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@/Covoiturage/LOGOEASY.png" />
+
+               </image>
+            </ImageView>
+         </left>
+         <center>
+            <Label prefHeight="23.0" prefWidth="215.0" text="Ride Share Board" textAlignment="CENTER" textFill="#aa1010" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="23.0" />
+               </font>
+            </Label>
+         </center>
+      </BorderPane>
+
+      <BorderPane layoutY="77.0" prefHeight="581.0" prefWidth="255.0" style="-fx-background-color: #B8C188;" />
+
+      <Label layoutX="496.0" layoutY="140.0" text="Need a Passenger? Post Here!">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+
+      <Label layoutX="482.0" layoutY="220.0" text="Departure City" textFill="#a30606">
+         <font>
+            <Font name="Franklin Gothic Demi Cond" size="18.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="departureCity" layoutX="556.0" layoutY="251.0" prefWidth="150.0" />
+
+      <Label layoutX="479.0" layoutY="295.0" text="Arrival City" textFill="#940909">
+         <font>
+            <Font name="Franklin Gothic Demi" size="18.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="arrivalCity" layoutX="556.0" layoutY="337.0" prefWidth="150.0" />
+
+      <Label layoutX="482.0" layoutY="357.0" text="Date" textFill="#7d0505">
+         <font>
+            <Font name="Franklin Gothic Medium Cond" size="18.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="travelDate" layoutX="556.0" layoutY="392.0" />
+
+      <Label layoutX="482.0" layoutY="448.0" text="When and How You Travel" textFill="#8b0e0e">
+         <font>
+            <Font name="Franklin Gothic Medium Cond" size="18.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="travelDetails" layoutX="484.0" layoutY="480.0" prefHeight="80.0" prefWidth="347.0" text="Enter travel details...">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </TextArea>
+
+      <Button fx:id="ajouter" layoutX="906.0"  onAction="#ajouter" layoutY="530.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="121.0" style="-fx-background-color: #CF321A;" text="ADD" textFill="#e2dcdc">
+         <font>
+            <Font name="Franklin Gothic Medium Cond" size="20.0" />
+         </font>
+      </Button>
+
+   </children>
+</AnchorPane>

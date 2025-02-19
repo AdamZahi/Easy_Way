@@ -14,13 +14,13 @@ public class Main {
         ServiceCommentaire sc = new ServiceCommentaire();
 
         // Ajouter un post
-        // Posts newPost = new Posts();
-        // newPost.setVilleDepart("Tunis");
-        // newPost.setVilleArrivee("Sfax");
-        // newPost.setDate(java.sql.Date.valueOf("2025-02-15"));
-        // newPost.setMessage("Covoiturage pour demain");
-        // sp.add(newPost);
-        // System.out.println("Post ajouté!");
+         Posts newPost = new Posts();
+         newPost.setVilleDepart("sousse");
+         newPost.setVilleArrivee("Sfax");
+         newPost.setDate(java.sql.Date.valueOf("2027-02-15"));
+         newPost.setMessage("Covoiturage pour demain");
+         sp.add(newPost);
+         System.out.println("Post ajouté!");
 
         // Mettre à jour un post
         // Posts postToUpdate = new Posts();

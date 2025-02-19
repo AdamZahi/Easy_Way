@@ -78,4 +78,28 @@ public class ServiceCommentaire implements IService<Commentaire> {
             System.out.println(e.getMessage());
         }
     }
+
+    public List<Commentaire> getCommentsByPostId(int postId) {
+        List<Commentaire> commentairesList = new ArrayList<>();
+        String qry = "SELECT contenu FROM commentaire WHERE id_post = ?";
+        try {
+            PreparedStatement pstm = cnx.prepareStatement(qry);
+            pstm.setInt(1, postId);
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                Commentaire c = new Commentaire();
+                c.setId_com(rs.getInt("id_com"));
+                c.setId_post(rs.getInt("id_post"));
+                c.setId_user(rs.getInt("id_user"));
+                c.setContenu(rs.getString("contenu"));
+                c.setDate_creat(rs.getDate("date_creat"));
+                String nomUser = rs.getString("nom_user"); // Récupérer le nom de l’utilisateur
+                System.out.println(nomUser + ": " + c.getContenu()); // Affichage temporaire
+                commentairesList.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return commentairesList;
+    }
 }
