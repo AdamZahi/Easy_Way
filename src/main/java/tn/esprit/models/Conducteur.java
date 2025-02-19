@@ -13,7 +13,11 @@ public class Conducteur extends User {
     }
 
     public Conducteur(int id_user, String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
-        System.out.println("Création d'un conducteur avec ID : " + id_user);
+        try {
+            System.out.println("Création d'un conducteur avec ID : " + id_user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         setId_user(id_user);
         setNom(nom);
         setPrenom(prenom);
@@ -28,7 +32,7 @@ public class Conducteur extends User {
 
 
     public Conducteur( String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
-        super( nom, prenom, email, mot_de_passe, telephonne, photo_profil);
+        super( nom, prenom, email, mot_de_passe, telephonne , photo_profil);
         this.id_conducteur = id_conducteur ;
         this.numero_permis = numero_permis;
         this.experience = experience;

@@ -183,7 +183,6 @@ public  class ServiceConducteur implements IService<Conducteur> {
         String queryUser = "DELETE FROM user WHERE id_user = ?";
 
         try {
-            // Supprimer le conducteur
             PreparedStatement pstmConducteur = cnx.prepareStatement(queryConducteur);
             pstmConducteur.setInt(1, conducteur.getId_user());
             int rowsDeletedConducteur = pstmConducteur.executeUpdate();
@@ -194,7 +193,6 @@ public  class ServiceConducteur implements IService<Conducteur> {
                 System.out.println("Aucun conducteur trouvé avec l'ID utilisateur " + conducteur.getId_user());
             }
 
-            // Supprimer l'utilisateur uniquement si le conducteur a été supprimé
             PreparedStatement pstmUser = cnx.prepareStatement(queryUser);
             pstmUser.setInt(1, conducteur.getId_user());
             int rowsDeletedUser = pstmUser.executeUpdate();
