@@ -1,12 +1,10 @@
 package tn.esprit.test;
 
-import tn.esprit.services.ServiceUser;
-import tn.esprit.models.User;
-import tn.esprit.models.Role;
-import tn.esprit.services.reclamationService;
-import tn.esprit.models.reclamations;
-import tn.esprit.services.categorieService;
 import tn.esprit.models.categories;
+import tn.esprit.models.reclamations;
+import tn.esprit.services.ServiceUser;
+import tn.esprit.services.categorieService;
+import tn.esprit.services.reclamationService;
 
 public class Main {
     public static void main(String[] args) {

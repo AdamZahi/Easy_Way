@@ -4,7 +4,10 @@ import tn.esprit.interfaces.IService;
 import tn.esprit.models.categories;
 import tn.esprit.util.MyDataBase;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

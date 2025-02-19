@@ -1,8 +1,6 @@
 package tn.esprit.models;
 
-import tn.esprit.models.User;
-
-public class Admin extends User{
+public class Admin extends User {
 
     public Admin() {
         super(); // Appelle le constructeur de la classe User (par défaut)
@@ -10,7 +8,7 @@ public class Admin extends User{
 
     public Admin(int id_user, String nom, String prenom, String email, String mot_de_passe,
                  int telephonne, String photo_profil, Role role) {
-        super(id_user, nom, prenom, email, mot_de_passe, telephonne,photo_profil, role); // Appel du constructeur de User
+        super(id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, role); // Appel du constructeur de User
     }
 
     // Accès aux attributs hérités

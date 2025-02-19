@@ -1,29 +1,25 @@
 package tn.esprit.models;
 
-import java.sql.Date;
-import tn.esprit.models.Role;
-
-
 public class User {
-    private int id_user ;
-    private String nom, prenom,email,mot_de_passe;
-    private int telephonne ;
+    private int id_user;
+    private String nom, prenom, email, mot_de_passe;
+    private int telephonne;
     private String photo_profil; // Nouveau champ
     private Role role; // Nouveau champ ("conducteur" ou "passager")
 
 
-
-    public User(){
+    public User() {
     }
-    public User( int id_user , String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil , Role role  ) {
-        this.id_user = id_user ;
-        this.nom = nom ;
-        this.prenom = prenom ;
-        this.email = email ;
-        this.mot_de_passe = mot_de_passe ;
-        this.telephonne = telephonne ;
-        this.photo_profil=photo_profil;
-        this.role=role;
+
+    public User(int id_user, String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, Role role) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.mot_de_passe = mot_de_passe;
+        this.telephonne = telephonne;
+        this.photo_profil = photo_profil;
+        this.role = role;
     }
 
     public int getId_user() {
