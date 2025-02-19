@@ -11,6 +11,7 @@ import java.util.List;
 public class ServiceUser implements IService<User> {
     private Connection cnx;
     public ServiceUser() {
+
         cnx = MyDataBase.getInstance().getCnx();
     }
 
@@ -131,5 +132,32 @@ public class ServiceUser implements IService<User> {
             System.out.println("Erreur lors de la suppression de l'utilisateur : " + e.getMessage());
         }
     }
+
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
+        User user = null;
+
+        try {
+            PreparedStatement pstm = cnx.prepareStatement(query);
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
+
+            if (rs.next()) {
+                user = new User(
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getInt("telephonne"),
+                        rs.getString("photo_profil")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération de l'utilisateur : " + e.getMessage());
+        }
+
+        return user;
+    }
+
 
 }

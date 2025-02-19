@@ -9,6 +9,13 @@ public class User {
 
 
     public User(){}
+    public User(  String nom, String prenom,String email , String mot_de_passe) {
+        this.nom = nom ;
+        this.prenom = prenom ;
+        this.email = email ;
+        this.mot_de_passe = mot_de_passe ;
+    }
+
     public User(int id_user, String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil ) {
         this.id_user = id_user;
         this.nom = nom ;
@@ -18,7 +25,7 @@ public class User {
         this.telephonne = telephonne ;
         this.photo_profil=photo_profil;
     }
-    public User(  String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil ) {
+    public User(  String nom, String prenom,String email , String mot_de_passe, int telephonne , String photo_profil ) {
         this.nom = nom ;
         this.prenom = prenom ;
         this.email = email ;
@@ -27,12 +34,6 @@ public class User {
         this.photo_profil=photo_profil;
     }
 
-    public User(  String nom, String prenom,String email , String mot_de_passe) {
-        this.nom = nom ;
-        this.prenom = prenom ;
-        this.email = email ;
-        this.mot_de_passe = mot_de_passe ;
-    }
 
 
 
