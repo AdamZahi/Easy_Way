@@ -85,7 +85,7 @@ public class ServiceVehicule implements IService<vehicule> {
     private void addMetro(Metro metro) throws SQLException {
         String query = "INSERT INTO metro (id, longueurReseau, nombreLignes, nombreRames, proprietaire) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, metro.getId());  // Use the same ID as the vehicle's ID
+            statement.setInt(1, metro.getId());
             statement.setDouble(2, metro.getLongueurReseau());
             statement.setInt(3, metro.getNombreLignes());
             statement.setInt(4, metro.getNombreRames());
@@ -358,5 +358,44 @@ public class ServiceVehicule implements IService<vehicule> {
         }
     }
 
+    public int getConducteurId(String nomConducteur, String prenomConducteur) {
+        String query = "SELECT idConducteur FROM conducteur WHERE nom = ? AND prenom = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, nomConducteur);
+            statement.setString(2, prenomConducteur);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("idConducteur");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de l'ID du conducteur : " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public int getTrajetId(String lieuDepart, String lieuArret) {
+        String query = "SELECT id FROM trajet WHERE depart = ? AND arret = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, lieuDepart);
+            statement.setString(2, lieuArret);
+
+
+            ResultSet rs = statement.executeQuery();
+
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de l'ID du trajet : " + e.getMessage());
+        }
+        return -1;
+    }
+
+
 
 }
+
+
+
