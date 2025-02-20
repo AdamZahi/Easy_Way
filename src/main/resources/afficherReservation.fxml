@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="page_map" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ccd899;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.AfficherReservation">
+   <children>
+      <AnchorPane fx:id="mama_anchor" layoutX="15.0" layoutY="15.0" onMouseClicked="#mama_anchor_clicked" prefHeight="369.0" prefWidth="569.0" style="-fx-background-radius: 13; -fx-background-color: white;">
+         <children>
+            <ImageView fitHeight="64.0" fitWidth="68.0" layoutX="491.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="42.0" layoutY="34.0" prefHeight="28.0" prefWidth="272.0" text="Accédez à vos réservations" textFill="#d90202">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="depart" layoutX="67.0" layoutY="178.0" onMousePressed="#depart_pressed" prefHeight="40.0" prefWidth="203.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #aeaeae; -fx-background-color: white; -fx-border-color: #ADD8E6;">
+               <font>
+                  <Font name="Calibri Light" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="DISAPPEAR" />
+               </cursor>
+               <effect>
+                  <Glow />
+               </effect>
+            </TextField>
+            <TextField fx:id="arret" layoutX="285.0" layoutY="178.0" onMousePressed="#arret_pressed" prefHeight="40.0" prefWidth="203.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #aeaeae; -fx-background-color: white; -fx-border-color: #ADD8E6;">
+               <font>
+                  <Font name="Calibri Light" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="DISAPPEAR" />
+               </cursor>
+               <effect>
+                  <Glow />
+               </effect>
+            </TextField>
+            <TextField fx:id="vehicule" layoutX="67.0" layoutY="245.0" onMousePressed="#vehicule_pressed" prefHeight="40.0" prefWidth="203.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #aeaeae; -fx-background-color: white; -fx-border-color: #ADD8E6;">
+               <font>
+                  <Font name="Calibri Light" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="DISAPPEAR" />
+               </cursor>
+               <effect>
+                  <Glow />
+               </effect>
+            </TextField>
+            <TextField fx:id="nb" layoutX="285.0" layoutY="245.0" onMousePressed="#nb_pressed" prefHeight="40.0" prefWidth="203.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #aeaeae; -fx-background-color: white; -fx-border-color: #ADD8E6;">
+               <font>
+                  <Font name="Calibri Light" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="DISAPPEAR" />
+               </cursor>
+               <effect>
+                  <Glow />
+               </effect>
+            </TextField>
+            <ComboBox fx:id="id" layoutX="67.0" layoutY="110.0" onMousePressed="#id_pressed" prefHeight="33.0" prefWidth="238.0" style="-fx-background-radius: 16; -fx-background-color: #ADD8E6; -fx-border-radius: 16; -fx-border-color: #ADD8E6;">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <Label fx:id="title2" layoutX="87.0" layoutY="86.0" prefHeight="20.0" prefWidth="154.0" style="-fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);" text="Réservation">
+               <font>
+                  <Font name="Calibri" size="19.0" />
+               </font>
+            </Label>
+            <Label fx:id="title21" layoutX="78.0" layoutY="157.0" prefHeight="20.0" prefWidth="154.0" style="-fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);" text="Point ed départ">
+               <font>
+                  <Font name="Calibri Light" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="title22" layoutX="296.0" layoutY="157.0" prefHeight="20.0" prefWidth="154.0" style="-fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);" text="Point D'arret">
+               <font>
+                  <Font name="Calibri Light" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="title23" layoutX="296.0" layoutY="224.0" prefHeight="20.0" prefWidth="173.0" style="-fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);" text="Nombre de places réservé">
+               <font>
+                  <Font name="Calibri Light" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="title24" layoutX="78.0" layoutY="224.0" prefHeight="20.0" prefWidth="154.0" style="-fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);" text="Mode de transport">
+               <font>
+                  <Font name="Calibri Light" size="15.0" />
+               </font>
+            </Label>
+            <Hyperlink layoutX="42.0" layoutY="344.0" style="-fx-underline: true;" text="Visit our facebook page" />
+            <Hyperlink layoutX="231.0" layoutY="344.0" style="-fx-underline: true;" text="community" />
+            <Hyperlink layoutX="469.0" layoutY="344.0" style="-fx-underline: true;" text="help" />
+            <Hyperlink layoutX="352.0" layoutY="344.0" style="-fx-underline: true;" text="Réclamation" />
+            <Button layoutX="314.0" layoutY="295.0" mnemonicParsing="false" text="Button" />
+            <Button layoutX="150.0" layoutY="295.0" mnemonicParsing="false" text="Button" />
+            
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
