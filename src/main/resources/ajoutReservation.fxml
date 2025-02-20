@@ -95,8 +95,10 @@
                            <Font size="11.0" />
                         </font>
                      </Hyperlink>
+                     <Label fx:id="erreurLabel" layoutX="112.0" layoutY="283.0" prefHeight="18.0" prefWidth="90.0" />
                   </children>
                </AnchorPane>
+               <Label text="Label" />
             </children>
          </AnchorPane>
        <AnchorPane cacheShape="false" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="322.0">

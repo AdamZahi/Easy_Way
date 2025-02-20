@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import tn.esprit.models.Reservation;
 import tn.esprit.services.ServiceReservation;
@@ -44,6 +45,10 @@ public class AjoutReservation {
 
     @FXML
     private AnchorPane page_map;
+
+    @FXML
+    Label erreurLabel;
+
 
 
     @FXML
@@ -114,12 +119,19 @@ public class AjoutReservation {
     @FXML
     void addReservation(ActionEvent event) {
         ServiceReservation sp = new ServiceReservation();
-        sp.add(new Reservation(depart.getText(),arret.getText(),vehicule.getValue(),nb.getValue()));
-        loc.setVisible(true);
-        arret.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
-        depart.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
-        vehicule.setStyle("-fx-background-radius: 15; -fx-background-color: white; -fx-border-color: #aeaeae; -fx-border-radius: 15;");
-        nb.setStyle("-fx-border-radius: 15px; -fx-border-color: #aeaeae; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+        if (nb.getValue() > 4) {
+            erreurLabel.setText("Le nombre ne doit pas dépasser 4");
+            erreurLabel.setTextFill(Color.RED);
+
+            nb.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+        } else {
+            sp.add(new Reservation(depart.getText(), arret.getText(), vehicule.getValue(), nb.getValue()));
+            loc.setVisible(true);
+            arret.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
+            depart.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
+            vehicule.setStyle("-fx-background-radius: 15; -fx-background-color: white; -fx-border-color: #aeaeae; -fx-border-radius: 15;");
+            nb.setStyle("-fx-border-radius: 15px; -fx-border-color: #aeaeae; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+        }
     }
 
     @FXML

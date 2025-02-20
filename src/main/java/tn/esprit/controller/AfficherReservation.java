@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import tn.esprit.models.Reservation;
 import tn.esprit.services.ServiceReservation;
@@ -47,6 +48,72 @@ public class AfficherReservation {
     @FXML
     private TextField Retour;
 
+    @FXML
+    Label erreurLabel;
+
+
+
+
+    @FXML
+    void supprimer_pressed(MouseEvent event) {
+        Integer selectedId = id.getValue();
+
+        if (selectedId != null) {
+            Reservation reservationToDelete = serviceReservation.getReservationById(selectedId);
+
+            if (reservationToDelete != null) {
+                serviceReservation.delete(reservationToDelete);
+
+                id.getItems().remove(selectedId);
+                depart.clear();
+                arret.clear();
+                vehicule.clear();
+                nb.clear();
+            } else {
+                JOptionPane.showMessageDialog(null, "Reservation not found.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a reservation ID to delete.");
+        }
+    }
+
+    public void modify_reservation(Reservation p) {
+        depart.setText(p.getDepart());
+        arret.setText(p.getArret());
+        vehicule.setText(p.getVehicule());
+        nb.setText(""+p.getNb());
+        mama_anchor.setStyle("-fx-background-radius: 13; -fx-background-color: white;");
+
+    }
+    @FXML
+    void modifier_pressed(MouseEvent event) {
+        Integer selectedId = id.getValue();
+
+        if (selectedId != null) {
+            String newDepart = depart.getText();
+            String newArret = arret.getText();
+            String newVehicule = vehicule.getText();
+            int newNb = Integer.parseInt(nb.getText());
+            ServiceReservation sp = new ServiceReservation();
+            if (newNb > 4) {
+                erreurLabel.setText("Le nombre ne doit pas dépasser 4");
+                erreurLabel.setTextFill(Color.RED);
+
+                nb.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+            } else {
+
+                Reservation updatedReservation = new Reservation(selectedId, newDepart, newArret, newVehicule, newNb);
+                
+                serviceReservation.update(updatedReservation);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a reservation to modify.");
+        }
+    }
+
+
+
     private ServiceReservation serviceReservation = new ServiceReservation();
     @FXML
     public void initialize() {
@@ -67,6 +134,8 @@ public class AfficherReservation {
             }
         });
     }
+
+
 
     public void setReservations(Reservation p) {
         depart.setText(p.getDepart());
@@ -108,7 +177,7 @@ public class AfficherReservation {
         Retour.setStyle(Retour.getStyle() + "-fx-background-color: #008000;");
     }
 
-    @FXML
+    /*@FXML
     void pressed(MouseEvent event) {
         ScaleTransition clickTrans = new ScaleTransition(Duration.millis(50), Supprimer);
         clickTrans.setByX(0.05);
@@ -149,7 +218,7 @@ public class AfficherReservation {
             });
             pause.play();
         });
-    }
+    }*/
 
 
     @FXML

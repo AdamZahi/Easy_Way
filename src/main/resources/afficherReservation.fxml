@@ -102,12 +102,13 @@
                   <Font name="Calibri Light" size="15.0" />
                </font>
             </Label>
-            <Hyperlink layoutX="42.0" layoutY="344.0" style="-fx-underline: true;" text="Visit our facebook page" />
-            <Hyperlink layoutX="231.0" layoutY="344.0" style="-fx-underline: true;" text="community" />
+            <Hyperlink layoutX="35.0" layoutY="344.0" style="-fx-underline: true;" text="Historique de réservation" />
+            <Hyperlink layoutX="217.0" layoutY="344.0" style="-fx-underline: true;" text="community" />
             <Hyperlink layoutX="469.0" layoutY="344.0" style="-fx-underline: true;" text="help" />
             <Hyperlink layoutX="352.0" layoutY="344.0" style="-fx-underline: true;" text="Réclamation" />
-            <Button layoutX="314.0" layoutY="295.0" mnemonicParsing="false" text="Button" />
-            <Button layoutX="150.0" layoutY="295.0" mnemonicParsing="false" text="Button" />
+            <Button fx:id="modifier" layoutX="317.0" layoutY="309.0" mnemonicParsing="false" onMousePressed="#modifier_pressed" prefHeight="28.0" prefWidth="111.0" text="Modifier" />
+            <Button fx:id="supprimer" layoutX="130.0" layoutY="309.0" mnemonicParsing="false" onMousePressed="#supprimer_pressed" prefHeight="28.0" prefWidth="111.0" text="Supprimer" />
+            <Label fx:id="erreurLabel" layoutX="300.0" layoutY="285.0" prefHeight="18.0" prefWidth="214.0" />
             
          </children>
       </AnchorPane>
