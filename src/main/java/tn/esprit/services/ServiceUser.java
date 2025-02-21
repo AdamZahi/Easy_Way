@@ -5,6 +5,7 @@ import tn.esprit.models.User;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,13 +43,15 @@ public class ServiceUser implements IService<User> {
             ResultSet  rs =stm.executeQuery(qry);
             while (rs.next()){
                 User u = new User();
-                //u.setId_user(rs.getInt("id_user"));
+                u.setId_user(rs.getInt("id_user"));
                 u.setNom(rs.getString("nom"));
                 u.setPrenom(rs.getString("prenom"));
                 u.setEmail(rs.getString("email"));
                 u.setMot_de_passe(rs.getString("mot_de_passe"));
                 u.setTelephonne(rs.getInt("telephonne"));
                 u.setPhoto_profil(rs.getString("photo_profil"));
+//                Timestamp timestamp = rs.getTimestamp("date_creation_compte");
+//                LocalDateTime dateCreation = timestamp.toLocalDateTime();
 
                 users.add(u);
             }

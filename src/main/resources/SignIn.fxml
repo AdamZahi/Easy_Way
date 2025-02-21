@@ -41,12 +41,12 @@
                      <font>
                         <Font name="Arial" size="24.0" />
                      </font></Button>
-                  <Text layoutX="84.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vous avez oublié votre mot de passe ?" underline="true">
+                  <Text layoutX="84.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vous avez oublié votre mot de passe ?" underline="true" onMouseClicked="#RedirectToResetPass">
                      <font>
                         <Font name="Arial" size="15.0" />
                      </font>
                   </Text>
-                  <Text layoutX="142.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ou bien créer un compte " underline="true" wrappingWidth="179.27557373046875">
+                  <Text layoutX="142.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ou bien créer un compte " underline="true" wrappingWidth="179.27557373046875" onMouseClicked="#RedirectToSignUp">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>

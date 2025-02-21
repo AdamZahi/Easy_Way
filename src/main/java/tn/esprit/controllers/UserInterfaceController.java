@@ -28,7 +28,6 @@ public class UserInterfaceController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignIn.fxml"));
             Parent root = loader.load();
 
-            // Obtenir la scène actuelle et la remplacer
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

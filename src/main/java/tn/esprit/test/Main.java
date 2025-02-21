@@ -40,7 +40,7 @@ public class Main {
 
         // User userToDelete = new User(4);
         // su.delete(userToDelete);
-
+        System.out.println(su.getAll());
 
         // User u = su.getById(6);
         // System.out.println(u);
