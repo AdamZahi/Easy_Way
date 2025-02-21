@@ -1,10 +1,11 @@
 package tn.esprit.services;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.user.User;
+import tn.esprit.models.User;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,9 @@ public class ServiceUser implements IService<User> {
                 u.setEmail(rs.getString("email"));
                 u.setMot_de_passe(rs.getString("mot_de_passe"));
                 u.setTelephonne(rs.getInt("telephonne"));
-                u.setPhoto_profil(rs.getString("photo_profil")); // Correction du setter
+                u.setPhoto_profil(rs.getString("photo_profil"));
+//                Timestamp timestamp = rs.getTimestamp("date_creation_compte");
+//                LocalDateTime dateCreation = timestamp.toLocalDateTime();
 
                 users.add(u);
             }
@@ -73,7 +76,7 @@ public class ServiceUser implements IService<User> {
             if (rs.next()) {
 
                 user = new User(
-                        rs.getInt("id_user"),
+                      //  rs.getInt(1,id_user),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
@@ -94,6 +97,7 @@ public class ServiceUser implements IService<User> {
         String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ? ,photo_profil = ? WHERE id_user = ?";
 
         try {
+
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, user.getNom());
             pstm.setString(2, user.getPrenom());

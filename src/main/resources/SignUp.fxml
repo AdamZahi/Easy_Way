@@ -25,7 +25,7 @@
                         <Font name="Arial Rounded MT Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text layoutX="15.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vous avez déjà un compte ? ">
+                  <Text layoutX="15.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="vous avez déjà un compte ? " >
                      <font>
                         <Font name="Arial" size="11.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <Font name="Arial" size="11.0" />
                      </font>
                   </Text>
-                  <Text layoutX="9.0" layoutY="363.0" strokeType="OUTSIDE" strokeWidth="0.0" text="connectez-vous à la place" underline="true">
+                  <Text layoutX="9.0" layoutY="363.0" strokeType="OUTSIDE" strokeWidth="0.0" text="connectez-vous à la place" underline="true" onMouseClicked="#RedirectToSignIn">
                      <font>
                         <Font name="Arial Bold" size="13.0" />
                      </font>
@@ -67,7 +67,7 @@
                         <DropShadow />
                      </effect>
                   </Button>
-                  <Text fontSmoothingType="LCD" layoutX="152.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connectez-vous" underline="true">
+                  <Text fontSmoothingType="LCD" layoutX="152.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connectez-vous" underline="true" onMouseClicked="#RedirectToSignIn">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>

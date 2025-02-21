@@ -2,13 +2,20 @@ package tn.esprit.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import tn.esprit.models.User;
 import tn.esprit.services.ServiceUser;
 
+import java.io.IOException;
 
 
 public class SignInController {
@@ -34,8 +41,8 @@ public class SignInController {
             return;
         }
 
-        ServiceUser serviceUser = new ServiceUser();  // Crée une instance
-        User user = serviceUser.getUserByEmail(email);  // Appelle la méthode
+        ServiceUser serviceUser = new ServiceUser();
+        User user = serviceUser.getUserByEmail(email);
 
         if (user == null) {
             showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.");
@@ -43,13 +50,16 @@ public class SignInController {
             showAlert("Erreur", "Mot de passe incorrect.");
         } else {
             showAlert("Succès", "Connexion réussie !");
-            // TODO : Rediriger vers la page principale après connexion
-            // Exemple : changer de scène en JavaFX
-            // FXMLLoader loader = new FXMLLoader(getClass().getResource("/path/to/main.fxml"));
-            // Parent root = loader.load();
-            // Stage stage = (Stage) signInButton.getScene().getWindow();
-            // stage.setScene(new Scene(root));
-            // stage.show();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UsersList.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) signInButton.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Impossible de charger l'interface utilisateur.");
+            }
         }
     }
 
@@ -59,5 +69,31 @@ public class SignInController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    void RedirectToSignUp(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void RedirectToResetPass(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResetPass.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
