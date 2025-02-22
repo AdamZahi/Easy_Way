@@ -15,7 +15,7 @@ public class MainFx extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/SignUp.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/ResetPass.fxml"));
         try {
             Parent root =loader.load();
             stage.setScene(new Scene(root));

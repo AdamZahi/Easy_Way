@@ -22,7 +22,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <Text fx:id="redirectToSignIn" layoutX="41.0" layoutY="130.0" onMouseClicked="#RedirectToSignIn" strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;  Revenir pour se connecter">
+            <Text fx:id="redirectToSignIn" layoutX="41.0" layoutY="130.0"  strokeType="OUTSIDE" strokeWidth="0.0" text=" &lt;  Revenir pour se connecter">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
