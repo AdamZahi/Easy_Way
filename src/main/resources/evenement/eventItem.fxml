@@ -8,7 +8,7 @@
 
 <HBox fx:id="eventItem" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="1150.0" spacing="15.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.eventItemController">
 <children>
-    <Label fx:id="idType" alignment="CENTER" prefWidth="85.0" text="Type">
+    <Label fx:id="idType" alignment="CENTER" prefWidth="105.0" text="Type">
         <font>
             <Font name="Corbel" size="18.0" />
         </font>
@@ -16,7 +16,7 @@
             <Insets left="10.0" />
         </HBox.margin>
     </Label>
-    <Label fx:id="idDesc" alignment="CENTER" layoutX="10.0" layoutY="28.0" prefHeight="23.0" prefWidth="163.0" text="Description">
+    <Label fx:id="idDesc" alignment="CENTER" layoutX="10.0" layoutY="28.0" prefHeight="23.0" prefWidth="200.0" text="Description">
         <font>
             <Font name="Corbel" size="20.0" />
         </font>
@@ -31,17 +31,17 @@
             <Font name="Corbel" size="20.0" />
         </font>
     </Label>
-    <Label fx:id="idLigne" alignment="CENTER" layoutX="276.0" layoutY="28.0" prefWidth="200.0" text="Ligne">
+    <Label fx:id="idLigne" alignment="CENTER" layoutX="276.0" layoutY="28.0" prefWidth="215.0" text="Ligne">
         <font>
             <Font name="Corbel" size="20.0" />
         </font>
     </Label>
-    <Label fx:id="idStatus" alignment="CENTER" layoutX="367.0" layoutY="28.0" prefWidth="90.0" text="Status">
+    <Label fx:id="idStatus" alignment="CENTER" layoutX="367.0" layoutY="28.0" prefWidth="105.0" text="Status">
         <font>
             <Font name="Corbel" size="20.0" />
         </font>
     </Label>
-    <HBox alignment="CENTER" prefHeight="55.0" prefWidth="186.0" spacing="10.0">
+    <HBox alignment="CENTER" prefHeight="55.0" prefWidth="260.0" spacing="10.0">
         <HBox.margin>
             <Insets left="35.0" />
         </HBox.margin>

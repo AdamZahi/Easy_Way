@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="846.0" prefWidth="1426.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.ListView">
    <left>
       <VBox prefHeight="846.0" prefWidth="190.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
@@ -113,7 +112,7 @@
                         <Insets left="35.0" />
                      </HBox.margin>
                   </Label>
-                  <Pane prefHeight="100.0" prefWidth="366.0" HBox.hgrow="ALWAYS" />
+                  <Pane prefHeight="100.0" prefWidth="592.0" HBox.hgrow="ALWAYS" />
                   <Button mnemonicParsing="false" onAction="#goToAddPage" prefHeight="35.0" prefWidth="92.0" style="-fx-background-color: #008000;" text="Ajouter" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="18.0" />
@@ -133,11 +132,11 @@
                <children>
                   <ScrollPane prefHeight="746.0" prefWidth="1593.0" styleClass="transparent" stylesheets="@profileCard.css">
                      <content>
-                        <VBox fx:id="eventLayout" prefHeight="744.0" prefWidth="1590.0" style="-fx-background-color: ffffff;">
+                        <VBox fx:id="eventLayout" prefHeight="744.0" prefWidth="1235.0" style="-fx-background-color: ffffff;">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="1093.0" spacing="15.0" style="-fx-background-color: e0e0e0;">
+                              <HBox alignment="CENTER_LEFT" prefHeight="55.0" prefWidth="1150.0" spacing="15.0" style="-fx-background-color: e0e0e0;">
                                  <children>
-                                    <Label alignment="CENTER" prefWidth="85.0" text="Type">
+                                    <Label alignment="CENTER" prefHeight="23.0" prefWidth="105.0" text="Type">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -145,7 +144,7 @@
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label alignment="CENTER" layoutX="10.0" layoutY="28.0" prefWidth="163.0" text="Description">
+                                    <Label alignment="CENTER" layoutX="10.0" layoutY="28.0" prefHeight="23.0" prefWidth="200.0" text="Description">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -160,12 +159,12 @@
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="CENTER" layoutX="276.0" layoutY="28.0" prefWidth="200.0" text="Ligne">
+                                    <Label alignment="CENTER" layoutX="276.0" layoutY="28.0" prefHeight="23.0" prefWidth="215.0" text="Ligne">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="CENTER" layoutX="367.0" layoutY="28.0" prefWidth="90.0" text="Status">
+                                    <Label alignment="CENTER" layoutX="367.0" layoutY="28.0" prefHeight="23.0" prefWidth="105.0" text="Status">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -189,7 +188,4 @@
          </children>
       </VBox>
    </center>
-   <right>
-      <HBox maxWidth="0.0" prefHeight="846.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
-   </right>
 </BorderPane>

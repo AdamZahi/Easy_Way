@@ -45,15 +45,11 @@ public class ShowList {
 
     @FXML
     public void initialize() {
-        // Fetch data from the database using ServiceEvenement
         fetchDataFromDatabase();
-
-        // Bind the data to the TableView
         eventTable.setItems(eventData);
     }
 
     private void fetchDataFromDatabase() {
-        // Use ServiceEvenement to get all events
         eventData.addAll(serviceEvenement.getAll());
     }
 
