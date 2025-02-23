@@ -14,7 +14,7 @@ public class mainFX extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/evenement/editEventPage.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
         try {
             Parent root =loader.load();
             stage.setScene(new Scene(root,1080,600));
