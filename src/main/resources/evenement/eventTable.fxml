@@ -3,10 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -105,15 +106,13 @@
             </font>
         </Button>
     </HBox>
-    <TableView fx:id="eventTableView" fixedCellSize="0.0" layoutX="204.0" layoutY="111.0" prefHeight="458.0" prefWidth="844.0" stylesheets="@styles.css">
-      <columns>
-          <TableColumn fx:id="typeColumn" prefWidth="100.0" text="Type" />
-          <TableColumn fx:id="descColumn" prefWidth="120.0" text="Description" />
-          <TableColumn fx:id="debutColumn" minWidth="0.0" prefWidth="90.0" text="Date debut" />
-          <TableColumn fx:id="finColumn" prefWidth="90.0" text="Date fin" />
-          <TableColumn fx:id="lineColumn" prefWidth="150.0" text="Ligne" />
-          <TableColumn fx:id="statusColumn" prefWidth="105.0" text="Status" />
-          <TableColumn fx:id="actionColumn" prefWidth="160.0" text="Actions" />
-      </columns>
-    </TableView>
+    <ScrollPane layoutX="204.0" layoutY="111.0" maxWidth="865.0" prefHeight="460.0" prefWidth="865.0" style="-fx-background-color: transparent;">
+        <GridPane fx:id="eventGrid" hgap="20" prefHeight="458.0" prefWidth="844.0" style="-fx-background-color: transparent;" stylesheets="@styles.css" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
+            </columnConstraints>
+        </GridPane>
+    </ScrollPane>
+
 </Pane>
