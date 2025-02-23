@@ -13,7 +13,7 @@ public class mainFX extends Application {
         launch(args);
     }
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         FXMLLoader loader= new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
         try {
             Parent root =loader.load();
