@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 import tn.esprit.services.ServiceUser;
 
 import java.io.IOException;

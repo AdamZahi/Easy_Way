@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 import tn.esprit.services.ServiceUser;
 
 
