@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,7 +64,7 @@ public class SignInController {
             SessionManager.getInstance().setId_user(user.getId_user());
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UsersList.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
                 Parent root = loader.load();
                 Stage stage = (Stage) signInButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -88,7 +88,7 @@ public class SignInController {
     @FXML
     void RedirectToSignUp(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignUp.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -101,7 +101,7 @@ public class SignInController {
     @FXML
     void RedirectToResetPass(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResetPass.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/ResetPass.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="488.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.NewPassController">
+<AnchorPane prefHeight="488.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.user.NewPassController">
    <children>
       <AnchorPane prefHeight="488.0" prefWidth="435.0" style="-fx-background-color: #ffffff;">
          <children>

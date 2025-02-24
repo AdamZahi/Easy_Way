@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

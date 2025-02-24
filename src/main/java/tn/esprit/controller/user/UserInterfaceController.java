@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +25,7 @@ public class UserInterfaceController {
     @FXML
     void RedirectToSignIn(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignIn.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignIn.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -39,7 +39,7 @@ public class UserInterfaceController {
     @FXML
     void RedirectToSignUp(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignUp.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

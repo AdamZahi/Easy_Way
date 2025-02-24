@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,7 +57,7 @@ public class ResetPassController {
 
     private void RedirectToVerifyCode(ActionEvent event, String email) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/VerifyCode.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/VerifyCode.fxml"));
             Parent root = loader.load();
 
             // Récupérer le contrôleur et passer les valeurs
