@@ -63,7 +63,7 @@ public class ServiceUser implements IService<User> {
         return users;
     }
 
-    @Override
+ //   @Override
     public User getById(int id_user) {
         String query = "SELECT * FROM user WHERE id_user = ?";
         User user = null;
