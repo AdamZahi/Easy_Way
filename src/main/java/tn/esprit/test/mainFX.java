@@ -17,7 +17,7 @@ public class mainFX extends Application {
         FXMLLoader loader= new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
         try {
             Parent root =loader.load();
-            stage.setScene(new Scene(root,1080,600));
+            stage.setScene(new Scene(root,1080,700));
             stage.setTitle("Easy Way");
             stage.show();
         } catch (IOException e) {

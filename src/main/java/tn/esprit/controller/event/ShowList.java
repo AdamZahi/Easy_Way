@@ -6,7 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.event.ServiceEvenement;
 
 public class ShowList {
     @FXML

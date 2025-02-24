@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.event.ServiceEvenement;
 
 import java.io.IOException;
 import java.net.URL;

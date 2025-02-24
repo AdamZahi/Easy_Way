@@ -19,7 +19,7 @@
         <VBox alignment="CENTER" prefHeight="252.0" prefWidth="190.0" styleClass="profile-layout"
               stylesheets="@profileCard.css">
             <ImageView fitHeight="129.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@../assets/avatar.jpg"/>
+                <Image url="@assets/avatar.jpg"/>
             </ImageView>
             <Label text="Adam Zahi" textFill="WHITE">
                 <VBox.margin>

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.models.Events.StatusEvenement;
 import tn.esprit.models.Events.TypeEvenement;
-import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.event.ServiceEvenement;
 import java.io.IOException;
 
 

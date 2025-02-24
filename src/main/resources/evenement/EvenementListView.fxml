@@ -20,7 +20,7 @@
                <children>
                   <ImageView fitHeight="129.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/avatar.jpg" />
+                        <Image url="@assets/avatar.jpg" />
                      </image>
                   </ImageView>
                   <Label text="Adam Zahi" textFill="WHITE">
@@ -120,7 +120,7 @@
                   </Button>
                   <ImageView fitHeight="36.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/search.png" />
+                        <Image url="@assets/search.png" />
                      </image>
                      <HBox.margin>
                         <Insets left="20.0" right="35.0" />

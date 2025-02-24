@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.event.ServiceEvenement;
 
 import java.net.URL;
 import java.util.ResourceBundle;

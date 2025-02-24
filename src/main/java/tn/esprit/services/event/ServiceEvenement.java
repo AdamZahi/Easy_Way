@@ -1,7 +1,6 @@
-package tn.esprit.services;
+package tn.esprit.services.event;
 
 import tn.esprit.interfaces.IEvent;
-import tn.esprit.interfaces.IService;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.models.Events.StatusEvenement;
 import tn.esprit.models.Events.TypeEvenement;
