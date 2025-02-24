@@ -11,7 +11,7 @@ public class ServiceCommentaire implements IService<Commentaire> {
     private Connection cnx;
 
     public ServiceCommentaire() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -49,6 +49,11 @@ public class ServiceCommentaire implements IService<Commentaire> {
             System.out.println(e.getMessage());
         }
         return commentairesList;
+    }
+
+    @Override
+    public Commentaire getById(int id) {
+        return null;
     }
 
     @Override

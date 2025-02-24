@@ -13,7 +13,7 @@ public class ServicePosts implements IService<Posts> {
     private Connection cnx;
 
     public ServicePosts() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -62,6 +62,11 @@ public class ServicePosts implements IService<Posts> {
             System.out.println(e.getMessage());
         }
         return postsList;
+    }
+
+    @Override
+    public Posts getById(int id) {
+        return null;
     }
 
     @Override
