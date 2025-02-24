@@ -1,4 +1,4 @@
-package tn.esprit.controller;
+package tn.esprit.controller.covoiturage;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,8 +12,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import tn.esprit.models.Posts;
-import tn.esprit.services.ServicePosts;
+import tn.esprit.models.covoiturage.Posts;
+import tn.esprit.services.covoiturage.ServicePosts;
 
 import java.net.URL;
 import java.sql.Date;

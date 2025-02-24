@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.covoiturage;
 
 import java.sql.Date;
 

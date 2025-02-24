@@ -1,7 +1,7 @@
-package tn.esprit.services;
+package tn.esprit.services.covoiturage;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.Posts;
+import tn.esprit.models.covoiturage.Posts;
 import tn.esprit.util.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
