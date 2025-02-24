@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="488.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="NewPass">
+<AnchorPane prefHeight="488.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.NewPassController">
    <children>
       <AnchorPane prefHeight="488.0" prefWidth="435.0" style="-fx-background-color: #ffffff;">
          <children>
@@ -29,7 +29,7 @@
             <Text fill="#8e8888" layoutX="57.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="votre mot de passe récent a été réinitialisé, veuillez saisir un nouveau mot de passe pour votre compte" wrappingWidth="283.3902282714844" />
             <PasswordField fx:id="newpasswd" layoutX="57.0" layoutY="184.0" prefHeight="26.0" prefWidth="283.0" promptText="Créer un mot de passe" />
             <PasswordField fx:id="confirmpass" layoutX="57.0" layoutY="231.0" prefHeight="26.0" prefWidth="283.0" promptText="Confirmer votre mot de passe" />
-            <Button fx:id="resetmdp" layoutX="59.0" layoutY="280.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="283.0" style="-fx-background-color: #e40000;" text="Définir le mot de passe " textFill="WHITE">
+            <Button fx:id="resetmdp" layoutX="59.0" layoutY="280.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="283.0" style="-fx-background-color: #e40000;" text="Définir le mot de passe " textFill="WHITE" onMouseClicked="#redirectToSignIn">
                <font>
                   <Font size="16.0" />
                </font>
