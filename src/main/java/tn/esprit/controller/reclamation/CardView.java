@@ -54,7 +54,7 @@ public class CardView {
 
     @FXML
     private VBox cardBox;
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
     
     @FXML
     private TextField txtId;

@@ -49,7 +49,7 @@ public class AjoutReclamation {
     @FXML
     private HBox boxh; // Conteneur pour afficher les réclamations
     private int currentId;
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
 
     @FXML
     private Label categoriecontrol;
