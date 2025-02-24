@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import tn.esprit.models.user.User;
-import tn.esprit.services.ServiceUser;
+import tn.esprit.services.user.ServiceUser;
 
 
 import java.text.SimpleDateFormat;

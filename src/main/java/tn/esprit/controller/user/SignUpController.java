@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import tn.esprit.models.user.User;
-import tn.esprit.services.ServiceUser;
+import tn.esprit.services.user.ServiceUser;
 
 import java.io.IOException;
 import java.security.MessageDigest;

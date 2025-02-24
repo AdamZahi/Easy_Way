@@ -1,5 +1,5 @@
 package tn.esprit.util;
-import tn.esprit.models.User ;
+import tn.esprit.models.user.User ;
 
 public class SessionManager {
     private static SessionManager instance; // Singleton

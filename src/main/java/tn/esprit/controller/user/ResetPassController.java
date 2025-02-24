@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import tn.esprit.services.EmailService;
+import tn.esprit.services.user.EmailService;
 
 import java.io.IOException;
 import java.security.SecureRandom;
