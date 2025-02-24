@@ -189,7 +189,7 @@ public class AjoutReclamation {
 
 
     public void gotoCardView(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CardView.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/CardView.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -258,6 +258,11 @@ public class AjoutReclamation {
         }
         return listeReclamations;
     }
+
+
+
+
+
 
 
 }

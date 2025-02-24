@@ -3,11 +3,13 @@ package tn.esprit.controller.reclamation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tn.esprit.models.reclamation.reclamations;
@@ -61,11 +63,14 @@ public class CardView {
     @FXML
     private GridPane gridPaneReclamations;
 
+    @FXML
+    private ComboBox<String> comboBoxTrier;
+
     private final reclamationService reclamationService = new reclamationService(); // ✅ Ajout de cette ligne
     
 
     public void gotoAjoutReclamation(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/ajoutReclamation.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/ajoutReclamation.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -76,6 +81,7 @@ public class CardView {
     private void initialize() {
         System.out.println("Initialisation de l'interface...");
         afficherReclamations(); // Appel automatique de l'affichage des réclamations
+        comboBoxTrier.getItems().addAll("email", "sujet", "description", " catégorie", "date");
     }
 
 
@@ -127,7 +133,7 @@ public class CardView {
 
     }
     @FXML
-    private void modifierReclamation(ActionEvent event) throws IOException {
+    private void modifierReclamation1(ActionEvent event) throws IOException {
         String idText = txtId.getText().trim();
         if (idText.isEmpty()) {
             lblMessage.setText("Enter ID");
@@ -149,7 +155,7 @@ public class CardView {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutReclamation.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ajoutReclamation.fxml"));
                 Parent root = loader.load();
 
                 AjoutReclamation controller = loader.getController();
@@ -216,12 +222,23 @@ public class CardView {
 
             // 🔴 Bouton de suppression
             Button suppbtn = new Button("Supprimer");
-            suppbtn.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-padding: 5px 10px;");
+            suppbtn.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 3px 7px;");
             suppbtn.setUserData(rec.getId());
+
+            // 🔵 Bouton de modification
+            Button modfbtn = new Button("Modifier");
+            modfbtn.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 3px 7px;");
+            modfbtn.setUserData(rec.getId());
 
             suppbtn.setOnAction(e -> {
                 System.out.println("Bouton Supprimer cliqué pour ID : " + rec.getId());
-                confirmerSuppression(rec.getId());  // Appeler confirmerSuppression avec un seul paramètre
+                confirmerSuppression(rec.getId());
+            });
+
+// ✅ Correction ici
+            modfbtn.setOnAction(e -> {
+                System.out.println("Bouton Modifier cliqué pour ID : " + rec.getId());
+                modifierReclamation(e);  // Passez l'événement ici
             });
 
 
@@ -231,11 +248,17 @@ public class CardView {
             gridPaneReclamations.add(labelSujet, 2, row);
             gridPaneReclamations.add(labelDescription, 3, row);
             gridPaneReclamations.add(labelDate, 4, row);
-            gridPaneReclamations.add(suppbtn, 5, row);// Ajout du bouton à la colonne "Action"
+
+            HBox buttonBox = new HBox(5);
+            buttonBox.setAlignment(Pos.CENTER);
+            buttonBox.getChildren().addAll(suppbtn, modfbtn);
+            gridPaneReclamations.add(buttonBox, 5, row);
 
             row++; // Passer à la ligne suivante
         }
     }
+
+
 
 
     public void supprimerReclamation(ActionEvent actionEvent) {
@@ -310,4 +333,51 @@ public class CardView {
             lblMessage.setText("Erreur lors de la suppression de la réclamation.");
         }
     }
+
+    public void modifierReclamation(ActionEvent actionEvent) {
+        // Récupérer l'ID de la réclamation à partir du bouton cliqué
+        Button clickedButton = (Button) actionEvent.getSource();
+        int reclamationId = (int) clickedButton.getUserData(); // L'ID de la réclamation stocké dans le bouton
+
+        try {
+            // Logique pour charger la réclamation en fonction de l'ID
+            String query = "SELECT id, categorieId, email, sujet, description, statu, date_creation FROM reclamation WHERE id = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, reclamationId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ajoutReclamation.fxml"));
+                Parent root = loader.load();  // Cela pourrait lancer une IOException
+                AjoutReclamation controller = loader.getController();
+                controller.setReclamationDetails(
+                        reclamationId,
+                        rs.getString("email"),
+                        rs.getString("sujet"),
+                        rs.getString("description"),
+                        rs.getString("date_creation"),
+                        rs.getInt("categorieId")
+                );
+                Stage stage = (Stage) gridPaneReclamations.getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                lblMessage.setText("Réclamation non trouvée");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            lblMessage.setText("Erreur avec la base de données");
+        } catch (IOException e) {
+            e.printStackTrace();
+            lblMessage.setText("Erreur de chargement de la page");
+        }
+    }
+
+
+
+
 }
+
+
