@@ -1,12 +1,11 @@
-package tn.esprit.services;
+package tn.esprit.services.user;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

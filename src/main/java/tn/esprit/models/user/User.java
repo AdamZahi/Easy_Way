@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.user;
 
 
 import java.time.LocalDateTime;

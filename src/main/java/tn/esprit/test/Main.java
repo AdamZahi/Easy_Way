@@ -1,13 +1,6 @@
 package tn.esprit.test;
 
-import tn.esprit.services.ServiceAdmin;
-import tn.esprit.services.ServiceUser ;
-import tn.esprit.services.ServiceConducteur ;
-
-
-import tn.esprit.models.Admin;
-import tn.esprit.models.User;
-import tn.esprit.models.Conducteur;
+import tn.esprit.services.user.ServiceUser;
 
 
 public class Main {

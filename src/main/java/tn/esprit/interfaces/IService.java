@@ -1,7 +1,7 @@
 package tn.esprit.interfaces;
 
 import java.util.List;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 
 public interface IService <T>{
 

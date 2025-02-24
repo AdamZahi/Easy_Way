@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +53,7 @@ public class VerifyCodeController {
 
     private void RedirectToNewPass(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/NewPass.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/NewPass.fxml"));
             Parent root = loader.load();
 
             // ✅ Passer l'email à NewPassController

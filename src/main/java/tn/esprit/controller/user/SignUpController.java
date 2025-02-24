@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,8 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import tn.esprit.models.User;
-import tn.esprit.services.ServiceUser;
+import tn.esprit.models.user.User;
+import tn.esprit.services.user.ServiceUser;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -132,7 +132,7 @@ public class SignUpController {
     @FXML
     void RedirectToSignIn(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignIn.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignIn.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

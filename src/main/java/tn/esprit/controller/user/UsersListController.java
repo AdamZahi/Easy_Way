@@ -1,4 +1,4 @@
-package tn.esprit.controllers;
+package tn.esprit.controller.user;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,15 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
-import tn.esprit.models.User;
+import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.time.LocalDate;
-import java.util.Arrays;
 
 public class UsersListController implements Initializable {
 
