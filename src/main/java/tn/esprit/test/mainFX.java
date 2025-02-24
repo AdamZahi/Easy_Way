@@ -1,6 +1,6 @@
 package tn.esprit.test;
 
-import javafx.application.Application;
+import javafx.application.Application ;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainFx extends Application {
+public class mainFX  extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -25,4 +25,5 @@ public class MainFx extends Application {
             System.out.println(e.getMessage());
         }
     }
+
 }

@@ -91,7 +91,7 @@ public class Conducteur extends User {
                 ", photo_profil='" + getPhoto_profil() + '\'' +
                 ", numero_permis='" + numero_permis + '\'' +
                 ", experience='" + experience + '\'' +
-                '}';
+                "}\n";
     }
 }
 

@@ -105,7 +105,7 @@ public  class ServiceConducteur implements IService<Conducteur> {
 
             if (rs.next()) {
                 conducteur = new Conducteur(
-                       /// rs.getInt("id_conducteur"),
+                        rs.getInt("id_conducteur"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),

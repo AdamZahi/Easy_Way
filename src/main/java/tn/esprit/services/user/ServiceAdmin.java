@@ -1,7 +1,8 @@
-package tn.esprit.services.user;
+package tn.esprit.services;
 
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.user.Admin;
+import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
