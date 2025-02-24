@@ -1,4 +1,4 @@
-package tn.esprit.controller;
+package tn.esprit.controller.event;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,15 +1,10 @@
-package tn.esprit.controller;
+package tn.esprit.controller.event;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import tn.esprit.interfaces.IService;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.services.ServiceEvenement;
 

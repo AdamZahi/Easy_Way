@@ -1,4 +1,4 @@
-package tn.esprit.controller;
+package tn.esprit.controller.event;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,7 +8,6 @@ import tn.esprit.models.Events.Evenements;
 import tn.esprit.services.ServiceEvenement;
 
 import java.net.URL;
-import java.security.Provider;
 import java.util.ResourceBundle;
 
 public class eventItemController implements Initializable {
