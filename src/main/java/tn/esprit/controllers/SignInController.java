@@ -16,6 +16,8 @@ import tn.esprit.models.user.User;
 import tn.esprit.services.ServiceUser;
 
 import java.io.IOException;
+import tn.esprit.util.SessionManager;
+
 
 
 public class SignInController {
@@ -30,6 +32,13 @@ public class SignInController {
     private Button signInButton;
 
     private ServiceUser serviceUser = new ServiceUser();
+
+    private String email;
+
+    public void setEmail(String email) {
+        this.email = email;
+        System.out.println("Email reçu dans SignInController : " + email);
+    }
 
     @FXML
     void SignIn(ActionEvent event) {
@@ -49,7 +58,11 @@ public class SignInController {
         } else if (!user.getMot_de_passe().equals(mdp)) {
             showAlert("Erreur", "Mot de passe incorrect.");
         } else {
+
             showAlert("Succès", "Connexion réussie !");
+            // Stocker l'utilisateur dans la session
+            SessionManager.getInstance().setId_user(user.getId_user());
+
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/UsersList.fxml"));
                 Parent root = loader.load();
@@ -62,6 +75,7 @@ public class SignInController {
             }
         }
     }
+
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

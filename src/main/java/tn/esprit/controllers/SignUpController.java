@@ -16,6 +16,8 @@ import tn.esprit.models.user.User;
 import tn.esprit.services.ServiceUser;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 public class SignUpController {
@@ -83,8 +85,9 @@ public class SignUpController {
         }
 
         int telephone = Integer.parseInt(telephoneText);
+        String hashedMdp = PasswordHash(mdp);
 
-        su.add(new User(nom, prenom, email, mdp, telephone , "photo"));
+        su.add(new User(nom, prenom, email, hashedMdp, telephone , "photo"));
         showAlert("Succès", "Compte créé avec succès !");
     }
 
@@ -110,6 +113,22 @@ public class SignUpController {
         return phone.matches("\\d{8}");
     }
 
+    public static String PasswordHash(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
+            byte[] rbt = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : rbt) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @FXML
     void RedirectToSignIn(MouseEvent event) {
         try {
@@ -123,5 +142,3 @@ public class SignUpController {
         }
     }
 }
-
-
