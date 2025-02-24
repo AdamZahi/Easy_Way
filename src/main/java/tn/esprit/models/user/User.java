@@ -1,14 +1,42 @@
 package tn.esprit.models.user;
 
 
+import java.time.LocalDateTime;
+
 public class User {
     private int id_user ;
     private String nom, prenom,email,mot_de_passe;
     private int telephonne ;
     private String photo_profil;
+    private LocalDateTime dateCreation; // Assure-toi que cet attribut existe
+
+    // Constructeur
+    public User(int id_user, String nom, String prenom, String email, LocalDateTime dateCreation) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.dateCreation = dateCreation;
+    }
+
+    // Getter et Setter
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
 
 
     public User(){}
+    public User(  String nom, String prenom,String email , String mot_de_passe) {
+        this.nom = nom ;
+        this.prenom = prenom ;
+        this.email = email ;
+        this.mot_de_passe = mot_de_passe ;
+    }
+
     public User(int id_user, String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil ) {
         this.id_user = id_user;
         this.nom = nom ;
@@ -18,7 +46,7 @@ public class User {
         this.telephonne = telephonne ;
         this.photo_profil=photo_profil;
     }
-    public User(  String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil ) {
+    public User(  String nom, String prenom,String email , String mot_de_passe, int telephonne , String photo_profil ) {
         this.nom = nom ;
         this.prenom = prenom ;
         this.email = email ;
@@ -27,12 +55,6 @@ public class User {
         this.photo_profil=photo_profil;
     }
 
-    public User(  String nom, String prenom,String email , String mot_de_passe) {
-        this.nom = nom ;
-        this.prenom = prenom ;
-        this.email = email ;
-        this.mot_de_passe = mot_de_passe ;
-    }
 
 
 
