@@ -2,38 +2,40 @@ package tn.esprit.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import tn.esprit.models.Posts;
 import tn.esprit.services.ServicePosts;
-import java.time.LocalDate;
-
-
 
 import java.net.URL;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class AddCovoiturageController implements Initializable {
 
     @FXML
-    private ComboBox<String> departureCity; // Correspond à fx:id="departureCity" dans le FXML
+    private ComboBox<String> departureCity;
 
     @FXML
-    private ComboBox<String> arrivalCity; // Correspond à fx:id="arrivalCity" dans le FXML
+    private ComboBox<String> arrivalCity;
 
     @FXML
-    private DatePicker travelDate; // Correspond à fx:id="travelDate"
+    private DatePicker travelDate;
 
     @FXML
-    private TextArea travelDetails; // Correspond à fx:id="travelDetails"
+    private TextArea travelDetails;
 
     @FXML
-    private Button ajouter; // Correspond à fx:id="ajouter"
+    private Button ajouter;
 
     private final ServicePosts servicePosts = new ServicePosts();
 
@@ -68,10 +70,11 @@ public class AddCovoiturageController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "La date de départ ne peut pas être dans le passé !");
             return;
         }
-        // Create ServicePost instance
+
+
         ServicePosts sp = new ServicePosts();
 
-        // Create a new Posts object with the form inputs
+
         Posts newPost = new Posts(
                 0, // ID is auto-generated, so set it to 0 or ignore it
                 1, // Replace with the actual user ID
@@ -81,16 +84,30 @@ public class AddCovoiturageController implements Initializable {
                 travelDetails.getText()
         );
 
-        // Add the post using the service method
+
         sp.add(newPost);
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Votre annonce a été ajoutée !");
+
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Viewpost.fxml")); // Adjust path here
+            Parent root = loader.load();
+            Stage stage = (Stage) ajouter.getScene().getWindow();  // Get the current stage
+            stage.setScene(new Scene(root));  // Set the new scene
+            stage.setTitle("View Posts");  // Set the new title for the stage
+            stage.show();  // Show the new scene
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement de la page de visualisation des annonces.");
+        }
+
         departureCity.setValue(null);
         arrivalCity.setValue(null);
         travelDate.setValue(null);
         travelDetails.clear();
     }
 
-    // Méthode pour afficher une alerte
+
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

@@ -11,6 +11,8 @@ import java.util.Optional;
 import tn.esprit.services.ServiceCommentaire;
 import tn.esprit.models.Commentaire;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 
 public class Viewpostcontrolleur {
 
@@ -42,7 +44,6 @@ public class Viewpostcontrolleur {
             Label villeArriveeLabel = new Label("Lieu d’arrivée : " + post.getVilleArrivee());
             Label dateLabel = new Label("Date : " + post.getDate().toString());
 
-            // Section de commentaires
             TextArea commentaireField = new TextArea();
             commentaireField.setPromptText("Ajouter un commentaire...");
             commentaireField.setWrapText(true);
@@ -134,15 +135,17 @@ public class Viewpostcontrolleur {
     }
 
     @FXML
-    private void afficherCommentaires(int postId, VBox postContainer) {
-        List<Commentaire> commentaires = serviceCommentaire.getCommentsByPostId(postId);
+    private void afficherCommentaires(int id_post, VBox postContainer) {
+        ServiceCommentaire serviceCommentaire = new ServiceCommentaire();
+        List<String> commentaires = serviceCommentaire.getCommentsByPostId(id_post);
 
         VBox commentsSection = new VBox();
         commentsSection.setSpacing(5);
-        commentsSection.setStyle("-fx-padding: 5; -fx-background-color: #F0F0F0; -fx-border-color: #ccc;");
+        commentsSection.setStyle("-fx-padding: 5; -fx-background-color: #F0F0F0; -fx-border-color: #ccc; -fx-border-radius: 5px;");
 
         Label title = new Label("Commentaires :");
         title.setStyle("-fx-font-weight: bold; -fx-text-fill: #333;");
+
         commentsSection.getChildren().add(title);
 
         if (commentaires.isEmpty()) {
@@ -150,28 +153,110 @@ public class Viewpostcontrolleur {
             noCommentsLabel.setStyle("-fx-text-fill: #888;");
             commentsSection.getChildren().add(noCommentsLabel);
         } else {
-            for (Commentaire commentaire : commentaires) {
-                System.out.println("Comment: " + commentaire.getContenu());
-                Label commentLabel = new Label(commentaire.getContenu());
+            for (String contenu : commentaires){ // Utilisation de String directement
+                VBox commentBox = new VBox(5);
+                commentBox.setStyle("-fx-padding: 5px; -fx-background-color: white; -fx-border-radius: 5px; -fx-border-color: #ddd; -fx-border-width: 1px;");
+
+                HBox commentRow = new HBox(10);
+                commentRow.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
+
+                Label commentLabel = new Label(contenu); // Utiliser directement la chaîne de caractères
+                commentLabel.setWrapText(true);
                 commentLabel.setStyle("-fx-text-fill: #555;");
-                commentsSection.getChildren().add(commentLabel);
+
+                Button deleteButton = new Button("❌");
+                deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
+
+                deleteButton.setOnAction(event -> handleDeleteComment(contenu, postContainer));
+
+                Button updateButton = new Button("✏️");
+                updateButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
+
+              //  updateButton.setOnAction(event -> handleUpdateComment(contenu, postContainer));
+
+                commentRow.getChildren().addAll(commentLabel, updateButton, deleteButton);
+                commentBox.getChildren().addAll(commentRow, new Separator());
+                commentsSection.getChildren().add(commentBox);
             }
         }
 
         postContainer.getChildren().add(commentsSection);
     }
 
+
+    private void handleDeleteComment(String contenu, VBox postContainer) {
+        Commentaire commentaireToDelete = null;
+
+
+        for (Commentaire c : serviceCommentaire.getAll()) {
+            if (c.getContenu().equals(contenu)) {
+                commentaireToDelete = c;
+                break;
+            }
+        }
+
+        if (commentaireToDelete != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Supprimer le commentaire");
+            alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
+            alert.setContentText("Cette action est irréversible.");
+
+            ButtonType yesButton = new ButtonType("Oui");
+            ButtonType noButton = new ButtonType("Non", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == yesButton) {
+                serviceCommentaire.delete(commentaireToDelete);
+                afficherPosts(); // Refresh the UI after deletion
+                System.out.println("Commentaire supprimé !");
+            }
+        }
+    }
+
+
+//    private void handleUpdateComment(String contenu, VBox postContainer) {
+//        Commentaire commentaireToUpdate = null;
+//
+//        // Find the Commentaire object from the content (again, modify this logic as per your needs)
+//        for (Commentaire c : serviceCommentaire.getAll()) {
+//            if (c.getContenu().equals(contenu)) {
+//                commentaireToUpdate = c;
+//                break;
+//            }
+//        }
+//
+//        if (commentaireToUpdate != null) {
+//            TextInputDialog dialog = new TextInputDialog(commentaireToUpdate.getContenu());
+//            dialog.setTitle("Modifier le commentaire");
+//            dialog.setHeaderText("Mettez à jour votre commentaire");
+//            dialog.setContentText("Nouveau contenu :");
+//
+//            Optional<String> result = dialog.showAndWait();
+//            result.ifPresent(newText -> {
+//                commentaireToUpdate.setContenu(newText);
+//                commentaireToUpdate.setDate_creat(new java.sql.Date(System.currentTimeMillis())); // Update the date to current time
+//                serviceCommentaire.update(commentaireToUpdate);
+//                afficherPosts(); // Refresh the UI after update
+//                System.out.println("Commentaire mis à jour !");
+//            });
+//        }
+//    }
+
+
+
+
     private void handleAddComment(ActionEvent event, int postId, TextArea commentaireField) {
         String commentaireText = commentaireField.getText();
         if (!commentaireText.isEmpty()) {
-            int id_user = 3; // À remplacer par l'ID réel de l'utilisateur connecté
+            int id_user = 3;
             java.sql.Date date_creat = new java.sql.Date(System.currentTimeMillis());
 
             Commentaire newComment = new Commentaire(postId, id_user, commentaireText, date_creat);
-            serviceCommentaire.add(newComment); // Utiliser instance
+            serviceCommentaire.add(newComment);
 
             commentaireField.clear();
-            // Refresh the posts and comments section after adding a new comment
+
             afficherPosts();
             System.out.println("Commentaire ajouté avec succès !");
         }

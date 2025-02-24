@@ -14,7 +14,7 @@ public class mainFx extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/Covoiturage/Viewpost.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/Covoiturage/Gestioncov.fxml"));
         try {
             Parent root =loader.load();
             Scene scene = new Scene(root);
