@@ -1,7 +1,7 @@
-package tn.esprit.services;
+package tn.esprit.services.covoiturage;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.Commentaire;
+import tn.esprit.models.covoiturage.Commentaire;
 import tn.esprit.util.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class ServiceCommentaire implements IService<Commentaire> {
     private Connection cnx;
 
     public ServiceCommentaire() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -49,6 +49,11 @@ public class ServiceCommentaire implements IService<Commentaire> {
             System.out.println(e.getMessage());
         }
         return commentairesList;
+    }
+
+
+    public Commentaire getById(int id) {
+        return null;
     }
 
     @Override

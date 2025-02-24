@@ -1,9 +1,11 @@
 package tn.esprit.test;
 
-import tn.esprit.services.ServicePosts;
-import tn.esprit.services.ServiceCommentaire;
-import tn.esprit.models.Posts;
-import tn.esprit.models.Commentaire;
+
+
+import tn.esprit.models.covoiturage.Commentaire;
+import tn.esprit.models.covoiturage.Posts;
+import tn.esprit.services.covoiturage.ServiceCommentaire;
+import tn.esprit.services.covoiturage.ServicePosts;
 
 import java.sql.Date;
 

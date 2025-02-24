@@ -1,7 +1,7 @@
-package tn.esprit.services;
+package tn.esprit.services.covoiturage;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.Posts;
+import tn.esprit.models.covoiturage.Posts;
 import tn.esprit.util.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class ServicePosts implements IService<Posts> {
     private Connection cnx;
 
     public ServicePosts() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -62,6 +62,11 @@ public class ServicePosts implements IService<Posts> {
             System.out.println(e.getMessage());
         }
         return postsList;
+    }
+
+
+    public Posts getById(int id) {
+        return null;
     }
 
     @Override

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.Viewpostcontrolleur">
+<AnchorPane prefHeight="700.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.covoiturage.Viewpostcontrolleur">
    <children>
       <BorderPane prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
          <center>
@@ -38,7 +38,6 @@
             </ImageView>
          </left>
       </BorderPane>
-
       <!-- Sidebar -->
       <VBox layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
          <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
@@ -50,7 +49,7 @@
             </VBox.margin></Label>
          <VBox layoutX="20.0" layoutY="20.0" prefHeight="91.0" prefWidth="202.0">
             <children>
-               <HBox layoutX="20.0" layoutY="20.0" prefHeight="25.0" prefWidth="186.0" spacing="10" style="-fx-background-color: #F4EFE2;">
+               <HBox layoutX="20.0" layoutY="20.0" prefHeight="25.0" prefWidth="186.0" spacing="10">
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@profil.png" />
@@ -65,7 +64,7 @@
                      <Insets left="40.0" right="40.0" />
                   </VBox.margin>
                </HBox>
-               <HBox prefHeight="25.0" prefWidth="155.0" spacing="10">
+               <HBox spacing="10">
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@car.png" />
@@ -77,10 +76,10 @@
                      </HBox.margin>
                   </Label>
                   <VBox.margin>
-<!--                     <Insets left="40.0" top="20.0" />-->
+                     <Insets left="40.0" top="20.0" />
                   </VBox.margin>
                </HBox>
-               <HBox spacing="10">
+               <HBox prefHeight="25.0" prefWidth="139.0" spacing="10" style="-fx-background-color: #F4EFE2;">
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@chatt.png" />
@@ -88,7 +87,7 @@
                   </ImageView>
                   <Label style="-fx-font-size: 16px; -fx-text-fill: #333;" text="Offres" />
                   <VBox.margin>
-                     <Insets left="40.0" top="20.0" />
+                     <Insets left="40.0" right="40.0" top="20.0" />
                   </VBox.margin>
                </HBox>
             </children>
@@ -103,10 +102,6 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <Button style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
-               <VBox.margin>
-                  <Insets left="90.0" />
-               </VBox.margin></Button>
             <VBox.margin>
                <Insets top="360.0" />
             </VBox.margin>
@@ -114,11 +109,12 @@
       </VBox>
 
 
-      <ScrollPane fitToWidth="true" layoutX="366.0" layoutY="109.0" prefHeight="450.0" prefWidth="429.0">
+
+      <ScrollPane fitToWidth="true" layoutX="248.0" layoutY="63.0" prefHeight="640.0" prefWidth="750.0">
          <content>
             <VBox fx:id="postsContainer" prefHeight="459.0" prefWidth="757.0" spacing="10" style="-fx-padding: 10; -fx-background-color: #F4EFE2;">
-               <VBox prefHeight="467.0" prefWidth="547.0" spacing="10" style="-fx-background-color: #F4EFE2; -fx-padding: 15px; -fx-border-color: #ccc; -fx-border-radius: 10px;">
-                  <Label text="Offre Covoiturage" textFill="#000000" alignment="CENTER">
+               <VBox prefHeight="420.0" prefWidth="456.0" spacing="10" style="-fx-background-color: #F4EFE2; -fx-padding: 15px; -fx-border-color: #ccc; -fx-border-radius: 10px;">
+                  <Label alignment="CENTER" text="Offre Covoiturage" textFill="#000000">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -170,8 +166,11 @@
                   </VBox>
 
                   <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10;">
-                     <Button fx:id="deleteButton" style="-fx-background-color: #C10707; -fx-text-fill: #fff; " text="Supprimer" />
-                     <Button fx:id="updateButton" style="-fx-background-color: #667A8A; -fx-text-fill: #fff; -fx-padding: 10 20;" text="Mettre à jour" />
+                     <Button fx:id="deleteButton" prefHeight="37.0" prefWidth="78.0" style="-fx-background-color: #C10707; -fx-text-fill: #fff; " text="Supprimer" />
+                     <Button fx:id="updateButton" prefHeight="10.0" prefWidth="124.0" style="-fx-background-color: #C2D4A9; -fx-text-fill: #fff; -fx-padding: 10 20;" text="Mettre à jour">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin></Button>
                   </HBox>
                   <VBox.margin>
                      <Insets />
