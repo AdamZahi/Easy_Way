@@ -1,10 +1,10 @@
-package tn.esprit.test;
+package tn.esprit.test.reclamation;
 
-import tn.esprit.models.categories;
-import tn.esprit.models.reclamations;
+import tn.esprit.models.reclamation.categories;
+import tn.esprit.models.reclamation.reclamations;
 import tn.esprit.services.ServiceUser;
-import tn.esprit.services.categorieService;
-import tn.esprit.services.reclamationService;
+import tn.esprit.services.reclamation.categorieService;
+import tn.esprit.services.reclamation.reclamationService;
 
 public class Main {
     public static void main(String[] args) {

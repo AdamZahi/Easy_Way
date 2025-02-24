@@ -1,7 +1,7 @@
-package tn.esprit.services;
+package tn.esprit.services.reclamation;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.categories;
+import tn.esprit.models.reclamation.categories;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.Connection;

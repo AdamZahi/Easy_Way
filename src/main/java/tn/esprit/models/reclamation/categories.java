@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.reclamation;
 
 import java.util.Objects;
 
