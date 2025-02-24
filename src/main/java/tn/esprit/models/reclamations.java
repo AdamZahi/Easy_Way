@@ -33,6 +33,10 @@ public class reclamations {
         this.date_creation = date_creation;
     }
 
+    public reclamations() {
+
+    }
+
     // Getters et Setters
     public int getId() {
         return id;

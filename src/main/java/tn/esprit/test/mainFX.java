@@ -19,7 +19,7 @@ public class mainFX extends Application {
     public void start(Stage primaryStage) {
         try {
            URL fxmlUrl = getClass().getResource("/ajoutReclamation.fxml");
-           // URL fxmlUrl = getClass().getResource("/CardView.fxml");
+          //  URL fxmlUrl = getClass().getResource("/CardView.fxml");
             if (fxmlUrl == null) {
                 throw new IOException("Cannot find ajoutReclamation.fxml");
             }

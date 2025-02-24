@@ -6,10 +6,7 @@ import tn.esprit.models.reclamations;
 import tn.esprit.models.categories;
 import tn.esprit.util.MyDataBase;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,4 +128,33 @@ public class reclamationService implements IService<reclamations> {
         }
         return reclamation;
     }
+
+    public List<reclamations> getAllReclamationsSansId() {
+        List<reclamations> reclamationsList = new ArrayList<>();
+        String query = "SELECT id, email, categorieId, sujet, description, statu, date_creation FROM reclamation";
+        categorieService cs = new categorieService(); // Déclaration avant la boucle
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                categories categorie = cs.getById(rs.getInt("categorieId"));
+                reclamations rec = new reclamations(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        categorie,
+                        rs.getString("sujet"),
+                        rs.getString("statu"),
+                        rs.getString("description"),
+                        rs.getString("date_creation")
+                );
+                reclamationsList.add(rec);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reclamationsList;
+    }
+
+
+
 }
