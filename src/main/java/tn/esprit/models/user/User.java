@@ -1,30 +1,62 @@
-package tn.esprit.models;
+package tn.esprit.models.user;
 
-import java.sql.Date;
-import tn.esprit.models.Role;
 
+import java.time.LocalDateTime;
 
 public class User {
     private int id_user ;
     private String nom, prenom,email,mot_de_passe;
     private int telephonne ;
-    private String photo_profil; // Nouveau champ
-    private Role role; // Nouveau champ ("conducteur" ou "passager")
+    private String photo_profil;
+    private LocalDateTime dateCreation; // Assure-toi que cet attribut existe
 
-
-
-    public User(){
+    // Constructeur
+    public User(int id_user, String nom, String prenom, String email, LocalDateTime dateCreation) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.dateCreation = dateCreation;
     }
-    public User( int id_user , String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil , Role role  ) {
-        this.id_user = id_user ;
+
+    // Getter et Setter
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+
+    public User(){}
+    public User(  String nom, String prenom,String email , String mot_de_passe) {
+        this.nom = nom ;
+        this.prenom = prenom ;
+        this.email = email ;
+        this.mot_de_passe = mot_de_passe ;
+    }
+
+    public User(int id_user, String nom, String prenom,String email , String mot_de_passe, int telephonne ,  String photo_profil ) {
+        this.id_user = id_user;
         this.nom = nom ;
         this.prenom = prenom ;
         this.email = email ;
         this.mot_de_passe = mot_de_passe ;
         this.telephonne = telephonne ;
         this.photo_profil=photo_profil;
-        this.role=role;
     }
+    public User(  String nom, String prenom,String email , String mot_de_passe, int telephonne , String photo_profil ) {
+        this.nom = nom ;
+        this.prenom = prenom ;
+        this.email = email ;
+        this.mot_de_passe = mot_de_passe ;
+        this.telephonne = telephonne ;
+        this.photo_profil=photo_profil;
+    }
+
+
+
 
     public int getId_user() {
         return id_user;
@@ -82,25 +114,18 @@ public class User {
         this.photo_profil = photo_profil;
     }
 
-    public Role getRole() {
-        return role;
-    }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {
         return "User{" +
-                "id_user=" + id_user +
-                ", nom='" + nom + '\'' +
+                //"id_user=" + id_user +
+                " nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
                 ", mot_de_passe='" + mot_de_passe + '\'' +
                 ", telephonne=" + telephonne +
                 ", photo_profil='" + photo_profil + '\'' +
-                ", role='" + role + '\'' +
                 '}';
     }
 }
