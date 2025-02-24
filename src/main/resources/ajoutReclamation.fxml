@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.reclamation.AjoutReclamation">
+    <children>
+        <AnchorPane prefHeight="700.0" prefWidth="1076.0" style="-fx-background-color: #E96151;">
+            <children>
+                <Label layoutX="270.0" layoutY="33.0" prefHeight="72.0" prefWidth="410.0" text="Reclamation Clients">
+                    <font>
+                        <Font name="Cooper Black" size="36.0" />
+                    </font>
+                </Label>
+            <AnchorPane layoutX="81.0" layoutY="105.0" prefHeight="494.0" prefWidth="770.0" style="-fx-background-color: #FFFFFF;">
+               <children>
+                    <Label layoutX="55.0" layoutY="58.0" prefHeight="31.0" prefWidth="106.0" text="Email :">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <Label layoutX="55.0" layoutY="104.0" prefHeight="31.0" prefWidth="106.0" text="Sujet :">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <Label layoutX="52.0" layoutY="155.0" prefHeight="31.0" prefWidth="106.0" text="Description :">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <Label layoutX="56.0" layoutY="303.0" prefHeight="38.0" prefWidth="98.0" text="Categorie :">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <Label layoutX="51.0" layoutY="357.0" prefHeight="38.0" prefWidth="118.0" text="Date d'incidence :">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Label>
+                    <TextField fx:id="email" layoutX="182.0" layoutY="62.0" prefHeight="26.0" prefWidth="233.0" promptText="saisir votre mail..." styleClass="shadow" stylesheets="@reclamation/css/grid.css" />
+                    <TextField fx:id="sujet" layoutX="183.0" layoutY="106.0" prefHeight="26.0" prefWidth="234.0" promptText="saisir sujet...." />
+                    <TextField fx:id="descriptionn" layoutX="184.0" layoutY="157.0" prefHeight="132.0" prefWidth="234.0" promptText="description..." />
+                    <DatePicker fx:id="date" layoutX="185.0" layoutY="366.0" prefHeight="26.0" prefWidth="234.0" promptText="JJ/MM/AAAA" />
+                    <Button layoutX="74.0" layoutY="432.0" mnemonicParsing="false" onAction="#addReclamation" prefHeight="31.0" prefWidth="190.0" style="-fx-background-color: #93d49a;" text="Ajouter une réclamtion" />
+                  <Button id="liste" layoutX="299.0" layoutY="432.0" mnemonicParsing="false" onAction="#gotoCardView" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #93d49a;" text="Voir liste" />
+                  <ImageView fitHeight="350.0" fitWidth="272.0" layoutX="508.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@reclamation/images/rec.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="sujetcontrol" layoutX="523.0" layoutY="47.0" prefHeight="18.0" prefWidth="234.0" textFill="#d90a0a">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="emailcontrol" layoutX="518.0" layoutY="30.0" prefHeight="18.0" prefWidth="234.0" textFill="#d91616">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="datecontrol" layoutX="508.0" layoutY="48.0" prefHeight="18.0" prefWidth="242.0" textFill="#df0a0a">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <ImageView fitHeight="56.0" fitWidth="72.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@reclamation/images/logo.png" />
+               </image>
+            </ImageView>
+            </children>
+        </AnchorPane>
+      <Label fx:id="descriptioncontrol" layoutX="222.0" layoutY="375.0" prefHeight="18.0" prefWidth="234.0" textFill="#d40e0e">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="categoriecontrol" layoutX="218.0" layoutY="429.0" prefHeight="18.0" prefWidth="234.0" textFill="#dc1212">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="messagerec" layoutX="194.0" layoutY="108.0" prefHeight="18.0" prefWidth="290.0" textFill="#3067ff">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+        <ComboBox fx:id="categorie" layoutX="265.0" layoutY="415.0" prefHeight="26.0" prefWidth="234.0" promptText="choisir une categorie" />
+    </children>
+</AnchorPane>
