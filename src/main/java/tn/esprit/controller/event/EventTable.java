@@ -1,5 +1,7 @@
 package tn.esprit.controller.event;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,13 +10,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.event.ServiceEvenement;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,16 +28,48 @@ import java.util.ResourceBundle;
 public class EventTable implements Initializable {
 
     ServiceEvenement se = new ServiceEvenement();
+    List<Evenements> events = se.getAll();
     @FXML
     private GridPane eventGrid;
-
+    @FXML
+    private TextField searchField;
+    private ObservableList<Evenements> allEvents = FXCollections.observableArrayList();
+    private ObservableList<Evenements> filteredEvents = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadEvents();
+        loadEvents(events);
+        allEvents.setAll(se.getAll()); // Charger tous les événements
+        filteredEvents.setAll(allEvents);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterEvents(newValue);
+        });
     }
 
-    private void loadEvents() {
-        List<Evenements> events = se.getAll();
+    private void filterEvents(String searchText) {
+        filteredEvents.clear();
+
+        if (searchText == null || searchText.isEmpty()) {
+            filteredEvents.addAll(allEvents);
+        } else {
+            String lowerCaseSearchText = searchText.toLowerCase();
+
+            for (Evenements event : allEvents) {
+                if (event.getType_evenement().toString().toLowerCase().contains(lowerCaseSearchText) ||
+                        event.getDescription().toLowerCase().contains(lowerCaseSearchText) ||
+                        event.getDate_debut().toString().contains(lowerCaseSearchText) ||
+                        event.getDate_fin().toString().contains(lowerCaseSearchText) ||
+                        event.getStatus_evenement().toString().toLowerCase().contains(lowerCaseSearchText)) {
+
+                    filteredEvents.add(event);
+                }
+            }
+            loadEvents(filteredEvents);
+        }
+    }
+
+
+    private void loadEvents(List<Evenements> events) {
         eventGrid.getChildren().clear();
 
         int row = 0;
@@ -106,10 +142,7 @@ public class EventTable implements Initializable {
         editPageController epc = new editPageController();
         if(se.getById(id_event)==null) {
             epc.showAlert("Success", "Événement est supprimée avec succès!");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) eventGrid.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            loadEvents(events);
         }
         else
             epc.showAlert("Error","Error lors de supprission de ce Événement");
@@ -132,4 +165,13 @@ public class EventTable implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+    @FXML
+    void ClearAll(ActionEvent event) {
+        loadEvents(events);
+        searchField.clear();
+    }
+
+
+
+
 }
