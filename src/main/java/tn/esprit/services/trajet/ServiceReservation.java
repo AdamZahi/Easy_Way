@@ -1,8 +1,8 @@
-package tn.esprit.services;
+package tn.esprit.services.trajet;
 
-import tn.esprit.interfaces.IService;
+import tn.esprit.interfaces.trajet.IService;
 import tn.esprit.util.MyDataBase;
-import tn.esprit.models.Reservation;
+import tn.esprit.models.trajet.Reservation;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +79,8 @@ public class ServiceReservation implements IService<Reservation> {
             System.out.println(e.getMessage());
         }
     }
-    public Reservation getReservationById(int id) {
+    @Override
+    public Reservation getById(int id) {
         String query = "SELECT * FROM `reservation` WHERE `id` = ?";
         Reservation reservation = null;
         try {

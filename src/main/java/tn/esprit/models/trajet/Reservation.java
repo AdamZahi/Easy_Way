@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.trajet;
 
 public class Reservation {
     private int id,nb;

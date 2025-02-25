@@ -1,8 +1,8 @@
-package tn.esprit.services;
+package tn.esprit.services.trajet;
 
-import tn.esprit.interfaces.IService;
+import tn.esprit.interfaces.trajet.IService;
 import tn.esprit.util.MyDataBase;
-import tn.esprit.models.Ligne;
+import tn.esprit.models.trajet.Ligne;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +77,10 @@ public class ServiceLigne implements IService<Ligne> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+    @Override
+    public Ligne getById(int id) {
+        System.out.println("non implémenté");
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package tn.esprit.models;
+package tn.esprit.models.trajet;
 
 public class Station {
     private int id,id_trajet,id_ligne;

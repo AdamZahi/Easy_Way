@@ -1,10 +1,9 @@
 package tn.esprit.test;
 
-import tn.esprit.models.Trajet;
-import tn.esprit.models.Station;
-import tn.esprit.services.ServiceTrajet;
-import tn.esprit.services.ServiceStation;
-import tn.esprit.services.ServiceLigne;
+import tn.esprit.models.trajet.Trajet;
+import tn.esprit.services.trajet.ServiceTrajet;
+import tn.esprit.services.trajet.ServiceStation;
+import tn.esprit.services.trajet.ServiceLigne;
 
 
 public class Main {

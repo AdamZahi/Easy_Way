@@ -1,8 +1,11 @@
-package tn.esprit.controller;
+package tn.esprit.controller.trajet;
 
 
 import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 import javafx.animation.ScaleTransition;
@@ -11,16 +14,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import tn.esprit.models.Reservation;
-import tn.esprit.services.ServiceReservation;
-
-import javax.swing.*;
+import tn.esprit.models.trajet.Paiement;
+import tn.esprit.models.trajet.Reservation;
+import tn.esprit.services.trajet.ServiceMap;
+//import tn.esprit.services.trajet.ServicePaiement;
+import tn.esprit.services.trajet.ServiceReservation;
 import java.io.IOException;
-import java.security.cert.PolicyNode;
 import java.util.List;
+import javafx.scene.control.SpinnerValueFactory;
 
 public class AjoutReservation {
 
@@ -43,8 +49,19 @@ public class AjoutReservation {
     private ImageView loc;
 
     @FXML
-    private AnchorPane page_map;
+    private Label control1;
 
+    @FXML
+    private Label control2;
+
+    @FXML
+    private Label control3;
+
+    @FXML
+    private Label control4;
+
+    @FXML
+    private WebView map;
 
     @FXML
     public void initialize() {
@@ -53,31 +70,59 @@ public class AjoutReservation {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1); //min=0 max=100
         nb.setValueFactory(valueFactory);
         loc.setVisible(true);
-
+        ServiceMap serviceMap = new ServiceMap();
+        serviceMap.initializeMap(map);
     }
+
+    @FXML
+    void payer(ActionEvent event) {
+        ServiceReservation sp = new ServiceReservation();
+        List<Reservation> reservations = sp.getAll();
+        //setting up the stage
+        Stage stage;
+        Scene scene;
+        Parent root;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/trajet/AjouterPaiement.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Transition to the next scene
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
 
 //magic link
 
     @FXML
     void showReservation(ActionEvent event) {
         ServiceReservation sp = new ServiceReservation();
-
         List<Reservation> reservations = sp.getAll();
-        for (Reservation p : reservations){
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AfficherReservation.fxml")) ;
-                AnchorPane boc =fxmlLoader.load();
-                AfficherReservation c = fxmlLoader.getController();
-                c.setReservations(p);
-
-                page_map.getChildren().add(boc);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
+        //setting up the stage
+        Stage stage;
+        Scene scene;
+        Parent root;
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/trajet/afficherReservation.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        AfficherReservation c = fxmlLoader.getController();
+        c.setReservations(reservations);
 
+        // Transition to the next scene
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
+
 
     @FXML
     void entered(MouseEvent event) {
@@ -111,15 +156,64 @@ public class AjoutReservation {
         });
     }
 
+    public void deleteLabel(Label label) {
+        if (label.getParent() != null) {
+            ((Pane) label.getParent()).getChildren().remove(label);
+        }
+    }
     @FXML
     void addReservation(ActionEvent event) {
         ServiceReservation sp = new ServiceReservation();
-        sp.add(new Reservation(depart.getText(),arret.getText(),vehicule.getValue(),nb.getValue()));
-        loc.setVisible(true);
-        arret.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
-        depart.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
-        vehicule.setStyle("-fx-background-radius: 15; -fx-background-color: white; -fx-border-color: #aeaeae; -fx-border-radius: 15;");
-        nb.setStyle("-fx-border-radius: 15px; -fx-border-color: #aeaeae; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+        if(!depart.getText().isEmpty() && !arret.getText().isEmpty() && vehicule.getValue() != null && nb.getValue() <= 4){
+            sp.add(new Reservation(depart.getText(), arret.getText(), vehicule.getValue(), nb.getValue()));
+            loc.setVisible(true);
+            arret.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
+            depart.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
+            vehicule.setStyle("-fx-background-radius: 15; -fx-background-color: white; -fx-border-color: #aeaeae; -fx-border-radius: 15;");
+            nb.setStyle("-fx-border-radius: 15px; -fx-border-color: #aeaeae; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+
+            String vehicleType = vehicule.getValue();
+            int numberOfPlaces = nb.getValue();
+
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/trajet/AjouterPaiement.fxml"));
+                Parent root = fxmlLoader.load();
+
+                AjouterPaiement paiementController = fxmlLoader.getController();
+                paiementController.setDepartArret(depart.getText(), arret.getText());
+                paiementController.setMontant(numberOfPlaces, vehicleType);
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            if (nb.getValue() > 4) {
+                control4.setText("Le nombre ne doit pas dépasser 4");
+                control4.setTextFill(Color.RED);
+
+                nb.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+
+            }else {deleteLabel(control4);}
+            if (depart.getText().isEmpty()) {
+                control1.setText("Veillez saisir votre position");
+                control1.setTextFill(Color.RED);
+                depart.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+            }else {deleteLabel(control1);}
+            if (arret.getText().isEmpty()) {
+                control2.setText("Veillez saisir votre destination");
+                control2.setTextFill(Color.RED);
+                arret.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+            }else {deleteLabel(control2);}
+            if (vehicule.getValue() == null) {
+                control3.setText("Veillez choisir votre mode de transport");
+                control3.setTextFill(Color.RED);
+                vehicule.setStyle("-fx-border-radius: 15px; -fx-border-color: red; -fx-background-radius: 15px; -fx-background-color: white; -fx-font-size: 10; -fx-padding: 3px 30px;");
+            }else {deleteLabel(control3);}
+        }
     }
 
     @FXML

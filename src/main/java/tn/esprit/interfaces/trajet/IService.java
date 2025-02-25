@@ -1,4 +1,4 @@
-package tn.esprit.interfaces;
+package tn.esprit.interfaces.trajet;
 
 import java.util.List;
 
@@ -11,5 +11,7 @@ public interface IService <T>{
     void update(T t);
 
     void delete(T t);
+
+    <T> T getById(int t);
 
 }
