@@ -15,7 +15,7 @@ public class mainFx  extends Application {
 
     @Override
     public void start(Stage stage) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/addEventForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
         try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
