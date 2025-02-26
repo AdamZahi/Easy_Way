@@ -29,6 +29,7 @@ import java.util.Objects;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
+import tn.esprit.services.reclamation.MailService;
 
 
 
@@ -109,16 +110,10 @@ public class AjoutReclamation {
         if (sujetText.isEmpty()) {
             sujetcontrol.setText("Le sujet est requis.");
             isValid = false;
-        } else if (!sujetText.matches("^[A-Za-z ]+$")) {
-            sujetcontrol.setText("Le sujet doit contenir uniquement des lettres.");
-            isValid = false;
         }
 
         if (descriptionText.isEmpty()) {
             descriptioncontrol.setText("La description est requise.");
-            isValid = false;
-        } else if (!descriptionText.matches("^[A-Za-z ]+$")) {
-            descriptioncontrol.setText("La description doit contenir uniquement des lettres.");
             isValid = false;
         }
 
@@ -133,7 +128,6 @@ public class AjoutReclamation {
         }
 
         if (isValid) {
-            // ✅ Affichage d'une boîte de dialogue de confirmation
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation d'ajout");
             alert.setHeaderText("Voulez-vous vraiment ajouter cette réclamation ?");
@@ -150,6 +144,16 @@ public class AjoutReclamation {
                         // Mode ajout
                         reclamationService.add(new reclamations(emailText, selectedCategorie, sujetText, "En attente", descriptionText, dateIncident.toString()));
                         messagerec.setText("Réclamation ajoutée avec succès !");
+
+                        // ✅ Envoi d'un mail de confirmation
+                        new Thread(() -> {
+                            String subject = "Confirmation de votre réclamation";
+                            String body = "Bonjour,\n\nVotre réclamation a bien été reçue.\n\nDétails :\n" +
+                                    "Sujet : " + sujetText + "\n" +
+                                    "Description : " + descriptionText + "\n" + "Description : " + descriptionText + "\n" +
+                                    "Date : " + dateIncident.toString() + "\n\nMerci de votre patience.";
+                            MailService.sendMail(emailText, subject, body);
+                        }).start();
                     }
 
                     // ✅ Vider les champs après l'ajout
@@ -159,19 +163,17 @@ public class AjoutReclamation {
                     new Thread(() -> {
                         try {
                             Thread.sleep(3000);
-                            Platform.runLater(() -> messagerec.setText("")); // Exécuter sur le thread JavaFX
+                            Platform.runLater(() -> messagerec.setText(""));
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }).start();
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-
     }
 
     private void clearFields() {
