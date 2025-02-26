@@ -7,7 +7,9 @@ import tn.esprit.services.user.ServiceConducteur ;
 
 
 import tn.esprit.models.user.Conducteur;
+import tn.esprit.models.user.Passager;
 import tn.esprit.services.ServiceEvenement;
+import tn.esprit.services.user.ServicePassager;
 import tn.esprit.services.user.ServiceUser;
 
 
@@ -16,7 +18,25 @@ public class Main {
 
         //    ServiceAdmin sa = new ServiceAdmin();
         //  ServiceConducteur sc = new ServiceConducteur();
-        ServiceUser su = new ServiceUser();
+        // ServiceUser su = new ServiceUser();
+        ServicePassager sp = new ServicePassager();
+
+
+        //test Passager
+//        sp.add(new Passager(1, "test", "test", "test@gmail.com", "testtest", 5566332, "photo", 0));
+
+//
+//        Passager passagerUpdate = new Passager(38, "test1111", "test", "test@gmail.com", "testtest", 5566332, "photo", 0);
+//        System.out.println(passagerUpdate.getId_user());
+//          sp.update(passagerUpdate);
+      //  System.out.println(sp.getAll());
+
+//        Passager p = sp.getById(1);
+//         System.out.println(p);
+
+        Passager passager = new Passager(38);
+
+         sp.delete(passager);
 
 
         // test admin
@@ -41,7 +61,7 @@ public class Main {
 
         // User userToDelete = new User(4);
         // su.delete(userToDelete);
-        System.out.println(su.getAll());
+      //  System.out.println(su.getAll());
 
         // User u = su.getById(6);
         // System.out.println(u);

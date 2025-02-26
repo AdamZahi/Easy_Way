@@ -26,6 +26,11 @@ public class User {
         this.photo_profil = photo_profil;
         this.role = role;
     }
+    // ✅ Ajouter un constructeur qui prend uniquement `id_user`
+    public User(int id_user) {
+        this.id_user = id_user;
+    }
+
 
 
 //    // ✅ Constructeur sans ID (pour création d'utilisateur)
