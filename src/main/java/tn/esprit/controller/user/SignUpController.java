@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import tn.esprit.models.user.User;
-import tn.esprit.services.ServiceUser;
+import tn.esprit.services.user.ServiceUser;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -59,60 +59,83 @@ public class SignUpController {
         String confirmMdp = confirmMdpField.getText();
         String telephoneText = telephonneField.getText().trim();
 
+        // Vérification des champs obligatoires
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty() || confirmMdp.isEmpty() || telephoneText.isEmpty()) {
-            showAlert("Erreur", "Tous les champs doivent être remplis.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis.");
             return;
         }
 
+        // Validation de l'email
         if (!isValidEmail(email)) {
-            showAlert("Erreur", "L'email n'est pas valide. Ex: exemple@mail.com");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "L'email n'est pas valide. Ex: exemple@mail.com");
             return;
         }
 
+        // Validation du mot de passe
         if (!isValidPassword(mdp)) {
-            showAlert("Erreur", "Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
             return;
         }
 
+        // Vérification de la confirmation du mot de passe
         if (!mdp.equals(confirmMdp)) {
-            showAlert("Erreur", "Les mots de passe ne correspondent pas.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Les mots de passe ne correspondent pas.");
             return;
         }
 
+        // Validation du numéro de téléphone
         if (!isValidPhoneNumber(telephoneText)) {
-            showAlert("Erreur", "Le numéro de téléphone est invalide. Il doit contenir uniquement des chiffres (8 chiffres pour la Tunisie).");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le numéro de téléphone est invalide. Il doit contenir uniquement des chiffres (8 chiffres pour la Tunisie).");
             return;
         }
 
         int telephone = Integer.parseInt(telephoneText);
         String hashedMdp = PasswordHash(mdp);
 
-        su.add(new User(nom, prenom, email, hashedMdp, telephone , "photo"));
-        showAlert("Succès", "Compte créé avec succès !");
+        // Ajout de l'utilisateur avec un rôle par défaut (par exemple, USER)
+        User newUser = new User(nom, prenom, email, hashedMdp, telephone, "photo", User.Role.Passager);
+        su.add(newUser);
+
+        showAlert(Alert.AlertType.INFORMATION, "Succès", "Compte créé avec succès !");
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    /**
+     * Affiche une boîte de dialogue d'alerte.
+     */
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
     }
 
+    /**
+     * Vérifie si un email est valide.
+     */
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.matches(emailRegex, email);
     }
 
+    /**
+     * Vérifie si un mot de passe est valide (au moins 8 caractères, une majuscule et un chiffre).
+     */
     private boolean isValidPassword(String password) {
         String passwordRegex = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
         return Pattern.matches(passwordRegex, password);
     }
 
+    /**
+     * Vérifie si un numéro de téléphone est valide (uniquement 8 chiffres pour la Tunisie).
+     */
     private boolean isValidPhoneNumber(String phone) {
         return phone.matches("\\d{8}");
     }
 
+    /**
+     * Hashage du mot de passe avec SHA-256.
+     */
     public static String PasswordHash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -129,6 +152,9 @@ public class SignUpController {
         return null;
     }
 
+    /**
+     * Redirection vers la page de connexion.
+     */
     @FXML
     void RedirectToSignIn(MouseEvent event) {
         try {

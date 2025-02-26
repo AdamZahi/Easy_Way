@@ -24,7 +24,7 @@ public class NewPassController {
     @FXML
     private Button resetmdp;
 
-    private final ServiceUser  userService = new ServiceUser();
+     ServiceUser  userService = new ServiceUser();
 
     private String email; // Stocke l'email récupéré de la page précédente
 
