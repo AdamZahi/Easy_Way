@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -41,9 +40,7 @@ public class EventTable implements Initializable {
         allEvents.setAll(se.getAll()); // Charger tous les événements
         filteredEvents.setAll(allEvents);
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterEvents(newValue);
-        });
+        searchField.textProperty().addListener((observable, oldValue, newValue) ->filterEvents(newValue));
     }
 
     private void filterEvents(String searchText) {
@@ -94,7 +91,7 @@ public class EventTable implements Initializable {
         Text description = new Text("📝 Description: " + evenement.getDescription());
         Text dateDebut = new Text("📅 Début: " + evenement.getDate_debut());
         Text dateFin = new Text("📅 Fin: " + evenement.getDate_fin());
-        Text ligne = new Text("🚋 Ligne: " + evenement.getId_ligne_affectee());
+        Text ligne = new Text("🚋 Ligne: " + se.getLigneInfo(evenement.getId_ligne_affectee()));
         Text status = new Text("\uD83D\uDEA6 Status: " + evenement.getStatus_evenement());
 
         Button editButton = new Button("✏ Modifier");
@@ -140,12 +137,13 @@ public class EventTable implements Initializable {
     private void handleDelete(int id_event) throws IOException {
         se.delete(id_event);
         editPageController epc = new editPageController();
-        if(se.getById(id_event)==null) {
+        if(se.getById(id_event)==null)
             epc.showAlert("Success", "Événement est supprimée avec succès!");
-            loadEvents(events);
-        }
+
         else
             epc.showAlert("Error","Error lors de supprission de ce Événement");
+
+        loadEvents(events);
 
     }
 
@@ -166,7 +164,7 @@ public class EventTable implements Initializable {
         stage.show();
     }
     @FXML
-    void ClearAll(ActionEvent event) {
+    void ClearAll() {
         loadEvents(events);
         searchField.clear();
     }
