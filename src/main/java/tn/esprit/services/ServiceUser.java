@@ -11,7 +11,7 @@ import java.util.List;
 public class ServiceUser implements IService<User> {
     private Connection cnx;
     public ServiceUser() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
