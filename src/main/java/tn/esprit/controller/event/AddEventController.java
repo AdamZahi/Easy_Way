@@ -23,7 +23,7 @@ public class AddEventController {
     private DatePicker dateFinPicker;
 
     @FXML
-    private TextField ligneField;
+    private ChoiceBox<String> lineChoiceBox;
 
     @FXML
     private TextArea descText;
@@ -39,12 +39,16 @@ public class AddEventController {
         // Populate ChoiceBoxes with Enum values
         typeChoiceBox.getItems().setAll(TypeEvenement.values());
         statusChoiceBox.getItems().setAll(StatusEvenement.values());
+        for (String info: se.getAllLineInfo())
+            lineChoiceBox.getItems().add(info);
     }
     @FXML
     void addEventToDB(ActionEvent event) {
         String description = descText.getText();
         TypeEvenement type = typeChoiceBox.getValue();
-        int ligne = Integer.parseInt(ligneField.getText());
+        String depart= lineChoiceBox.getValue().split(" - ")[0];
+        String arret = lineChoiceBox.getValue().split(" - ")[1];
+        int ligne = se.getLineIdByDepartArret(depart, arret);
 
         java.time.LocalDate localDateDebut = dateDebutPicker.getValue();
         java.sql.Date dateDebut = java.sql.Date.valueOf(localDateDebut);
@@ -57,8 +61,11 @@ public class AddEventController {
 
         StatusEvenement status = statusChoiceBox.getValue();
 
-        if (dateDebut.before(dateFin)|| description.isEmpty() || type == null || ligneField.getText()==null || dateDebut == null || status == null) {
+        if ( description.isEmpty() || type == null || lineChoiceBox.getValue().isEmpty() || dateDebut == null || status == null) {
             showAlert("Erreur", "Veuillez remplir tous les champs.");
+            return;
+        }else if(dateDebut.after(dateFin)){
+            showAlert("Erreur", "Il faut que la date debut soit avant la date fin.");
             return;
         }
         Evenements newEvent = new Evenements(0,
@@ -83,7 +90,7 @@ public class AddEventController {
     void clearAll(ActionEvent event) {
         typeChoiceBox.getItems().clear();
         statusChoiceBox.getItems().clear();
-        ligneField.setText("");
+        lineChoiceBox.getItems().clear();
         dateDebutPicker.setValue(null);
         dateFinPicker.setValue(null);
         descText.setText("");
