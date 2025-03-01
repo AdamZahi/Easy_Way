@@ -40,6 +40,19 @@
             <version>8.0.33</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.vonage</groupId>
+            <artifactId>client</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>9.0.0</version>
+        </dependency>
+
 
     </dependencies>
 
