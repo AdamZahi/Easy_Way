@@ -1,6 +1,4 @@
 package tn.esprit.controller.reclamation;
-
-//import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -17,14 +15,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-//import javafx.scene.paint.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import tn.esprit.models.reclamation.reclamations;
-
-import com.itextpdf.kernel.colors.Color;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -37,19 +31,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import tn.esprit.services.reclamation.reclamationService;
-
-
 import tn.esprit.util.MyDataBase;
 import com.itextpdf.layout.element.Cell;
-
-
-
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.property.TextAlignment;  // iText TextAlignment
-
-
 
 
 public class CardView {
@@ -57,58 +42,32 @@ public class CardView {
     public Button suppbtn;
     public Button modfbtn;
     @FXML
-    private Label emailLabel;
-
-    @FXML
-    private Label categorieLabel;
-
-    @FXML
-    private Label sujetLabel;
-
-    @FXML
-    private Label statutLabel;
-
-    @FXML
-    private Label descriptionLabel;
-
-    @FXML
-    private Label dateLabel;
-
-    @FXML
     private ScrollPane scroll;
-
     @FXML
     private VBox cardBox;
     private final Connection connection = MyDataBase.getConnection();
-    
     @FXML
     private TextField txtId;
-
     @FXML
     private Button refreshBtn;
-
     @FXML
-    private Label lblEmail, lblSujet, lblDescription, lblCategorie, lblDate , lblMessage;
+    private Label lblMessage;
     @FXML
     private GridPane gridPaneReclamations;
-
     @FXML
     private Button trier;
-
     @FXML
     private TextField txtChercher;  // Champ de texte pour la recherche
     @FXML
     private Button btnChercher;
-
     @FXML
     private ComboBox<String> comboBoxTrier;
-
     @FXML
     private ComboBox<String> comboBoxChercher;
-
+    @FXML
+    private Button stqButton;
     @FXML
     private Button pdfButton;
-
     private final reclamationService reclamationService = new reclamationService(); // ✅ Ajout de cette ligne
     
 
@@ -120,13 +79,31 @@ public class CardView {
         stage.show();
     }
 
+    public void gotoStatestique(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/staticStatu.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     @FXML
     private void initialize() {
         System.out.println("Initialisation de l'interface...");
         afficherReclamations(); // Appel automatique de l'affichage des réclamations
-        comboBoxTrier.getItems().addAll("email", "sujet", "description", " catégorie", "date");
-        comboBoxChercher.getItems().addAll("email", "sujet", "description", " catégorie", "date");
+        comboBoxTrier.getItems().addAll("email", "sujet", "description", "date");
+        comboBoxChercher.getItems().addAll("email", "sujet", "description", "date");
         comboBoxTrier.setOnAction(event -> trierReclamations());
+
+        // Ajouter un listener au champ de recherche
+        txtChercher.textProperty().addListener((observable, oldValue, newValue) -> {
+            chercherReclamation(new ActionEvent()); // Appel automatique de la fonction
+        });
+
+        // Ajouter un listener au ComboBox pour actualiser si l'utilisateur change de critère
+        comboBoxChercher.valueProperty().addListener((observable, oldValue, newValue) -> {
+            chercherReclamation(new ActionEvent()); // Appel automatique de la fonction
+        });
     }
 
 
@@ -138,8 +115,6 @@ public class CardView {
     }
 
 
-
-
     // Assurez-vous que cette variable est bien reliée à votre FXML
 
     public void remplirGridPane(List<reclamations> reclamations) {
@@ -147,36 +122,40 @@ public class CardView {
 
         // 🔹 Création de la ligne d'en-tête
         Label headerEmail = new Label("Email");
-        Label headerCategorie = new Label("Catégorie");
         Label headerSujet = new Label("Sujet");
         Label headerDescription = new Label("Description");
+        Label headerCategorie = new Label("Catégorie");
         Label headerDate = new Label("Date de création");
+        Label headerStatut = new Label("Statut");
         Label headerAction = new Label("Action");
 
         // 🔹 Appliquer un style en gras pour les titres
         String headerStyle = "-fx-font-weight: bold; -fx-font-size: 14px;";
         headerEmail.setStyle(headerStyle);
-        headerCategorie.setStyle(headerStyle);
         headerSujet.setStyle(headerStyle);
         headerDescription.setStyle(headerStyle);
+        headerCategorie.setStyle(headerStyle);
         headerDate.setStyle(headerStyle);
+        headerStatut.setStyle(headerStyle);
         headerAction.setStyle(headerStyle);
         // 🔹 Ajouter la ligne d'en-tête à la première ligne du `GridPane`
         gridPaneReclamations.add(headerEmail, 0, 0);
-        gridPaneReclamations.add(headerCategorie, 1, 0);
-        gridPaneReclamations.add(headerSujet, 2, 0);
-        gridPaneReclamations.add(headerDescription, 3, 0);
+        gridPaneReclamations.add(headerSujet, 1, 0);
+        gridPaneReclamations.add(headerDescription, 2, 0);
+        gridPaneReclamations.add(headerCategorie, 3, 0);
         gridPaneReclamations.add(headerDate, 4, 0);
-        gridPaneReclamations.add(headerAction, 5, 0);
+        gridPaneReclamations.add(headerStatut, 5, 0);
+        gridPaneReclamations.add(headerAction, 6, 0);
 
         int row = 1; // Ligne de départ après l'en-tête
 
         for (reclamations rec : reclamations) {
             Label labelEmail = new Label(rec.getEmail());
-            Label labelCategorie = new Label(rec.getCategorie().getType());
             Label labelSujet = new Label(rec.getSujet());
             Label labelDescription = new Label(rec.getDescription());
+            Label labelCategorie = new Label(rec.getCategorie().getType());
             Label labelDate = new Label(rec.getDate_creation());
+            Label labelStatut = new Label(rec.getStatu());
 
             System.out.println("ID de la réclamation récupérée : " + rec.getId());
 
@@ -204,15 +183,16 @@ public class CardView {
 
             // 🔹 Ajouter les éléments au GridPane
             gridPaneReclamations.add(labelEmail, 0, row);
-            gridPaneReclamations.add(labelCategorie, 1, row);
-            gridPaneReclamations.add(labelSujet, 2, row);
-            gridPaneReclamations.add(labelDescription, 3, row);
+            gridPaneReclamations.add(labelSujet, 1, row);
+            gridPaneReclamations.add(labelDescription, 2, row);
+            gridPaneReclamations.add(labelCategorie, 3, row);
             gridPaneReclamations.add(labelDate, 4, row);
+            gridPaneReclamations.add(labelStatut, 5, row);
 
-            HBox buttonBox = new HBox(5);
+            HBox buttonBox = new HBox(6);
             buttonBox.setAlignment(Pos.CENTER);
             buttonBox.getChildren().addAll(suppbtn, modfbtn);
-            gridPaneReclamations.add(buttonBox, 5, row);
+            gridPaneReclamations.add(buttonBox, 6, row);
 
             row++; // Passer à la ligne suivante
         }
@@ -294,47 +274,54 @@ public class CardView {
         }
     }
 
+
     public void modifierReclamation(ActionEvent actionEvent) {
         // Récupérer l'ID de la réclamation à partir du bouton cliqué
         Button clickedButton = (Button) actionEvent.getSource();
-        int reclamationId = (int) clickedButton.getUserData(); // L'ID de la réclamation stocké dans le bouton
+        int reclamationId = (int) clickedButton.getUserData(); // L'ID stocké dans le bouton
 
         try {
-            // Logique pour charger la réclamation en fonction de l'ID
+            // Récupérer les détails de la réclamation depuis la base de données
             String query = "SELECT id, categorieId, email, sujet, description, statu, date_creation FROM reclamation WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, reclamationId);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ajoutReclamation.fxml"));
-                Parent root = loader.load();  // Cela pourrait lancer une IOException
-                AjoutReclamation controller = loader.getController();
+                // Charger la page ModifierReclamation.fxml
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ModifierReclamation.fxml"));
+                Parent root = loader.load();
+
+                // Récupérer le contrôleur de la page de modification
+                ModifierReclamation controller = loader.getController();
+
+                // Envoyer les données récupérées au contrôleur
                 controller.setReclamationDetails(
                         reclamationId,
-                        rs.getString("email"),
                         rs.getString("sujet"),
                         rs.getString("description"),
+                        rs.getInt("categorieId"),
                         rs.getString("date_creation"),
-                        rs.getInt("categorieId")
+                        rs.getString("statu")
                 );
+
+                // Afficher la nouvelle scène
                 Stage stage = (Stage) gridPaneReclamations.getScene().getWindow();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
             } else {
-                lblMessage.setText("Réclamation non trouvée");
+                lblMessage.setText("Réclamation non trouvée !");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            lblMessage.setText("Erreur avec la base de données");
+            lblMessage.setText("Erreur avec la base de données !");
         } catch (IOException e) {
             e.printStackTrace();
-            lblMessage.setText("Erreur de chargement de la page");
+            lblMessage.setText("Erreur de chargement de la page !");
         }
     }
-
 
 
     @FXML
@@ -351,7 +338,6 @@ public class CardView {
         for (reclamations obj : reclamationsList) {
             System.out.println("Type de l'objet : " + obj.getClass().getName());
         }
-
 
         Comparator<reclamations> comparator = switch (critere) {
             case "email" -> Comparator.comparing(reclamations::getEmail);
@@ -374,28 +360,20 @@ public class CardView {
 
     @FXML
     public void chercherReclamation(ActionEvent event) {
-        String searchText = txtChercher.getText().trim().toLowerCase();  // Récupérer le texte de recherche et le mettre en minuscules
-        String critere = comboBoxChercher.getValue();  // Récupérer la valeur sélectionnée dans le ComboBox
+        String searchText = txtChercher.getText().trim().toLowerCase();
+        String critere = comboBoxChercher.getValue();
 
-        if (searchText.isEmpty()) {
-            System.out.println("Veuillez entrer un texte à rechercher.");
-            return;  // Si le champ de recherche est vide, on n'effectue aucune action
-        }
-
-        if (critere == null) {
-            System.out.println("Veuillez sélectionner un critère de recherche.");
-            return;  // Si aucun critère n'est sélectionné, on n'effectue aucune action
-        }
-
-        // Récupérer toutes les réclamations
         List<reclamations> reclamationsList = reclamationService.getAllReclamationsSansId();
 
+        // Si la recherche est vide ou aucun critère sélectionné, afficher toutes les réclamations
+        if (searchText.isEmpty() || critere == null) {
+            remplirGridPane(reclamationsList);
+            return;
+        }
 
         // Filtrer les réclamations en fonction du critère choisi
         List<reclamations> filteredReclamations = reclamationsList.stream()
                 .filter(r -> {
-                    System.out.println("Recherche par catégorie : " + r.getCategorie().getType());
-
                     switch (critere) {
                         case "email":
                             return r.getEmail().toLowerCase().contains(searchText);
@@ -404,10 +382,9 @@ public class CardView {
                         case "description":
                             return r.getDescription().toLowerCase().contains(searchText);
                         case "categorie":
-                            // Vérifier que la catégorie n'est pas null avant de l'utiliser
-
                             return r.getCategorie() != null && r.getCategorie().getType() != null &&
                                     r.getCategorie().getType().toLowerCase().contains(searchText);
+
                         case "date":
                             return r.getDate_creation() != null && r.getDate_creation().toLowerCase().contains(searchText);
                         default:
@@ -419,6 +396,7 @@ public class CardView {
         // Mettre à jour l'affichage des réclamations avec les résultats filtrés
         remplirGridPane(filteredReclamations);
     }
+
 
 
     @FXML

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -48,10 +49,15 @@
                     </Label>
                     <TextField fx:id="email" layoutX="236.0" layoutY="62.0" prefHeight="26.0" prefWidth="259.0" promptText="saisir votre mail..." styleClass="shadow" stylesheets="@css/grid.css" />
                     <TextField fx:id="sujet" layoutX="237.0" layoutY="106.0" prefHeight="26.0" prefWidth="258.0" promptText="saisir sujet...." />
-                    <TextField fx:id="descriptionn" layoutX="238.0" layoutY="157.0" prefHeight="132.0" prefWidth="257.0" promptText="description..." />
                     <DatePicker fx:id="date" layoutX="239.0" layoutY="366.0" prefHeight="26.0" prefWidth="256.0" promptText="JJ/MM/AAAA" />
-                    <Button layoutX="120.0" layoutY="432.0" mnemonicParsing="false" onAction="#addReclamation" prefHeight="31.0" prefWidth="190.0" style="-fx-background-color: #93d49a;" text="Ajouter une réclamtion" />
-                  <Button id="liste" layoutX="369.0" layoutY="432.0" mnemonicParsing="false" onAction="#gotoCardView" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #93d49a;" text="Voir liste" />
+                    <Button layoutX="120.0" layoutY="467.0" mnemonicParsing="false" onAction="#addReclamation" prefHeight="31.0" prefWidth="190.0" style="-fx-background-color: #93d49a;" text="Ajouter une réclamtion">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="12.0" />
+                     </font></Button>
+                  <Button id="liste" layoutX="369.0" layoutY="467.0" mnemonicParsing="false" onAction="#gotoCardView" prefHeight="31.0" prefWidth="189.0" style="-fx-background-color: #93d49a;" text="Voir liste">
+                     <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="12.0" />
+                     </font></Button>
                   <ImageView fitHeight="350.0" fitWidth="272.0" layoutX="556.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/rec.png" />
@@ -73,6 +79,23 @@
                      </font>
                   </Label>
                     <ComboBox fx:id="categorie" layoutX="238.0" layoutY="313.0" prefHeight="26.0" prefWidth="257.0" promptText="choisir une categorie" />
+                  <Label fx:id="messagerec" layoutX="205.0" layoutY="14.0" prefHeight="31.0" prefWidth="365.0" textFill="#3067ff">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="descriptionn" layoutX="237.0" layoutY="156.0" prefHeight="140.0" prefWidth="258.0" promptText="Description...." />
+                  <Label layoutX="73.0" layoutY="408.0" prefHeight="31.0" prefWidth="106.0" text="Statu :">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="statu" layoutX="237.0" layoutY="410.0" prefHeight="26.0" prefWidth="257.0" promptText="Statu..." />
+                  <Label fx:id="categoriecontrol" layoutX="66.0" layoutY="297.0" prefHeight="18.0" prefWidth="234.0" textFill="#dc1212">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <ImageView fitHeight="56.0" fitWidth="72.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
@@ -85,16 +108,6 @@
       <Label fx:id="descriptioncontrol" layoutX="222.0" layoutY="375.0" prefHeight="18.0" prefWidth="234.0" textFill="#d40e0e">
          <font>
             <Font size="10.0" />
-         </font>
-      </Label>
-      <Label fx:id="categoriecontrol" layoutX="218.0" layoutY="429.0" prefHeight="18.0" prefWidth="234.0" textFill="#dc1212">
-         <font>
-            <Font size="10.0" />
-         </font>
-      </Label>
-      <Label fx:id="messagerec" layoutX="194.0" layoutY="108.0" prefHeight="18.0" prefWidth="290.0" textFill="#3067ff">
-         <font>
-            <Font name="System Bold" size="13.0" />
          </font>
       </Label>
     </children>

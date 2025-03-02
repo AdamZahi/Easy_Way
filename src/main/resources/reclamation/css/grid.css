@@ -109,3 +109,37 @@
 .ScrollPane {
     -fx-background-color: transparent;
 }
+
+.chart-pie-label {
+    -fx-fill: black; /* Couleur du texte */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Couleur des tranches du PieChart */
+.default-color0.chart-pie { -fx-pie-color: #09bd17; } /* "Traitée" -> Vert */
+.default-color1.chart-pie { -fx-pie-color: #ff7a03; } /* "En attente" -> Jaune */
+.default-color2.chart-pie { -fx-pie-color: #fe1010; } /* "Refusée" -> Rouge */
+
+
+.dialog-pane {
+    -fx-background-color: #f0f8ff;  /* Couleur de fond */
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+}
+
+.dialog-pane .header {
+    -fx-background-color: #87cefa; /* Couleur d'en-tête */
+    -fx-text-fill: #fff; /* Couleur du texte dans l'en-tête */
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #333;  /* Couleur du texte du contenu */
+}
+
+.button {
+    -fx-background-color: #4682b4;  /* Couleur de fond des boutons */
+    -fx-text-fill: #fff; /* Couleur du texte du bouton */
+}
+
+
