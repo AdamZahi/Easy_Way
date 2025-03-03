@@ -53,7 +53,7 @@ public class ServicePayment implements IService<Payment> {
     @Override
     public List<Payment> getAll() {
         ArrayList<Payment> payments = new ArrayList<>();
-        String query = "SELECT * FROM `payment`";
+        String query = "SELECT * FROM payment";
         try {
             Statement stm = cnx.createStatement();
             ResultSet rs = stm.executeQuery(query);
@@ -73,7 +73,7 @@ public class ServicePayment implements IService<Payment> {
 
     @Override
     public void update(Payment payment) {
-        String query = "UPDATE `payment` SET `transactionId` = ?, `amount` = ? WHERE `paymentId ` = ?";
+        String query = "UPDATE payment SET transactionId = ?, amount = ? WHERE paymentId  = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, payment.getTransactionId());
@@ -87,7 +87,7 @@ public class ServicePayment implements IService<Payment> {
 
     @Override
     public void delete(Payment payment) {
-        String query = "DELETE FROM `payment` WHERE `paymentId ` = ?";
+        String query = "DELETE FROM payment WHERE paymentId  = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setInt(1, payment.getPaymentId());

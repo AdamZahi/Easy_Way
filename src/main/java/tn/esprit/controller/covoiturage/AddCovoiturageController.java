@@ -96,10 +96,7 @@ public class AddCovoiturageController implements Initializable {
             return;
         }
 
-        if (places > 6) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le nombre de places ne peut pas dépasser 6 !");
-            return;
-        }
+
 
         if (prixValue < 0) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix ne peut pas être négatif !");

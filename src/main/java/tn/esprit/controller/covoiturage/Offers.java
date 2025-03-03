@@ -109,11 +109,11 @@ public class Offers {
                 }
 
                 // Appel de la méthode Valider pour vérifier le paiement et réserver
-                reservercov cov = new reservercov();
-                cov.Valider(event);
+//                reservercov cov = new reservercov();
+//                cov.Valider(event);
 
                 // Après un paiement réussi, changer de scène
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Reserver.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/reservecov.fxml"));
                 try {
                     Parent root = loader.load();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -189,12 +189,12 @@ public class Offers {
                     return;
                 }
 
-                // Appel de la méthode Valider pour vérifier le paiement et réserver
-                reservercov cov = new reservercov();
-                cov.Valider(event);
+//                // Appel de la méthode Valider pour vérifier le paiement et réserver
+//                reservercov cov = new reservercov();
+//                cov.Valider(event);
 
                 // Après un paiement réussi, changer de scène
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/reservecov.fxml"));
+                else {FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/reservecov.fxml"));
                 try {
                     Parent root = loader.load();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -202,7 +202,7 @@ public class Offers {
                     stage.show();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }}
             });
 
 
