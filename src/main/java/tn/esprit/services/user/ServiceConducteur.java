@@ -16,27 +16,36 @@ public  class ServiceConducteur implements IService<Conducteur> {
     }
 
     public void add(Conducteur conducteur) {
-        try {
+        Connection cnx = null;
+        PreparedStatement pstmUser = null;
+        PreparedStatement pstmConducteur = null;
+        ResultSet generatedKeys = null;
 
-            String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+        try {
+            // 🔹 Récupération de la connexion sans fermeture automatique
+            cnx = MyDataBase.getInstance().getCnx();
+
+            // 1️⃣ Insérer dans la table 'user' avec le rôle 'Conducteur'
+            String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
             pstmUser.setString(1, conducteur.getNom());
             pstmUser.setString(2, conducteur.getPrenom());
             pstmUser.setString(3, conducteur.getEmail());
             pstmUser.setString(4, conducteur.getMot_de_passe());
             pstmUser.setInt(5, conducteur.getTelephonne());
             pstmUser.setString(6, conducteur.getPhoto_profil());
-
+            pstmUser.setString(7, "Conducteur");
 
             int affectedRows = pstmUser.executeUpdate();
             if (affectedRows > 0) {
-
-                ResultSet generatedKeys = pstmUser.getGeneratedKeys();
+                generatedKeys = pstmUser.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id_user = generatedKeys.getInt(1);
+                    System.out.println("✅ Utilisateur ajouté avec ID : " + id_user);
 
-                    String queryConducteur = "INSERT INTO conducteur (id_user , nom , prenom , email, mot_de_passe , telephonne, photo_profil , numero_permis , experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement pstmConducteur = cnx.prepareStatement(queryConducteur);
+                    // 2️⃣ Insérer dans la table 'conducteur' avec `permis_conduire` et `experience`
+                    String queryConducteur = "INSERT INTO conducteur (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, numero_permis, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    pstmConducteur = cnx.prepareStatement(queryConducteur);
                     pstmConducteur.setInt(1, id_user);
                     pstmConducteur.setString(2, conducteur.getNom());
                     pstmConducteur.setString(3, conducteur.getPrenom());
@@ -44,24 +53,34 @@ public  class ServiceConducteur implements IService<Conducteur> {
                     pstmConducteur.setString(5, conducteur.getMot_de_passe());
                     pstmConducteur.setInt(6, conducteur.getTelephonne());
                     pstmConducteur.setString(7, conducteur.getPhoto_profil());
-                    pstmConducteur.setString(8, conducteur.getNumero_permis());
-                    pstmConducteur.setString(9, conducteur.getExperience());
-
+                    pstmConducteur.setString(8, conducteur.getNumero_permis()); // 🚗 Numéro du permis
+                    pstmConducteur.setString(9, conducteur.getExperience()); // 🏆 Nombre d'années d'expérience
 
                     int rowsInserted = pstmConducteur.executeUpdate();
                     if (rowsInserted > 0) {
-                        System.out.println("Conducteur ajouté avec succès !");
+                        System.out.println("✅ Conducteur ajouté avec succès !");
                     } else {
-                        System.out.println("Erreur lors de l'ajout du conducteur dans la table conducteur.");
+                        System.out.println("⚠️ Erreur lors de l'ajout du conducteur.");
                     }
                 }
             } else {
-                System.out.println("Aucune ligne insérée dans la table user.");
+                System.out.println("❌ Aucune ligne insérée dans la table user.");
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du conducteur : " + e.getMessage());
+            System.out.println("⚠️ Erreur SQL : " + e.getMessage());
+        } finally {
+            try {
+                // ❗ Fermeture des ressources sauf la connexion
+                if (generatedKeys != null) generatedKeys.close();
+                if (pstmUser != null) pstmUser.close();
+                if (pstmConducteur != null) pstmConducteur.close();
+            } catch (SQLException e) {
+                System.out.println("⚠️ Erreur lors de la fermeture des ressources : " + e.getMessage());
+            }
         }
     }
+
+
 
 
     @Override

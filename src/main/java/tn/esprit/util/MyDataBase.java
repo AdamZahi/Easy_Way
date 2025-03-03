@@ -13,19 +13,29 @@ public class MyDataBase {
 
     public MyDataBase() {
         try {
-            cnx = DriverManager.getConnection(URL,USERNAME,PASSWORD);
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            cnx = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            System.out.println("⚠️ Erreur de connexion à la base de données : " + e.getMessage());
         }
     }
+
     public static MyDataBase getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new MyDataBase();
+        }
         return instance;
     }
 
     public Connection getCnx() {
-
+        try {
+            // Vérifie si la connexion est fermée et la rouvre si nécessaire
+            if (cnx == null || cnx.isClosed()) {
+                System.out.println("🔄 Réouverture de la connexion à la base de données...");
+                cnx = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            }
+        } catch (SQLException e) {
+            System.out.println("⚠️ Impossible de rétablir la connexion : " + e.getMessage());
+        }
         return cnx;
     }
 }

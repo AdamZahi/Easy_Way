@@ -28,6 +28,12 @@ public class Conducteur extends User {
         this.numero_permis = numero_permis;
         this.experience = experience;
     }
+    public Conducteur(int id_user, String numero_permis, String experience) {
+        setId_user(id_user);
+        this.numero_permis = numero_permis;
+        this.experience = experience;
+    }
+
 
 
 

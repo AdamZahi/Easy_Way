@@ -6,9 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -23,35 +21,27 @@ import java.util.regex.Pattern;
 public class SignUpController {
 
     @FXML
-    private TextField EmailField;
+    private TextField EmailField, MotDePasseField, NomField, PrenomField, confirmMdpField, telephonneField;
 
     @FXML
-    private TextField MotDePasseField;
-
-    @FXML
-    private TextField NomField;
-
-    @FXML
-    private ImageView PhotoProfil;
-
-    @FXML
-    private TextField PrenomField;
-
-    @FXML
-    private TextField confirmMdpField;
+    private ImageView PhotoProfil, logo;
 
     @FXML
     private Button createAccountButton;
 
     @FXML
-    private ImageView logo;
+    private ChoiceBox<String> roleChoiceBox;
 
     @FXML
-    private TextField telephonneField;
+    public void initialize() {
+        roleChoiceBox.getItems().addAll("Passager", "Conducteur");
+        roleChoiceBox.setValue("Passager"); // Valeur par défaut
+    }
 
     @FXML
     void SignUp(ActionEvent event) {
         ServiceUser su = new ServiceUser();
+
         String nom = NomField.getText().trim();
         String prenom = PrenomField.getText().trim();
         String email = EmailField.getText().trim();
@@ -59,49 +49,77 @@ public class SignUpController {
         String confirmMdp = confirmMdpField.getText();
         String telephoneText = telephonneField.getText().trim();
 
-        // Vérification des champs obligatoires
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty() || confirmMdp.isEmpty() || telephoneText.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis.");
             return;
         }
 
-        // Validation de l'email
         if (!isValidEmail(email)) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "L'email n'est pas valide. Ex: exemple@mail.com");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "L'email n'est pas valide.");
             return;
         }
 
-        // Validation du mot de passe
         if (!isValidPassword(mdp)) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
             return;
         }
 
-        // Vérification de la confirmation du mot de passe
         if (!mdp.equals(confirmMdp)) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Les mots de passe ne correspondent pas.");
             return;
         }
 
-        // Validation du numéro de téléphone
         if (!isValidPhoneNumber(telephoneText)) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le numéro de téléphone est invalide. Il doit contenir uniquement des chiffres (8 chiffres pour la Tunisie).");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le numéro de téléphone est invalide.");
             return;
         }
 
+        String selectedRole = roleChoiceBox.getValue();
+        if (selectedRole == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un rôle.");
+            return;
+        }
+
+        User.Role role = selectedRole.equals("Passager") ? User.Role.Passager : User.Role.Conducteur;
         int telephone = Integer.parseInt(telephoneText);
         String hashedMdp = PasswordHash(mdp);
 
-        // Ajout de l'utilisateur avec un rôle par défaut (par exemple, USER)
-        User newUser = new User(nom, prenom, email, hashedMdp, telephone, "photo", User.Role.Passager);
+        // Création du user
+        User newUser = new User(nom, prenom, email, hashedMdp, telephone, "photo", role);
         su.add(newUser);
 
+        // Récupération de l'ID après insertion
+        int idUser = su.getLastInsertedId();
+        newUser.setId_user(idUser); // ✅ Fixer l'ID ici
+
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Compte créé avec succès !");
+
+        // Redirection
+        redirectToRolePage(newUser, event);
     }
 
-    /**
-     * Affiche une boîte de dialogue d'alerte.
-     */
+    private void redirectToRolePage(User user, ActionEvent event) {
+        try {
+            String fxmlPage = user.getRole() == User.Role.Conducteur ? "/user/Conducteur.fxml" : "/user/Passager.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPage));
+            Parent root = loader.load();
+
+            if (user.getRole() == User.Role.Conducteur) {
+                ConducteurController conducteurController = loader.getController();
+                conducteurController.setUser(user); // ✅ Correction ici
+            } else {
+                PassagerController controller = loader.getController();
+                controller.setUser(user);
+            }
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -110,32 +128,20 @@ public class SignUpController {
         alert.showAndWait();
     }
 
-    /**
-     * Vérifie si un email est valide.
-     */
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.matches(emailRegex, email);
     }
 
-    /**
-     * Vérifie si un mot de passe est valide (au moins 8 caractères, une majuscule et un chiffre).
-     */
     private boolean isValidPassword(String password) {
         String passwordRegex = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
         return Pattern.matches(passwordRegex, password);
     }
 
-    /**
-     * Vérifie si un numéro de téléphone est valide (uniquement 8 chiffres pour la Tunisie).
-     */
     private boolean isValidPhoneNumber(String phone) {
         return phone.matches("\\d{8}");
     }
 
-    /**
-     * Hashage du mot de passe avec SHA-256.
-     */
     public static String PasswordHash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -152,9 +158,6 @@ public class SignUpController {
         return null;
     }
 
-    /**
-     * Redirection vers la page de connexion.
-     */
     @FXML
     void RedirectToSignIn(MouseEvent event) {
         try {

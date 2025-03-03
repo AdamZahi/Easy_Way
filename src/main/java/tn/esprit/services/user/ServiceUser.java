@@ -248,4 +248,19 @@ public class ServiceUser implements IService<User> {
         }
         return -1;
     }
+
+    public int getLastInsertedId() {
+        int id = -1;
+        try (Connection cnx = MyDataBase.getInstance().getCnx();
+             PreparedStatement ps = cnx.prepareStatement("SELECT id_user FROM user ORDER BY id_user DESC LIMIT 1");
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                id = rs.getInt("id_user");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
 }

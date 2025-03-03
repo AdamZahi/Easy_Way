@@ -16,10 +16,18 @@ public class ServicePassager implements IService<Passager> {
     }
 
     public void add(Passager passager) {
+        Connection cnx = null;
+        PreparedStatement pstmUser = null;
+        PreparedStatement pstmPassager = null;
+        ResultSet generatedKeys = null;
+
         try {
+            // 🔹 Récupération de la connexion sans la fermer après
+            cnx = MyDataBase.getInstance().getCnx();
+
             // 1️⃣ Insérer dans la table 'user' avec le rôle 'Passager'
             String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+            pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
             pstmUser.setString(1, passager.getNom());
             pstmUser.setString(2, passager.getPrenom());
             pstmUser.setString(3, passager.getEmail());
@@ -30,13 +38,14 @@ public class ServicePassager implements IService<Passager> {
 
             int affectedRows = pstmUser.executeUpdate();
             if (affectedRows > 0) {
-                ResultSet generatedKeys = pstmUser.getGeneratedKeys();
+                generatedKeys = pstmUser.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int id_user = generatedKeys.getInt(1);
+                    System.out.println("✅ Utilisateur ajouté avec ID : " + id_user);
 
-                    // 2️⃣ Insérer dans la table 'passager'
-                    String queryPassager = "INSERT INTO passager (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement pstmPassager = cnx.prepareStatement(queryPassager);
+                    // 2️⃣ Insérer dans la table 'passager' avec `nbDeTrajetsEffectues`
+                    String queryPassager = "INSERT INTO passager (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, nbTrajetsEffectues) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    pstmPassager = cnx.prepareStatement(queryPassager);
                     pstmPassager.setInt(1, id_user);
                     pstmPassager.setString(2, passager.getNom());
                     pstmPassager.setString(3, passager.getPrenom());
@@ -44,6 +53,7 @@ public class ServicePassager implements IService<Passager> {
                     pstmPassager.setString(5, passager.getMot_de_passe());
                     pstmPassager.setInt(6, passager.getTelephonne());
                     pstmPassager.setString(7, passager.getPhoto_profil());
+                    pstmPassager.setInt(8, 0);
 
                     int rowsInserted = pstmPassager.executeUpdate();
                     if (rowsInserted > 0) {
@@ -56,7 +66,17 @@ public class ServicePassager implements IService<Passager> {
                 System.out.println("❌ Aucune ligne insérée dans la table user.");
             }
         } catch (SQLException e) {
-            System.out.println("⚠️ Erreur lors de l'ajout du passager : " + e.getMessage());
+            System.out.println("⚠️ Erreur SQL : " + e.getMessage());
+        } finally {
+            try {
+                // ❗ On ferme uniquement les PreparedStatement et ResultSet
+                if (generatedKeys != null) generatedKeys.close();
+                if (pstmUser != null) pstmUser.close();
+                if (pstmPassager != null) pstmPassager.close();
+                // ⚠️ NE PAS FERMER cnx ici !
+            } catch (SQLException e) {
+                System.out.println("⚠️ Erreur lors de la fermeture des ressources : " + e.getMessage());
+            }
         }
     }
 
