@@ -13,7 +13,7 @@ public class ServiceUser implements IService<User> {
     private Connection cnx;
     public ServiceUser() {
 
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ServiceUser implements IService<User> {
         return users;
     }
 
-    @Override
+ //   @Override
     public User getById(int id_user) {
         String query = "SELECT * FROM user WHERE id_user = ?";
         User user = null;
@@ -189,7 +189,7 @@ public class ServiceUser implements IService<User> {
     public boolean updatePasswordByEmail(String email, String newPassword) {
         String query = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
 
-        try (Connection conn = MyDataBase.getInstance().getCnx();
+        try (Connection conn = MyDataBase.getInstance().getConnection();
              PreparedStatement pstm = conn.prepareStatement(query)) {
 
             pstm.setString(1, newPassword);

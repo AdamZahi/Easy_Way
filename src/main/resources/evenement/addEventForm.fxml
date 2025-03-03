@@ -110,7 +110,7 @@
         <!-- Type Choice Box -->
         <HBox alignment="CENTER" spacing="80.0">
             <Label prefHeight="18.0" prefWidth="80.0" text="Type:" />
-            <ChoiceBox fx:id="typeChoiceBox" prefWidth="280.0" />
+            <ChoiceBox fx:id="typeCB" prefWidth="280.0" />
         </HBox>
 
            <!-- Ligne Affectée Field -->

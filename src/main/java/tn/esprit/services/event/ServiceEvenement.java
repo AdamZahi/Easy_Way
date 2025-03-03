@@ -14,7 +14,7 @@ public class ServiceEvenement implements IEvent<Evenements> {
     private Connection cnx;
 
     public ServiceEvenement() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ServiceEvenement implements IEvent<Evenements> {
                 ligneInfo = depart + " - " + arret;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return ligneInfo;
     }
