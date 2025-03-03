@@ -1,8 +1,7 @@
-package tn.esprit.services;
+package tn.esprit.services.user;
 
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.user.Admin;
-import tn.esprit.models.user.User;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
@@ -13,7 +12,7 @@ public class ServiceAdmin implements IService<Admin> {
     private Connection cnx;
 
     public ServiceAdmin() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     public void add(Admin admin) {
