@@ -7,6 +7,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -26,44 +28,59 @@
       </AnchorPane>
       <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #E96151;">
          <children>
-            <AnchorPane layoutX="11.0" layoutY="99.0" prefHeight="106.0" prefWidth="970.0">
+            <AnchorPane layoutX="24.0" layoutY="80.0" prefHeight="106.0" prefWidth="970.0">
                <children>
-                  <Button fx:id="chercher" layoutX="515.0" layoutY="19.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="80.0" style="-fx-background-color: #55baf0;" text="chercher" textFill="#050505">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Button>
-                  <TextField fx:id="txtChercher" layoutX="110.0" layoutY="26.0" prefHeight="34.0" prefWidth="201.0" />
+                  <TextField fx:id="txtChercher" layoutX="136.0" layoutY="27.0" prefHeight="34.0" prefWidth="201.0" promptText="chercher....." />
                <!--   <Button layoutX="793.0" layoutY="351.0" mnemonicParsing="false" onMouseClicked="#refresh" prefHeight="26.0" prefWidth="85.0" text="refresh" /> -->
-                  <Text layoutX="-1.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="chercher :" wrappingWidth="144.00002136230466">
+                  <Text layoutX="26.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher :" wrappingWidth="144.00002136230466">
                      <font>
                         <Font name="Dubai Regular" size="24.0" />
                      </font>
                   </Text>
-                  <ComboBox fx:id="comboBoxTrier" layoutX="676.0" layoutY="26.0" prefHeight="34.0" prefWidth="174.0" promptText="choisir selon quoi le trie" />
-                  <Label fx:id="lblMessage" layoutX="340.0" layoutY="76.0" prefHeight="30.0" prefWidth="279.0" textFill="#1a731a">
+                  <ComboBox fx:id="comboBoxTrier" layoutX="749.0" layoutY="27.0" prefHeight="34.0" prefWidth="188.0" promptText="choisir selon quoi le trie" stylesheets="@css/grid.css" />
+                  <ComboBox fx:id="comboBoxChercher" layoutX="350.0" layoutY="27.0" prefHeight="34.0" prefWidth="216.0" promptText="choisir selon quoi la recherche" />
+                  <Text layoutX="668.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trier :" wrappingWidth="144.00002136230466">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Dubai Regular" size="24.0" />
                      </font>
-                  </Label>
-                  <Button fx:id="trier" layoutX="863.0" layoutY="22.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="80.0" style="-fx-background-color: #55baf0;" text="Trier" textFill="#050505">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Button>
-                  <ComboBox fx:id="comboBoxChercher" layoutX="330.0" layoutY="25.0" prefHeight="34.0" prefWidth="174.0" promptText="choisir selon quoi la recherche" />
+                  </Text>
                </children>
             </AnchorPane>
-            <Button layoutX="861.0" layoutY="20.0" mnemonicParsing="false" onAction="#gotoAjoutReclamation" prefHeight="39.0" prefWidth="106.0" text="Return ">
+            <Button layoutX="786.0" layoutY="633.0" mnemonicParsing="false" onAction="#gotoAjoutReclamation" prefHeight="42.0" prefWidth="164.0" style="-fx-background-color: #93d49a;" text="Retourne ">
                <font>
-                  <Font name="System Bold" size="14.0" />
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
                </font>
             </Button>
-            <Text layoutX="241.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTE DES RECLAMTIONS" wrappingWidth="564.0000366210937">
+            <Text layoutX="241.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTE DES RECLAMTIONS" wrappingWidth="564.0000366210937">
                <font>
                   <Font name="Book Antiqua Bold" size="36.0" />
                </font>
             </Text>
+            <Label fx:id="lblMessage1" layoutX="38.0" layoutY="69.0" prefHeight="35.0" prefWidth="829.0" textFill="#1a731a">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblMessage" layoutX="160.0" layoutY="143.0" prefHeight="60.0" prefWidth="671.0" textFill="#1a731a">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="refreshBtn" layoutX="605.0" layoutY="635.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="42.0" prefWidth="164.0" style="-fx-background-color: #93d49a;" text="Refresh">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="pdfButton" layoutX="406.0" layoutY="635.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="43.0" prefWidth="174.0" style="-fx-background-color: #93d49a;" text="Télecharger PDF">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="stqButton" layoutX="201.0" layoutY="635.0" mnemonicParsing="false" onAction="#gotoStatestique" prefHeight="41.0" prefWidth="174.0" style="-fx-background-color: #93d49a;" text="Statestique">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
     <!--  <TableView fx:id="tableReclamation" layoutX="381.0" layoutY="27.0" prefHeight="270.0" prefWidth="521.0">
@@ -78,7 +95,7 @@
         </columns>
       </TableView> -->
       <Pane layoutX="42.0" layoutY="-7.0" prefHeight="5.0" prefWidth="600.0" />
-      <AnchorPane layoutX="21.0" layoutY="247.0" prefHeight="414.0" prefWidth="964.0">
+      <AnchorPane layoutX="14.0" layoutY="194.0" prefHeight="388.0" prefWidth="974.0">
          <children>
             <ScrollPane fx:id="scroll" layoutX="1.0" layoutY="1.0" prefHeight="386.0" prefWidth="962.0">
               <content>
@@ -117,10 +134,10 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <Label fx:id="lblMessage1" layoutX="98.0" layoutY="200.0" prefHeight="35.0" prefWidth="829.0" textFill="#1a731a">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
+      <ImageView fitHeight="50.0" fitWidth="54.0" layoutX="2.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/logo.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>
