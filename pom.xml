@@ -26,9 +26,6 @@
             <artifactId>twilio</artifactId>
             <version>9.3.0</version>
         </dependency>
-
-
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -71,7 +68,26 @@
             <version>24.1.0</version> <!-- Vérifie la dernière version -->
         </dependency>
 
-
+            <dependency>
+                <groupId>com.vonage</groupId>
+                <artifactId>client</artifactId>
+                <version>7.6.0</version> <!-- Vérifie la dernière version sur https://mvnrepository.com/artifact/com.vonage/client -->
+            </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21.0.2</version> <!-- Vérifie que la version correspond à ton JavaFX -->
+        </dependency>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>3.8.6</version> <!-- Vérifie la dernière version ici : https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable -->
+        </dependency>
 
 
 

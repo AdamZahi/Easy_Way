@@ -50,7 +50,7 @@ public class ModifierReclamation {
     @FXML
     private TextField nouvSujet;
 
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
     private final tn.esprit.services.reclamation.categorieService categorieService = new categorieService();
 
     private int currentId; // Pour garder l'ID de la réclamation en cours

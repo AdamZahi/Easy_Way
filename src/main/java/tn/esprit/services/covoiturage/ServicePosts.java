@@ -13,7 +13,7 @@ public class ServicePosts implements IService<Posts> {
     private Connection cnx;
 
     public ServicePosts() {
-        cnx = MyDataBase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
 
     @Override

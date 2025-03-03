@@ -13,13 +13,13 @@ public class ServiceRetard {
     private Connection cnx;
 
     public ServiceRetard() {
-        cnx = MyDataBase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
 
     public static List<Retards> getTrainingData(){
         List<Retards> data = new ArrayList<Retards>();
         try{
-            Connection conn = MyDataBase.getInstance().getConnection();
+            Connection conn = MyDataBase.getInstance().getCnx();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery("SELECT * FROM retards");
             while(rs.next()){

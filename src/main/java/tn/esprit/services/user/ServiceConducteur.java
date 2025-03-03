@@ -12,7 +12,7 @@ public  class ServiceConducteur implements IService<Conducteur> {
     private Connection cnx;
 
     public ServiceConducteur() {
-        cnx = MyDataBase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
 
     public void add(Conducteur conducteur) {

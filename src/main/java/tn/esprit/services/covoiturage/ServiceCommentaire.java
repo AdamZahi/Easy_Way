@@ -11,7 +11,7 @@ public class ServiceCommentaire implements IService<Commentaire> {
     private Connection cnx;
 
     public ServiceCommentaire() {
-        cnx = MyDataBase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
 
     @Override

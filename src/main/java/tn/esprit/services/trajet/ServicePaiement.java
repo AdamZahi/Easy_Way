@@ -3,6 +3,8 @@ package tn.esprit.services.trajet;
 
 import tn.esprit.interfaces.trajet.IService;
 import tn.esprit.models.trajet.Paiement;
+import tn.esprit.util.MyDataBase;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
