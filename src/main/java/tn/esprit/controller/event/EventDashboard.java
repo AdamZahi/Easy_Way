@@ -8,10 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,6 +25,8 @@ public class EventDashboard implements Initializable {
     @FXML
     private GridPane eventGrid;
     @FXML
+    private GridPane grid;
+    @FXML
     private TextField searchField;
     @FXML
     private ChoiceBox<String> statusFilter;
@@ -37,7 +36,7 @@ public class EventDashboard implements Initializable {
     private BarChart<String, Number> eventChart;
 
     private List<Evenements> eventList = new ArrayList<>();
-    private ServiceEvenement se = new ServiceEvenement();
+    private final ServiceEvenement se = new ServiceEvenement();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,7 +46,7 @@ public class EventDashboard implements Initializable {
     }
 
     private void loadFilters() {
-        statusFilter.getItems().addAll("Tous", "En cours", "Résolu", "Annulé");
+        statusFilter.getItems().addAll("Tous", "En cour", "Résolu", "Annulé");
         typeFilter.getItems().addAll("Tous", "Retard", "Incident", "Grève");
         statusFilter.setValue("Tous");
         typeFilter.setValue("Tous");
@@ -60,35 +59,21 @@ public class EventDashboard implements Initializable {
         eventList = se.getAll();
         eventGrid.getChildren().clear();
 
-        int column = 0, row = 0;
+        int row = 0;
         for (Evenements event : eventList) {
             if (shouldDisplayEvent(event)) {
                 VBox eventCard = createEventCard(event);
-                eventGrid.add(eventCard, column, row);
-                column++;
-                if (column == 3) { // 3 colonnes max
-                    column = 0;
-                    row++;
-                }
+                grid.add(eventCard, 0, row);
+                row++;
             }
         }
 
         updateChart();
     }
 
-    private boolean shouldDisplayEvent(Evenements event) {
-        String searchText = searchField.getText().toLowerCase();
-        String selectedStatus = statusFilter.getValue();
-        String selectedType = typeFilter.getValue();
-
-        return (selectedStatus.equals("Tous") || event.getStatus_evenement().toString().equalsIgnoreCase(selectedStatus))
-                && (selectedType.equals("Tous") || event.getType_evenement().toString().equalsIgnoreCase(selectedType))
-                && (event.getDescription().toLowerCase().contains(searchText)
-                || event.getType_evenement().toString().toLowerCase().contains(searchText));
-    }
-
     private VBox createEventCard(Evenements event) {
         VBox card = new VBox();
+        card.setMinWidth(225);
         card.setPadding(new Insets(10));
         card.setSpacing(5);
         card.setStyle("-fx-background-color: #f5f5f5; -fx-border-radius: 10px; -fx-border-color: #ddd;");
@@ -113,6 +98,17 @@ public class EventDashboard implements Initializable {
         card.getChildren().addAll(titleLabel, descLabel, dateLabel, actionButtons);
 
         return card;
+    }
+
+    private boolean shouldDisplayEvent(Evenements event) {
+        String searchText = searchField.getText().toLowerCase();
+        String selectedStatus = statusFilter.getValue();
+        String selectedType = typeFilter.getValue();
+
+        return (selectedStatus.equals("Tous") || event.getStatus_evenement().toString().equalsIgnoreCase(selectedStatus))
+                && (selectedType.equals("Tous") || event.getType_evenement().toString().equalsIgnoreCase(selectedType))
+                && (event.getDescription().toLowerCase().contains(searchText)
+                || event.getType_evenement().toString().toLowerCase().contains(searchText));
     }
 
     private void setupSearchFilter() {
