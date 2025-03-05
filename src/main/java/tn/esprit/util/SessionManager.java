@@ -1,10 +1,7 @@
 package tn.esprit.util;
 
-import tn.esprit.models.user.User;
-
 public class SessionManager {
     private static SessionManager instance; // Singleton
-    private User user;
     private int id_user; // Attribut de session
 
     // Constructeur privé pour empêcher l'instanciation directe
@@ -29,7 +26,5 @@ public class SessionManager {
     public void logout() {
         id_user = 0; // Réinitialiser la session
     }
-    public String getUsername() {
-        return (user != null) ? user.getNom() : null; // Si user est null, retourne null
-    }
+
 }

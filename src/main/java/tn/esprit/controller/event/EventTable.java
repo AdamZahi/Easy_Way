@@ -148,8 +148,19 @@ public class EventTable implements Initializable {
     }
 
     @FXML
-    void RedirectToVehicules(ActionEvent event) {
-
+    void RedirectToVehicules(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

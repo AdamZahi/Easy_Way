@@ -6,6 +6,9 @@ import com.vonage.client.sms.SmsSubmissionResponseMessage;
 import com.vonage.client.sms.messages.TextMessage;
 import tn.esprit.services.user.ServiceConducteur ;
 
+import tn.esprit.services.trajet.ServicePaiement;
+import tn.esprit.services.trajet.ServiceReservation;
+import tn.esprit.models.trajet.Reservation;
 
 import tn.esprit.services.event.ServiceEvenement;
 import tn.esprit.services.event.ServiceTwilio;

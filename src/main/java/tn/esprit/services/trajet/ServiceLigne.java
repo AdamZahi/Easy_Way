@@ -17,12 +17,13 @@ public class ServiceLigne implements IService<Ligne> {
 
     @Override
     public void add(Ligne ligne) {
-        String query = "INSERT INTO `ligne` (`depart`, `arret`, `type`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `ligne` (`depart`, `arret`, `type`, `admin_id`) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, ligne.getDep());
             pstm.setString(2, ligne.getArr());
             pstm.setString(3, ligne.getType());
+            pstm.setInt(4, ligne.getAdmin_id());
             pstm.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -42,6 +43,7 @@ public class ServiceLigne implements IService<Ligne> {
                 l.setDep(rs.getString("depart"));
                 l.setArr(rs.getString("arret"));
                 l.setType(rs.getString("type"));
+                l.setAdmin_id(rs.getInt("admin_id"));
                 lignes.add(l);
             }
             System.out.println(lignes);
@@ -55,13 +57,14 @@ public class ServiceLigne implements IService<Ligne> {
 
     @Override
     public void update(Ligne ligne) {
-        String query = "UPDATE `ligne` SET `depart` = ?, `arret` = ?, `type` = ? WHERE `id` = ?";
+        String query = "UPDATE `ligne` SET `depart` = ?, `arret` = ?, `type` = ?, `admin_id` = ? WHERE `id` = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, ligne.getDep());
             pstm.setString(2, ligne.getArr());
             pstm.setString(3, ligne.getType());
-            pstm.setInt(4, ligne.getId());
+            pstm.setInt(4, ligne.getAdmin_id());
+            pstm.setInt(5, ligne.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
