@@ -367,7 +367,7 @@ public class ServiceVehicule implements IService<vehicule> {
             statement.setString(2, prenomConducteur);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                return rs.getInt("idConducteur");
+                return rs.getInt("id_conducteur");
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération de l'ID du conducteur : " + e.getMessage());

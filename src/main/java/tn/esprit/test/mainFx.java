@@ -15,7 +15,7 @@ public class mainFx extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/trajet/ajoutReservation.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
         try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
