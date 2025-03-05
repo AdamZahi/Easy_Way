@@ -147,6 +147,10 @@ public class EventTable implements Initializable {
 
     }
 
+    @FXML
+    void RedirectToVehicules(ActionEvent event) {
+
+    }
 
     @FXML
     void goToAddForm(ActionEvent event) throws IOException {
@@ -185,5 +189,27 @@ public class EventTable implements Initializable {
         stage.show();
     }
 
+    @FXML
+    void RedirectToUsers(ActionEvent event) {
 
+    }
+
+    @FXML
+    void RedirectToLigne(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToReclamation(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToTrajet(ActionEvent event) {
+
+    }
+    @FXML
+    void RedirectToCovoiturage(ActionEvent event) {
+
+    }
 }
