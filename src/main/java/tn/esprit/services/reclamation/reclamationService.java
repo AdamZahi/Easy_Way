@@ -11,7 +11,7 @@ import java.util.List;
 
 public class reclamationService implements IService<reclamations> {
 
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
 
     @Override
     public void add(reclamations reclamation) {

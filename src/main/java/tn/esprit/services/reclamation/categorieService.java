@@ -13,7 +13,7 @@ import java.util.List;
 
 public class categorieService implements IService<categories> {
 
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
 
     @Override
     public void add(categories categorie) {

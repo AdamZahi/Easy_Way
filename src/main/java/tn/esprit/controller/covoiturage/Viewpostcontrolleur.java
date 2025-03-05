@@ -1,15 +1,15 @@
-package tn.esprit.controller;
+package tn.esprit.controller.covoiturage;
 
-import tn.esprit.models.Posts;
-import tn.esprit.services.ServicePosts;
+import tn.esprit.models.covoiturage.Posts;
+import tn.esprit.services.covoiturage.ServicePosts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.util.List;
 import java.util.Optional;
-import tn.esprit.services.ServiceCommentaire;
-import tn.esprit.models.Commentaire;
+import tn.esprit.services.covoiturage.ServiceCommentaire;
+import tn.esprit.models.covoiturage.Commentaire;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
