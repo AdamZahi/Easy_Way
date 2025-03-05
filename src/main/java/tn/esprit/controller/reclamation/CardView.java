@@ -45,7 +45,7 @@ public class CardView {
     private ScrollPane scroll;
     @FXML
     private VBox cardBox;
-    private final Connection connection = MyDataBase.getConnection();
+    private final Connection connection = MyDataBase.getInstance().getCnx();
     @FXML
     private TextField txtId;
     @FXML

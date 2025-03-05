@@ -20,13 +20,14 @@ public class Admin extends User {
         setTelephonne(telephonne);
         setPhoto_profil(photo_profil);
     }
-    public Admin(String nom, String prenom, String email, String mot_de_passe ,int telephonne  , String photo_profil) {
-        super( nom, prenom, email, mot_de_passe , telephonne , photo_profil );
-    }
-    public Admin(int id_admin ,String nom, String prenom, String email, String mot_de_passe) {
-        super( nom, prenom, email, mot_de_passe);
-        this.id_admin=id_admin;
-    }
+//    public Admin(String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil) {
+//        super(nom, prenom, email, mot_de_passe,  telephonne, photo_profil);
+//    }
+
+//    public Admin(int id_admin ,String nom, String prenom, String email, String mot_de_passe) {
+//        super( nom, prenom, email, mot_de_passe);
+//        this.id_admin=id_admin;
+//    }
 
     public int getId_admin() {
         return id_admin;

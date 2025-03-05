@@ -28,30 +28,20 @@ public class Conducteur extends User {
         this.numero_permis = numero_permis;
         this.experience = experience;
     }
-
-
-
-    public Conducteur( String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
-        super( nom, prenom, email, mot_de_passe, telephonne , photo_profil);
-        this.id_conducteur = id_conducteur ;
+    public Conducteur(int id_user, String numero_permis, String experience) {
+        setId_user(id_user);
         this.numero_permis = numero_permis;
         this.experience = experience;
-
     }
-//    public Conducteur( int id_conducteur , String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
-//        super( nom, prenom, email, mot_de_passe, telephonne, photo_profil);
-//        this.id_conducteur = id_conducteur ;
-//        this.numero_permis = numero_permis;
-//        this.experience = experience;
-//
-//    }
-
-//    public Conducteur( String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
-//        super( nom, prenom, email, mot_de_passe, telephonne, photo_profil);
-//    }
 
 
 
+
+    public Conducteur(String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, String numero_permis, String experience) {
+        super(nom, prenom, email, mot_de_passe, telephonne, photo_profil, Role.Conducteur); // Ajout du rôle
+        this.numero_permis = numero_permis;
+        this.experience = experience;
+    }
 
 
 

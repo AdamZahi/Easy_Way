@@ -39,7 +39,7 @@ public class StaticStatu implements Initializable {
     @FXML
     private Label statutLabel;  // Ajouter un label pour afficher le statut cliqué
 
-    private Connection connection = MyDataBase.getInstance().getConnection();
+    private Connection connection = MyDataBase.getInstance().getCnx();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

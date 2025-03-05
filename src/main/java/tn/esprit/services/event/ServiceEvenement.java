@@ -27,7 +27,7 @@ public class ServiceEvenement implements IEvent<Evenements> {
                 "VALUES (?,?,?,?,?,?,?)";
         List<Integer> userIds = null;
         List<Integer> phoneNumbers = null;
-        try (Connection conn = MyDataBase.getInstance().getConnection();
+        try (Connection conn = MyDataBase.getInstance().getCnx();
              PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, evenements.getType_evenement().name());//type event

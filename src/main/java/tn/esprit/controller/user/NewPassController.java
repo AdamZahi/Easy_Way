@@ -24,7 +24,7 @@ public class NewPassController {
     @FXML
     private Button resetmdp;
 
-    private final ServiceUser  userService = new ServiceUser();
+     ServiceUser  userService = new ServiceUser();
 
     private String email; // Stocke l'email récupéré de la page précédente
 
@@ -94,6 +94,7 @@ public class NewPassController {
             System.out.println("Erreur lors du chargement de SignIn.fxml : " + e.getMessage());
         }
     }
+
 
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
