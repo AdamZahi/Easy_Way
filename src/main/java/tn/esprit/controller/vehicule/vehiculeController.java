@@ -36,6 +36,7 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class vehiculeController {
@@ -652,7 +653,7 @@ public class vehiculeController {
     @FXML
     private void handleAddBus() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/formulaireBus.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/formulaireBus.fxml"));
             Scene scene = new Scene(loader.load());
 
             AjouterBusController controller = loader.getController();
@@ -1580,12 +1581,16 @@ public class vehiculeController {
             boolean searchMatch = (searchQuery == null || searchQuery.isEmpty()) ||
                     bus.getImmatriculation().toLowerCase().contains(searchQuery.toLowerCase()) ||
                     String.valueOf(bus.getCapacite()).contains(searchQuery) ||
-                    vehiculeService.getConducteurNomById(bus.getIdConducteur()).toLowerCase().contains(searchQuery.toLowerCase()) ||
-                    vehiculeService.getConducteurPrenomById(bus.getIdConducteur()).toLowerCase().contains(searchQuery.toLowerCase()) ||
-                    vehiculeService.getTrajetDepartById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase()) ||
-                    vehiculeService.getTrajetArretById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase()) ||
+                    (vehiculeService.getConducteurNomById(bus.getIdConducteur()) != null &&
+                            vehiculeService.getConducteurNomById(bus.getIdConducteur()).toLowerCase().contains(searchQuery.toLowerCase())) ||
+                    (vehiculeService.getConducteurPrenomById(bus.getIdConducteur()) != null &&
+                            vehiculeService.getConducteurPrenomById(bus.getIdConducteur()).toLowerCase().contains(searchQuery.toLowerCase())) ||
+                    (vehiculeService.getTrajetDepartById(bus.getIdTrajet()) != null &&
+                            vehiculeService.getTrajetDepartById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase())) ||
+                    (vehiculeService.getTrajetArretById(bus.getIdTrajet()) != null &&
+                            vehiculeService.getTrajetArretById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase())) ||
                     String.valueOf(bus.getNombrePortes()).contains(searchQuery) ||
-                    String.valueOf( bus.getTypeService()).toLowerCase().contains(searchQuery.toLowerCase()) ||
+                    String.valueOf(bus.getTypeService()).toLowerCase().contains(searchQuery.toLowerCase()) ||
                     String.valueOf(bus.getNombreDePlaces()).contains(searchQuery) ||
                     bus.getCompagnie().toLowerCase().contains(searchQuery.toLowerCase()) ||
                     (bus.isClimatisation() ? "oui" : "non").contains(searchQuery.toLowerCase());
@@ -1669,14 +1674,20 @@ public class vehiculeController {
         return metro.getImmatriculation().toLowerCase().contains(searchQuery) ||
                 metro.getProprietaire().toLowerCase().contains(searchQuery) ||
                 String.valueOf(metro.getCapacite()).contains(searchQuery) ||
-                vehiculeService.getConducteurNomById(metro.getIdConducteur()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getConducteurPrenomById(metro.getIdConducteur()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getTrajetDepartById(metro.getIdTrajet()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getTrajetArretById(metro.getIdTrajet()).toLowerCase().contains(searchQuery) ||
+                safeToLower(vehiculeService.getConducteurNomById(metro.getIdConducteur())).contains(searchQuery) ||
+                safeToLower(vehiculeService.getConducteurPrenomById(metro.getIdConducteur())).contains(searchQuery) ||
+                safeToLower(vehiculeService.getTrajetDepartById(metro.getIdTrajet())).contains(searchQuery) ||
+                safeToLower(vehiculeService.getTrajetArretById(metro.getIdTrajet())).contains(searchQuery) ||
                 String.valueOf(metro.getNombreLignes()).contains(searchQuery) ||
                 String.valueOf(metro.getNombreRames()).contains(searchQuery) ||
                 String.valueOf(metro.getLongueurReseau()).contains(searchQuery);
     }
+
+    // Méthode utilitaire pour éviter NullPointerException
+    private String safeToLower(String value) {
+        return value != null ? value.toLowerCase() : "";
+    }
+
 
     private void applyMetroFilter(String selectedProprietaire, String selectedState, String selectedTrajet, String selectedConducteur, String searchQuery) {
         System.out.println("Application du filtre avec recherche : " + searchQuery);
@@ -1754,15 +1765,20 @@ public class vehiculeController {
         return train.getImmatriculation().toLowerCase().contains(searchQuery) ||
                 train.getProprietaire().toLowerCase().contains(searchQuery) ||
                 String.valueOf(train.getCapacite()).contains(searchQuery) ||
-                vehiculeService.getConducteurNomById(train.getIdConducteur()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getConducteurPrenomById(train.getIdConducteur()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getTrajetDepartById(train.getIdTrajet()).toLowerCase().contains(searchQuery) ||
-                vehiculeService.getTrajetArretById(train.getIdTrajet()).toLowerCase().contains(searchQuery) ||
+                Optional.ofNullable(vehiculeService.getConducteurNomById(train.getIdConducteur()))
+                        .map(String::toLowerCase).orElse("").contains(searchQuery) ||
+                Optional.ofNullable(vehiculeService.getConducteurPrenomById(train.getIdConducteur()))
+                        .map(String::toLowerCase).orElse("").contains(searchQuery) ||
+                Optional.ofNullable(vehiculeService.getTrajetDepartById(train.getIdTrajet()))
+                        .map(String::toLowerCase).orElse("").contains(searchQuery) ||
+                Optional.ofNullable(vehiculeService.getTrajetArretById(train.getIdTrajet()))
+                        .map(String::toLowerCase).orElse("").contains(searchQuery) ||
                 String.valueOf(train.getNombreLignes()).contains(searchQuery) ||
                 String.valueOf(train.getNombreWagons()).contains(searchQuery) ||
                 String.valueOf(train.getVitesseMaximale()).contains(searchQuery) ||
                 String.valueOf(train.getLongueurReseau()).contains(searchQuery);
     }
+
     private void applyTrainFilterSearch(String selectedProprietaire, String selectedState, String selectedTrajet, String selectedConducteur, String searchQuery) {
         System.out.println("Application du filtre avec recherche : " + searchQuery);
 
