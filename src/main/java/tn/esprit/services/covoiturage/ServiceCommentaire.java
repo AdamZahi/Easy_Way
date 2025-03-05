@@ -15,22 +15,31 @@ public class ServiceCommentaire implements IService<Commentaire> {
     }
 
     @Override
+
     public void add(Commentaire commentaire) {
-        String qry = "INSERT INTO commentaire (id_post, id_user, contenu, date_creat) VALUES (?, ?, ?, ?)";
+        String qry = "INSERT INTO commentaire (id_post, id_user, contenu, date_creat, nom) VALUES (?, ?, ?, ?, ?)";
+
         try {
             PreparedStatement pstm = cnx.prepareStatement(qry);
             pstm.setInt(1, commentaire.getId_post());
             pstm.setInt(2, commentaire.getId_user());
-            pstm.setString(3, commentaire.getContenu());  // Utilisation du bon getter
-            pstm.setDate(4, commentaire.getDate_creat()); // Utilisation de date_creat
-            pstm.executeUpdate();
+            pstm.setString(3, commentaire.getContenu());
+            pstm.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Utilisation de la date actuelle
+            pstm.setString(5, commentaire.getNom());
+
+            pstm.executeUpdate(); // Exécute l'insertion dans la base de données
+
+            System.out.println("Commentaire ajouté avec succès !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erreur lors de l'ajout du commentaire : " + e.getMessage());
         }
     }
 
+
     @Override
     public List<Commentaire> getAll() {
+
+
         List<Commentaire> commentairesList = new ArrayList<>();
         String qry = "SELECT * FROM commentaire";
         try {
@@ -38,9 +47,11 @@ public class ServiceCommentaire implements IService<Commentaire> {
             ResultSet rs = stm.executeQuery(qry);
             while (rs.next()) {
                 Commentaire c = new Commentaire();
+
                 c.setId_com(rs.getInt("id_com"));
                 c.setId_post(rs.getInt("id_post"));
                 c.setId_user(rs.getInt("id_user"));
+                c.setNom(rs.getString("nom"));
                 c.setContenu(rs.getString("contenu")); // Utilisation du bon setter
                 c.setDate_creat(rs.getDate("date_creat")); // Utilisation de date_creat
                 commentairesList.add(c);
@@ -51,6 +62,9 @@ public class ServiceCommentaire implements IService<Commentaire> {
         return commentairesList;
     }
 
+
+
+
     @Override
     public Commentaire getById(int id) {
         return null;
@@ -58,12 +72,13 @@ public class ServiceCommentaire implements IService<Commentaire> {
 
     @Override
     public void update(Commentaire commentaire) {
-        String qry = "UPDATE commentaire SET id_post = ?, id_user = ?, contenu = ?, date_creat = ? WHERE id_com = ?";
+        String qry = "UPDATE commentaire SET id_post = ?, id_user = ?, contenu = ?, date_creat = ? ,nom = ? WHERE id_com = ? ";
         try {
             PreparedStatement pstm = cnx.prepareStatement(qry);
             pstm.setInt(1, commentaire.getId_post());
             pstm.setInt(2, commentaire.getId_user());
-            pstm.setString(3, commentaire.getContenu()); // Utilisation du bon getter
+            pstm.setString(3, commentaire.getContenu());
+            pstm.setString(5, commentaire.getNom());// Utilisation du bon getter
             pstm.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Nouvelle date actuelle
             pstm.setInt(5, commentaire.getId_com()); // Utilisation du bon getter
             pstm.executeUpdate();
@@ -84,25 +99,34 @@ public class ServiceCommentaire implements IService<Commentaire> {
         }
     }
 
-    public List<String> getCommentsByPostId(int id_post) {
-        List<String> commentairesList = new ArrayList<>();
-        String qry = "SELECT c.contenu FROM commentaire c WHERE c.id_post = ?";
+    public List<Commentaire> getCommentsByPostId(int id_post) {
+        List<Commentaire> commentaires = new ArrayList<>();
+        String query = "SELECT c.contenu, c.date_creat, u.nom " +
+                "FROM commentaire c " +
+                "JOIN user u ON c.id_user = u.id_user " +
+                "WHERE c.id_post = ?";
 
-        try {
-            PreparedStatement pstm = cnx.prepareStatement(qry);
-            pstm.setInt(1, id_post);
-            ResultSet rs = pstm.executeQuery();
+        try (PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setInt(1, id_post);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 String contenu = rs.getString("contenu");
-                commentairesList.add(contenu);
+                Date date_creat = rs.getDate("date_creat");
+                String nom = rs.getString("nom");
+                // On récupère le nom d'utilisateur
+
+                // On passe maintenant aussi le username dans l'objet Commentaire
+                commentaires.add(new Commentaire(id_post, 0, contenu, date_creat, nom));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-        return commentairesList;
+        return commentaires;
     }
+
+
 
 
 }

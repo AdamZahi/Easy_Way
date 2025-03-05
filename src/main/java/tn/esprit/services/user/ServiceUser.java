@@ -263,4 +263,25 @@ public class ServiceUser implements IService<User> {
         return id;
     }
 
+        public String getUserNameById(int id_user) {
+        String nomUtilisateur = null; // Utiliser null pour gérer les cas d'absence
+
+        String query = "SELECT nom FROM user WHERE id_user = ?"; // Correction du nom de table
+
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, id_user);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                nomUtilisateur = rs.getString("nom");
+            } else {
+                System.out.println("Aucun utilisateur trouvé avec cet ID : " + id_user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération du nom d'utilisateur : " + e.getMessage());
+        }
+
+        return nomUtilisateur;
+    }
+
 }

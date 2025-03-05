@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F4EFE2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.covoiturage.Choix">
+    <children>
+        <!-- Header -->
+        <BorderPane prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+            <center>
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="836.0" spacing="20">
+                    <children>
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Home" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Our Solution" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Community" />
+                    </children>
+                </HBox>
+            </center>
+            <right>
+                <Button style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
+                    <BorderPane.margin>
+                        <Insets right="10.0" top="15.0" />
+                    </BorderPane.margin>
+                </Button>
+            </right>
+            <left>
+                <ImageView fitHeight="60.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@LOGOEASY.png" />
+                    </image>
+                </ImageView>
+            </left>
+        </BorderPane>
+
+        <!-- Sidebar -->
+        <VBox layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+            <children>
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
+                    <font>
+                        <Font name="Franklin Gothic Demi Cond" size="18.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="60.0" right="10.0" top="10.0" />
+                    </VBox.margin>
+                </Label>
+                <VBox layoutX="20.0" layoutY="20.0" prefHeight="91.0" prefWidth="202.0">
+                    <children>
+                        <HBox layoutX="20.0" layoutY="20.0" prefHeight="25.0" prefWidth="186.0" spacing="10">
+                            <VBox.margin>
+                                <Insets left="40.0" right="40.0" />
+                            </VBox.margin>
+                            <children>
+                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@profil.png" />
+                                    </image>
+                                </ImageView>
+                                <Label style="-fx-font-size: 16px; -fx-text-fill: #333;" text="Profile">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox layoutY="500.0" spacing="10">
+                    <children>
+                        <ToggleButton style="-fx-font-size: 14px; -fx-text-fill: #333; -fx-background-color: #DDDEC6;" text="Light Mode">
+                            <graphic>
+                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                    <image>
+                                        <Image url="@idea.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </ToggleButton>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="360.0" />
+                    </VBox.margin>
+                </VBox>
+            </children>
+        </VBox>
+
+        <!-- Main Content -->
+        <AnchorPane layoutX="272.0" layoutY="109.0" prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                    <children>
+                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Choisissez votre mode de transport">
+                     <font>
+                        <Font name="Freestyle Script" size="12.0" />
+                     </font></Label>
+                  <ImageView fitHeight="225.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@tuni.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ImageView>
+                        <Label style="-fx-font-size: 16px;" text="Veuillez sélectionner l'option souhaitée :" />
+                        <HBox alignment="CENTER" spacing="20">
+                            <children>
+                                <Button onAction="#handleCovoiturage" style="-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #008955;" text="Covoiturage" textFill="WHITE" />
+                                <Button style="-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #A11010;" text="Transport Public" textFill="#f8f3f3" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
