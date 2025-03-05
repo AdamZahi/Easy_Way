@@ -15,7 +15,7 @@
       <AnchorPane layoutX="16.0" layoutY="14.0" prefHeight="670.0" prefWidth="967.0" style="-fx-background-color: white; -fx-background-radius: 13;">
          <children>
             <Button fx:id="valider" layoutX="103.0" layoutY="449.0" mnemonicParsing="false" onAction="#Valider" prefHeight="39.0" prefWidth="163.0" stylesheets="@button.css" text="Valider" />
-            <TextArea layoutX="540.0" layoutY="206.0" prefHeight="102.0" prefWidth="269.0" style="-fx-background-color: transparent;" text="Avec notre application, vous pouvez&#10; voyager à travers la Tunisie &#10;à des prix imbattables. &#10;">
+            <TextArea editable="false" layoutX="540.0" layoutY="206.0" prefHeight="102.0" prefWidth="269.0" style="-fx-background-color: transparent;" text="Avec notre application, vous pouvez&#10; voyager à travers la Tunisie &#10;à des prix imbattables. &#10;">
                <font>
                   <Font size="15.0" />
                </font>
@@ -77,7 +77,7 @@
                   <Font name="Calibri Light" size="12.0" />
                </font>
             </Text>
-            <TextArea layoutX="539.0" layoutY="322.0" prefHeight="95.0" prefWidth="265.0" style="-fx-background-color: transparent;" text="Profitez d'un tarif unique de 3DT &#10;pour chaque trajet, idéal pour vos &#10;déplacements en toute simplicité.">
+            <TextArea editable="false" layoutX="539.0" layoutY="322.0" prefHeight="95.0" prefWidth="265.0" style="-fx-background-color: transparent;" text="Profitez d'un tarif unique de 3DT &#10;pour chaque trajet, idéal pour vos &#10;déplacements en toute simplicité.">
                <font>
                   <Font size="15.0" />
                </font>
