@@ -1,7 +1,7 @@
 package tn.esprit.services.VehiculeService;
 
 import tn.esprit.interfaces.IService;
-import tn.esprit.models.*;
+import tn.esprit.models.vehicules.*;
 import tn.esprit.models.vehicules.*;
 import tn.esprit.util.MyDataBase;
 import tn.esprit.interfaces.IService;
