@@ -19,7 +19,7 @@ public class ServiceUser implements IService<User> {
     @Override
     public void add(User user) {
 
-        String query = "INSERT INTO `user`(`nom`, `prenom`, `email`, `mot_de_passe`, `telephonne`, `photo_profil`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user(nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, user.getNom());
@@ -39,7 +39,7 @@ public class ServiceUser implements IService<User> {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM `user`";
+        String query = "SELECT * FROM user";
         try {
             Statement stm = cnx.createStatement();
             ResultSet rs = stm.executeQuery(query);
@@ -200,7 +200,7 @@ public class ServiceUser implements IService<User> {
             return rowsUpdated > 0;
         } catch (SQLException e) {
             System.out.println("Erreur SQL lors de la mise à jour du mot de passe:");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -261,6 +261,27 @@ public class ServiceUser implements IService<User> {
             e.printStackTrace();
         }
         return id;
+    }
+
+    public String getUserNameById(int id_user) {
+        String nomUtilisateur = null; // Utiliser null pour gérer les cas d'absence
+
+        String query = "SELECT nom FROM user WHERE id_user = ?"; // Correction du nom de table
+
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, id_user);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                nomUtilisateur = rs.getString("nom");
+            } else {
+                System.out.println("Aucun utilisateur trouvé avec cet ID : " + id_user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération du nom d'utilisateur : " + e.getMessage());
+        }
+
+        return nomUtilisateur;
     }
 
 }
