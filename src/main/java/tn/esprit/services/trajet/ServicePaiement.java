@@ -3,6 +3,8 @@ package tn.esprit.services.trajet;
 
 import tn.esprit.interfaces.trajet.IService;
 import tn.esprit.models.trajet.Paiement;
+import tn.esprit.util.MyDataBase;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +18,13 @@ public class ServicePaiement implements IService<Paiement> {
 
     @Override
     public void add(Paiement paiement) {
-        String query = "INSERT INTO `paiement` (`pay_id`,`montant`) VALUES (?, ?)";
+        String query = "INSERT INTO `paiement` (`pay_id`,`montant`,`res_id`,`user_id`) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, paiement.getPay_id());
             pstm.setDouble(2, paiement.getMontant());
+            pstm.setInt(3, paiement.getRes_id());
+            pstm.setInt(4, paiement.getUser_id());
             pstm.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -39,6 +43,8 @@ public class ServicePaiement implements IService<Paiement> {
                 l.setId(rs.getInt("id"));
                 l.setPay_id(rs.getString("pay_id"));
                 l.setMontant(rs.getDouble("montant"));
+                l.setRes_id(rs.getInt("res_id"));
+                l.setUser_id(rs.getInt("user_id"));
                 paiements.add(l);
             }
             System.out.println(paiements);
@@ -52,12 +58,14 @@ public class ServicePaiement implements IService<Paiement> {
 
     @Override
     public void update(Paiement paiement) {
-        String query = "UPDATE `paiement` SET `pay_id` = ?, `montant` = ? WHERE `id` = ?";
+        String query = "UPDATE `paiement` SET `pay_id` = ?, `montant` = ?, `res_id` = ?, `user_id` = ? WHERE `id` = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, paiement.getPay_id());
             pstm.setDouble(2, paiement.getMontant());
-            pstm.setInt(3, paiement.getId());
+            pstm.setInt(3, paiement.getRes_id());
+            pstm.setInt(4, paiement.getUser_id());
+            pstm.setInt(5, paiement.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -86,5 +94,20 @@ public class ServicePaiement implements IService<Paiement> {
                 "Pay ID: " + paiement.getPay_id() + "\n" +
                 "Amount: " + paiement.getMontant();
     }
+    public List<Integer> getReservationIds() {
+        List<Integer> reservationIds = new ArrayList<>();
+        String query = "SELECT res_id FROM paiement"; // Query to get reservation IDs
+        try {
+            PreparedStatement pstm = cnx.prepareStatement(query);
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                reservationIds.add(rs.getInt("res_id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return reservationIds;
+    }
+
 
 }
