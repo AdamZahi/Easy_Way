@@ -2,7 +2,7 @@ package tn.esprit.test.reclamation;
 
 import tn.esprit.models.reclamation.categories;
 import tn.esprit.models.reclamation.reclamations;
-import tn.esprit.services.ServiceUser;
+import tn.esprit.services.user.ServiceUser;
 import tn.esprit.services.reclamation.categorieService;
 import tn.esprit.services.reclamation.reclamationService;
 

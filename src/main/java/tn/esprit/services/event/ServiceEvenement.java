@@ -14,7 +14,7 @@ public class ServiceEvenement implements IEvent<Evenements> {
     private Connection cnx;
 
     public ServiceEvenement() {
-        cnx = MyDataBase.getInstance().getCnx();
+        cnx = MyDataBase.getInstance().getConnection();
     }
 
     @Override
