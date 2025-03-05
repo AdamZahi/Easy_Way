@@ -1,3 +1,4 @@
+
 package tn.esprit.controller.vehicule;
 
 import javafx.fxml.FXML;
@@ -124,21 +125,20 @@ public class AjouterMetroController {
         alert.showAndWait();
     }
 
-        @FXML
-        private TextField immatriculationField; // ou n'importe quel autre contrôle FXML
+    @FXML
+    private TextField immatriculationField; // ou n'importe quel autre contrôle FXML
 
-        private Runnable onMetroAdded;
+    private Runnable onMetroAdded;
 
-        public void setOnMetroAdded(Runnable callback) {
-            this.onMetroAdded = callback;
-        }
-
-        private void refreshParentView() {
-            if (onMetroAdded != null) {
-                onMetroAdded.run();
-            }
-        }
-
-
+    public void setOnMetroAdded(Runnable callback) {
+        this.onMetroAdded = callback;
     }
 
+    private void refreshParentView() {
+        if (onMetroAdded != null) {
+            onMetroAdded.run();
+        }
+    }
+
+
+}

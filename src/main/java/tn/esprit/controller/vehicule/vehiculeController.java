@@ -74,7 +74,7 @@ public class vehiculeController {
     @FXML
     private void initialize() {
         // Chargement du CSS
-        String cssPath = getClass().getResource("/easyway.css").toExternalForm();
+        String cssPath = getClass().getResource("/vehicule/easyway.css").toExternalForm();
 
         // Application du CSS aux conteneurs
         busCardsContainer.getStylesheets().add(cssPath);
@@ -306,7 +306,7 @@ public class vehiculeController {
             System.out.println("Exportation en PDF réussie : " + filePath);
         });
 
-        Image menuIconImage = new Image(getClass().getResourceAsStream("/pdf.png"));
+        Image menuIconImage = new Image(getClass().getResourceAsStream("/vehicule/pdf.png"));
         ImageView menuIcon = new ImageView(menuIconImage);
         menuIcon.setFitWidth(30); // Ajuster la taille de l'icône
         menuIcon.setFitHeight(30);
@@ -1221,7 +1221,7 @@ public class vehiculeController {
     private String generateRouteUrl(double startLat, double startLng, double endLat, double endLng) {
         // Example: OpenStreetMap OSRM URL
         //return "https://www.openstreetmap.org/directions?engine=osrm_car&route="
-              //  + startLat + "%2C" + startLng + "%3B" + endLat + "%2C" + endLng;
+        //  + startLat + "%2C" + startLng + "%3B" + endLat + "%2C" + endLng;
 
         // Alternatively, for Google Maps:
         return "https://www.google.com/maps/dir/?api=1&origin=" + startLat + "," + startLng + "&destination=" + endLat + "," + endLng;
@@ -1585,7 +1585,7 @@ public class vehiculeController {
                     vehiculeService.getTrajetDepartById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase()) ||
                     vehiculeService.getTrajetArretById(bus.getIdTrajet()).toLowerCase().contains(searchQuery.toLowerCase()) ||
                     String.valueOf(bus.getNombrePortes()).contains(searchQuery) ||
-                   String.valueOf( bus.getTypeService()).toLowerCase().contains(searchQuery.toLowerCase()) ||
+                    String.valueOf( bus.getTypeService()).toLowerCase().contains(searchQuery.toLowerCase()) ||
                     String.valueOf(bus.getNombreDePlaces()).contains(searchQuery) ||
                     bus.getCompagnie().toLowerCase().contains(searchQuery.toLowerCase()) ||
                     (bus.isClimatisation() ? "oui" : "non").contains(searchQuery.toLowerCase());
@@ -1790,14 +1790,3 @@ public class vehiculeController {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
