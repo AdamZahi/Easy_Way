@@ -61,11 +61,11 @@
             <version>24.1.0</version> <!-- Vérifie la dernière version -->
         </dependency>
 
-            <dependency>
-                <groupId>com.vonage</groupId>
-                <artifactId>client</artifactId>
-                <version>7.6.0</version> <!-- Vérifie la dernière version sur https://mvnrepository.com/artifact/com.vonage/client -->
-            </dependency>
+        <dependency>
+            <groupId>com.vonage</groupId>
+            <artifactId>client</artifactId>
+            <version>7.6.0</version> <!-- Vérifie la dernière version sur https://mvnrepository.com/artifact/com.vonage/client -->
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>

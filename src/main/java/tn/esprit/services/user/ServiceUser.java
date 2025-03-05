@@ -200,7 +200,7 @@ public class ServiceUser implements IService<User> {
             return rowsUpdated > 0;
         } catch (SQLException e) {
             System.out.println("Erreur SQL lors de la mise à jour du mot de passe:");
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
     }
