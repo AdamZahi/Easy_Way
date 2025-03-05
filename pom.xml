@@ -37,6 +37,12 @@
             <version>21.0.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itext7-core -->
@@ -149,7 +155,6 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>tn.esprit.test.MainFx</mainClass>
-                    <mainClass>tn.esprit.test.mainFX</mainClass>
                 </configuration>
             </plugin>
         </plugins>
