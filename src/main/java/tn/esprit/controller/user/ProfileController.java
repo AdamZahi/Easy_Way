@@ -84,19 +84,34 @@ public class ProfileController implements Initializable {
 
     @FXML
     void saveProfileChanges(ActionEvent event) {
-        if (!currentPasswordField.getText().isEmpty() && !newPasswordField.getText().isEmpty()) {
-            if (!currentUser.getMot_de_passe().equals(currentPasswordField.getText())) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Mot de passe incorrect.");
+        // Vérification des champs obligatoires
+        if (nomField.getText().isEmpty() || prenomField.getText().isEmpty() ||
+                emailField.getText().isEmpty() || telephoneField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis.");
+            return;
+        }
+
+        // Vérification du mot de passe si un nouveau mot de passe est fourni
+        if (!currentPasswordField.getText().isEmpty() || !newPasswordField.getText().isEmpty()) {
+            if (currentPasswordField.getText().isEmpty() || newPasswordField.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez entrer à la fois l'ancien et le nouveau mot de passe.");
                 return;
             }
+
+            if (!currentUser.getMot_de_passe().equals(currentPasswordField.getText())) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le mot de passe actuel est incorrect.");
+                return;
+            }
+            // Mise à jour du mot de passe
             currentUser.setMot_de_passe(newPasswordField.getText());
         }
 
+        // Mise à jour des autres informations
         currentUser.setNom(nomField.getText());
         currentUser.setPrenom(prenomField.getText());
         currentUser.setEmail(emailField.getText());
 
-        // Conversion sécurisée de String en int pour le téléphone
+        // Validation du numéro de téléphone (doit être un entier)
         try {
             currentUser.setTelephonne(Integer.parseInt(telephoneField.getText()));
         } catch (NumberFormatException e) {
@@ -104,14 +119,16 @@ public class ProfileController implements Initializable {
             return;
         }
 
+        // Mise à jour du profil dans la base de données
         try {
-            userService.update(currentUser); // Suppression de la condition sur update()
+            userService.update(currentUser);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Profil mis à jour avec succès !");
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour du profil.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour du profil. Veuillez réessayer.");
             e.printStackTrace();
         }
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
