@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -100,6 +101,12 @@
                      </HBox>
             </children>
          </VBox>
+               <Button mnemonicParsing="false" text="Go Back" onAction="#gotooffres">
+                  <VBox.margin>
+                     <Insets left="20.0" top="20.0" />
+                  </VBox.margin>
+               </Button>
+
                <VBox layoutY="500.0" spacing="10">
                   <ToggleButton style="-fx-font-size: 14px; -fx-text-fill: #333; -fx-background-color: #DDDEC6;" text="Light Mode">
                      <graphic>
@@ -141,19 +148,32 @@
             </Label>
             <ComboBox fx:id="arrivalCity" layoutX="556.0" layoutY="337.0" prefWidth="150.0" />
 
-            <Label layoutX="482.0" layoutY="357.0" prefHeight="22.0" prefWidth="38.0" text="Date" textFill="#a30606">
+            <Label layoutX="481.0" layoutY="394.0" prefHeight="22.0" prefWidth="38.0" text="Date" textFill="#a30606">
                <font>
                   <Font name="Franklin Gothic Demi Cond" size="18.0" />
                </font>
             </Label>
             <DatePicker fx:id="travelDate" layoutX="556.0" layoutY="392.0" />
-
-            <Label layoutX="482.0" layoutY="448.0" text="Quand et comment voyagez-vous ?" textFill="#8b0e0e">
+            <Label layoutX="472.0" layoutY="448.0" text="Prix (DT)" textFill="#a30606">
                <font>
                   <Font name="Franklin Gothic Demi Cond" size="18.0" />
                </font>
             </Label>
-            <TextArea fx:id="travelDetails" layoutX="484.0" layoutY="480.0" prefHeight="80.0" prefWidth="347.0" text="🕒 Heure : &#10;💰 Prix : &#10;📍 Point de départ :  &#10; 👥 Nombre de personnes : ">
+            <TextField fx:id="prix" layoutX="556.0" layoutY="446.0" prefWidth="150.0" />
+
+            <Label layoutX="411.0" layoutY="492.0" text="Nombre de places" textFill="#a30606">
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="nombreDePlaces" layoutX="556.0" layoutY="490.0" prefWidth="150.0" />
+
+            <Label layoutX="496.0" layoutY="536.0" text="Quand et comment voyagez-vous ?" textFill="#8b0e0e">
+               <font>
+                  <Font name="Franklin Gothic Demi Cond" size="18.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="travelDetails" layoutX="448.0" layoutY="566.0" prefHeight="80.0" prefWidth="347.0" text="🕒 Heure : &#10;📍 Point de départ :  &#10;">
                <font>
                   <Font size="12.0" />
                </font>

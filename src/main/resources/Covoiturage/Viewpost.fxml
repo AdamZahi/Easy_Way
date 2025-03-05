@@ -70,11 +70,12 @@
                         <Image url="@car.png" />
                      </image>
                   </ImageView>
-                  <Label style="-fx-font-size: 16px; -fx-text-fill: #333;" text="Posts">
+                  <Label style="-fx-font-size: 16px; -fx-text-fill: #333;" text="Posts" />
+
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
-                  </Label>
+
                   <VBox.margin>
                      <Insets left="40.0" top="20.0" />
                   </VBox.margin>
@@ -92,6 +93,12 @@
                </HBox>
             </children>
          </VBox>
+         <Button mnemonicParsing="false" text="Go Back" onAction="#goToGestionCov">
+            <VBox.margin>
+               <Insets left="20.0" top="20.0" />
+            </VBox.margin>
+         </Button>
+
          <VBox layoutY="500.0" spacing="10">
             <ToggleButton style="-fx-font-size: 14px; -fx-text-fill: #333; -fx-background-color: #DDDEC6;" text="Light Mode">
                <graphic>

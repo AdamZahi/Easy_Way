@@ -4,17 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.models.covoiturage.Posts;
 import tn.esprit.services.covoiturage.ServicePosts;
+import tn.esprit.util.SessionManager;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -35,19 +34,23 @@ public class AddCovoiturageController implements Initializable {
     private TextArea travelDetails;
 
     @FXML
+    private TextField nombreDePlaces;
+
+    @FXML
+    private TextField prix;
+
+    @FXML
     private Button ajouter;
 
     private final ServicePosts servicePosts = new ServicePosts();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Vérification pour éviter NullPointerException
         if (departureCity != null && arrivalCity != null) {
             departureCity.getItems().addAll("Tunis", "Sousse", "Sfax", "Monastir", "Nabeul", "Bizerte",
                     "Gabès", "Gafsa", "Kairouan", "Mahdia", "Djerba", "Tozeur", "Zarzis", "Ben Arous",
                     "Ariana", "Manouba", "Beja", "Jendouba", "Kef", "Siliana", "Kasserine", "Sidi Bouzid",
                     "Médenine", "Tataouine");
-
             arrivalCity.getItems().addAll(departureCity.getItems());
         }
     }
@@ -55,7 +58,8 @@ public class AddCovoiturageController implements Initializable {
     @FXML
     void ajouter(ActionEvent event) {
         if (departureCity.getValue() == null || arrivalCity.getValue() == null ||
-                travelDate.getValue() == null || travelDetails.getText().isEmpty()) {
+                travelDate.getValue() == null || travelDetails.getText().isEmpty() ||
+                nombreDePlaces.getText().isEmpty() || prix.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez remplir tous les champs !");
             return;
         }
@@ -65,37 +69,61 @@ public class AddCovoiturageController implements Initializable {
             return;
         }
 
-        // Check if the date is in the past
         if (travelDate.getValue().isBefore(LocalDate.now())) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "La date de départ ne peut pas être dans le passé !");
             return;
         }
 
+        int idUserConnecte = SessionManager.getInstance().getId_user();
+        if (idUserConnecte == 0) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Vous devez être connecté pour ajouter une annonce !");
+            return;
+        }
 
-        ServicePosts sp = new ServicePosts();
+        int places;
+        double prixValue;
 
+        try {
+            places = Integer.parseInt(nombreDePlaces.getText());
+            prixValue = Double.parseDouble(prix.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix et le nombre de places doivent être des valeurs valides !");
+            return;
+        }
+
+        if (places <= 0) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le nombre de places doit être supérieur à zéro !");
+            return;
+        }
+
+
+
+        if (prixValue < 0) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix ne peut pas être négatif !");
+            return;
+        }
 
         Posts newPost = new Posts(
-                0, // ID is auto-generated, so set it to 0 or ignore it
-                1, // Replace with the actual user ID
+                0,
+                idUserConnecte,
                 departureCity.getValue(),
                 arrivalCity.getValue(),
                 Date.valueOf(travelDate.getValue()),
-                travelDetails.getText()
+                travelDetails.getText(),
+                prixValue,
+                places
         );
 
-
-        sp.add(newPost);
+        servicePosts.add(newPost);
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Votre annonce a été ajoutée !");
 
-
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Viewpost.fxml")); // Adjust path here
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Viewpost.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) ajouter.getScene().getWindow();  // Get the current stage
-            stage.setScene(new Scene(root));  // Set the new scene
-            stage.setTitle("View Posts");  // Set the new title for the stage
-            stage.show();  // Show the new scene
+            Stage stage = (Stage) ajouter.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("View Posts");
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors du chargement de la page de visualisation des annonces.");
@@ -105,8 +133,9 @@ public class AddCovoiturageController implements Initializable {
         arrivalCity.setValue(null);
         travelDate.setValue(null);
         travelDetails.clear();
+        nombreDePlaces.clear();
+        prix.clear();
     }
-
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -114,5 +143,21 @@ public class AddCovoiturageController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    @FXML
+    private void gotooffres(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Choix.fxml"));
+            Parent root = loader.load();
+
+            // Get current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set new scene
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
