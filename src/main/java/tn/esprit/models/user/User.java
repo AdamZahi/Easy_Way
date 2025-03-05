@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class User {
     public enum Role {
-        Conducteur , Passager
+        Conducteur , Passager , Admin
     }
 
     private int id_user;
