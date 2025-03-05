@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -28,6 +29,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import tn.esprit.models.vehicules.*;
 import tn.esprit.services.VehiculeService.ServiceVehicule;
+import tn.esprit.util.SessionManager;
 
 import java.awt.*;
 import java.io.FileOutputStream;
@@ -1796,12 +1798,83 @@ public class vehiculeController {
         trainCardsContainer.getChildren().addAll(filteredCards);
     }
 
+    @FXML
+    void RedirectToEvent(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToLigne(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToTrajet(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToUsers(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToReclamation(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/CardView.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
 
 
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de Déconnexion");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous vraiment vous déconnecter ?");
+        Optional<ButtonType> result = alert.showAndWait();
 
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            SessionManager.getInstance().logout();
 
-
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+    }
 
 
 

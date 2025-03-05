@@ -26,15 +26,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import tn.esprit.services.reclamation.reclamationService;
 import tn.esprit.util.MyDataBase;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.Document;
+import tn.esprit.util.SessionManager;
 
 
 public class CardView {
@@ -269,7 +267,7 @@ public class CardView {
                 lblMessage.setText("Aucune réclamation trouvée avec cet ID.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             lblMessage.setText("Erreur lors de la suppression de la réclamation.");
         }
     }
@@ -490,6 +488,89 @@ public class CardView {
                 alert.setContentText("Une erreur est survenue lors de la création du fichier PDF.");
                 alert.showAndWait();
             }
+        }
+    }
+
+    @FXML
+    void RedirectToEvent(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToLigne(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToTrajet(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToUsers(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToVehicule(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de Déconnexion");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous vraiment vous déconnecter ?");
+
+        // 🔹 Afficher l'alerte et attendre la réponse de l'utilisateur
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // 🔹 Si l'utilisateur clique sur "Oui", on procède à la déconnexion
+            SessionManager.getInstance().logout();
+
+            // Charger la nouvelle interface
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la scène et changer l'interface
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         }
     }
 
