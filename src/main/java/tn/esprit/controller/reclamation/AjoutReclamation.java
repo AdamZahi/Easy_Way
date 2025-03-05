@@ -251,9 +251,9 @@ public class AjoutReclamation {
         statu.setValue(null);
     }
 
-
-    public void gotoCardView(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/CardView.fxml")));
+    @FXML
+    void RedirectToOffers(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Covoiturage/Choix.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

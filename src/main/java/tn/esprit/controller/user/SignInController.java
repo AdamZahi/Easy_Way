@@ -63,13 +63,22 @@ public class SignInController {
             SessionManager.getInstance().setId_user(user.getId_user());
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) signInButton.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
+                if(user.getRole()== User.Role.Admin){
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) signInButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }else {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Choix.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) signInButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }
+
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
                 showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
             }
         }
@@ -95,7 +104,7 @@ public class SignInController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -108,7 +117,7 @@ public class SignInController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
