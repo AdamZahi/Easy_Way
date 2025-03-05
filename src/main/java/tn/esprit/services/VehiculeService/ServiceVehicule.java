@@ -21,7 +21,7 @@ public class ServiceVehicule implements IService<vehicule> {
     public void add(vehicule vehicule) {
         try {
 
-            String query = "INSERT INTO vehicule (immatriculation, capacite, etat, idTrajet, typeVehicule, idConducteur) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO vehicule (immatriculation, capacite, etat, idTrajet, typeVehicule, id_conducteur) VALUES (?, ?, ?, ?, ?, ?)";
 
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, vehicule.getImmatriculation());
@@ -104,6 +104,7 @@ public class ServiceVehicule implements IService<vehicule> {
 
             String query = "SELECT v.*, " +
                     "b.nombrePortes, b.typeService, b.nombreDePlaces, b.compagnie, b.climatisation, " +
+                    "c.nom AS conducteurNom, c.prenom AS conducteurPrenom, " +
                     "t.longueurReseau AS train_longueurReseau, t.nombreLignes AS train_nombreLignes, " +
                     "t.nombreWagons, t.vitesseMaximale, t.proprietaire AS train_proprietaire, " +
                     "m.longueurReseau AS metro_longueurReseau, m.nombreLignes AS metro_nombreLignes, " +
@@ -111,7 +112,8 @@ public class ServiceVehicule implements IService<vehicule> {
                     "FROM vehicule v " +
                     "LEFT JOIN bus b ON v.id = b.id " +
                     "LEFT JOIN train t ON v.id = t.id " +
-                    "LEFT JOIN metro m ON v.id = m.id";
+                    "LEFT JOIN metro m ON v.id = m.id " +
+                    "LEFT JOIN conducteur c ON v.id_conducteur = c.id_conducteur";
 
             try (PreparedStatement statement = connection.prepareStatement(query);
                  ResultSet resultSet = statement.executeQuery()) {
@@ -143,7 +145,7 @@ public class ServiceVehicule implements IService<vehicule> {
         String etat = resultSet.getString("etat");
         int idTrajet = resultSet.getInt("idTrajet");
         String typeVehicule = resultSet.getString("typeVehicule");
-        int idConducteur = resultSet.getInt("idConducteur");
+        int idConducteur = resultSet.getInt("id_conducteur");
 
         switch (typeVehicule) {
             case "BUS":
@@ -154,7 +156,7 @@ public class ServiceVehicule implements IService<vehicule> {
                         typeService = TypeService.valueOf(typeServiceStr);
                     } catch (IllegalArgumentException e) {
                         System.err.println("Valeur invalide pour typeService : " + typeServiceStr);
-                        typeService = TypeService.URBAIN;  // Valeur par défaut
+                        typeService = TypeService.URBAIN;  //
                     }
                 }
 
@@ -250,7 +252,7 @@ public class ServiceVehicule implements IService<vehicule> {
     public void update(vehicule vehicule) {
         try {
 
-            String query = "UPDATE vehicule SET immatriculation = ?, capacite = ?, etat = ?, idTrajet = ?, typeVehicule = ?, idConducteur = ? WHERE id = ?";
+            String query = "UPDATE vehicule SET immatriculation = ?, capacite = ?, etat = ?, idTrajet = ?, typeVehicule = ?, id_conducteur = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, vehicule.getImmatriculation());
                 statement.setInt(2, vehicule.getCapacite());
@@ -287,6 +289,7 @@ public class ServiceVehicule implements IService<vehicule> {
             statement.setInt(6, bus.getId());
 
             statement.executeUpdate();
+
         }
     }
 
@@ -359,7 +362,7 @@ public class ServiceVehicule implements IService<vehicule> {
     }
 
     public int getConducteurId(String nomConducteur, String prenomConducteur) {
-        String query = "SELECT idConducteur FROM conducteur WHERE nom = ? AND prenom = ?";
+        String query = "SELECT id_conducteur FROM conducteur WHERE nom = ? AND prenom = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, nomConducteur);
             statement.setString(2, prenomConducteur);
@@ -393,6 +396,180 @@ public class ServiceVehicule implements IService<vehicule> {
         return -1;
     }
 
+
+    public String getConducteurNomById(int idConducteur) {
+        String nom = null;
+        String query = "SELECT nom FROM conducteur WHERE id_conducteur = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idConducteur);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                nom = resultSet.getString("nom");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return nom;
+    }
+
+
+    public String getConducteurPrenomById(int idConducteur) {
+        String prenom = null;
+        String query = "SELECT prenom FROM conducteur WHERE id_conducteur = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idConducteur);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                prenom = resultSet.getString("prenom");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return prenom;
+    }
+    public String getTrajetDepartById(int trajetId) {
+        String query = "SELECT depart FROM trajet WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, trajetId);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("depart");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération du lieu de départ : " + e.getMessage());
+        }
+        return null;
+    }
+
+    public String getTrajetArretById(int trajetId) {
+        String query = "SELECT arret FROM trajet WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, trajetId);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("arret");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération du lieu d'arrêt : " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean isImmatriculationUnique(String immatriculation) {
+
+        String query = "SELECT COUNT(*) FROM bus WHERE immatriculation = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, immatriculation);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) == 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<String> getConducteurs() {
+        List<String> conducteurs = new ArrayList<>();
+        String query = "SELECT CONCAT(nom, ' ', prenom) AS conducteur FROM conducteur";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                conducteurs.add(rs.getString("conducteur"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conducteurs;
+    }
+
+    public List<String> getTrajets() {
+        List<String> trajets = new ArrayList<>();
+        String query = "SELECT CONCAT(depart, ' - ', arret) AS trajet FROM trajet";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                trajets.add(rs.getString("trajet"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return trajets;
+    }
+
+    public List<String> getEtats() {
+        List<String> etats = new ArrayList<>();
+        String query = "SELECT DISTINCT etat FROM vehicule";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                etats.add(rs.getString("etat"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return etats;
+    }
+    public List<String> getTypesService() {
+        List<String> typesService = new ArrayList<>();
+        String query = "SELECT DISTINCT typeService FROM bus"; // Récupérer les types de service depuis la table bus
+        try (
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                typesService.add(rs.getString("typeService"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return typesService;
+    }
+
+    public List<String> getProprietaires(){
+        List<String> proprietaires = new ArrayList<>();
+        String query = "SELECT DISTINCT proprietaire FROM metro";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                proprietaires.add(rs.getString("proprietaire"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return proprietaires;
+    }
+
+    public List<String> getProprietairesTrain(){
+        List<String> proprietaires = new ArrayList<>();
+        String query = "SELECT DISTINCT proprietaire FROM train";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                proprietaires.add(rs.getString("proprietaire"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return proprietaires;
+    }
 
 
 }
