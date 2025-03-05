@@ -44,7 +44,7 @@
                         <Button fx:id="vehiculesBtn" mnemonicParsing="false" onAction="#RedirectToVehicules" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Vehicules">
 
                         </Button>
-                        <Button fx:id="EventsBtn" mnemonicParsing="false" onAction="#RedirectToEvents" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Evenements">
+                        <Button fx:id="EventsBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Evenements">
 
                         </Button>
                         <Button fx:id="ReclamationBtn" mnemonicParsing="false" onAction="#RedirectToReclamation" prefHeight="35.0" prefWidth="180.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Reclamations">
@@ -96,8 +96,13 @@
                      <Insets left="35.0" />
                   </HBox.margin>
                </Label>
-               <TextField fx:id="searchField" prefHeight="26.0" prefWidth="591.0" promptText="Rechercher un événement..." />
+               <TextField fx:id="searchField" prefHeight="26.0" prefWidth="469.0" promptText="Rechercher un événement..." />
                <Button mnemonicParsing="false" onAction="#ClearAll" prefHeight="35.0" prefWidth="92.0" style="-fx-background-color: ef9a9a;" text="Effacer tout" textFill="WHITE">
+                  <font>
+                     <Font name="Corbel Bold" size="14.0" />
+                  </font>
+               </Button>
+               <Button layoutX="633.0" layoutY="36.0" mnemonicParsing="false" onAction="#goToDashboard" prefHeight="35.0" prefWidth="92.0" style="-fx-background-color: lightblue;" text="Dashboard" textFill="WHITE">
                   <font>
                      <Font name="Corbel Bold" size="14.0" />
                   </font>
