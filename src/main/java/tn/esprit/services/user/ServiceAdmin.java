@@ -12,7 +12,7 @@ public class ServiceAdmin implements IService<Admin> {
     private Connection cnx;
 
     public ServiceAdmin() {
-        cnx = MyDataBase.getInstance().getConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
 
     public void add(Admin admin) {
