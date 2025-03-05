@@ -17,61 +17,48 @@ public class ServicePassager implements IService<Passager> {
 
     public void add(Passager passager) {
         Connection cnx = null;
-        PreparedStatement pstmUser = null;
         PreparedStatement pstmPassager = null;
-        ResultSet generatedKeys = null;
+        ResultSet rs = null;
 
         try {
             // 🔹 Récupération de la connexion sans la fermer après
             cnx = MyDataBase.getInstance().getCnx();
 
-            // 1️⃣ Insérer dans la table 'user' avec le rôle 'Passager'
-            String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
-            pstmUser.setString(1, passager.getNom());
-            pstmUser.setString(2, passager.getPrenom());
-            pstmUser.setString(3, passager.getEmail());
-            pstmUser.setString(4, passager.getMot_de_passe());
-            pstmUser.setInt(5, passager.getTelephonne());
-            pstmUser.setString(6, passager.getPhoto_profil());
-            pstmUser.setString(7, "Passager");
+            // Vérifier si un passager avec cet email existe déjà dans la table 'passager'
+            String checkPassagerQuery = "SELECT COUNT(*) FROM passager WHERE email = ?";
+            PreparedStatement checkStmt = cnx.prepareStatement(checkPassagerQuery);
+            checkStmt.setString(1, passager.getEmail());
+            rs = checkStmt.executeQuery();
 
-            int affectedRows = pstmUser.executeUpdate();
-            if (affectedRows > 0) {
-                generatedKeys = pstmUser.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int id_user = generatedKeys.getInt(1);
-                    System.out.println("✅ Utilisateur ajouté avec ID : " + id_user);
+            if (rs.next() && rs.getInt(1) > 0) {
+                // Si un passager avec cet email existe déjà
+                System.out.println("❌ Passager avec cet email déjà existant.");
+                return; // Terminer la méthode si le passager existe déjà
+            }
 
-                    // 2️⃣ Insérer dans la table 'passager' avec `nbDeTrajetsEffectues`
-                    String queryPassager = "INSERT INTO passager (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, nbTrajetsEffectues) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                    pstmPassager = cnx.prepareStatement(queryPassager);
-                    pstmPassager.setInt(1, id_user);
-                    pstmPassager.setString(2, passager.getNom());
-                    pstmPassager.setString(3, passager.getPrenom());
-                    pstmPassager.setString(4, passager.getEmail());
-                    pstmPassager.setString(5, passager.getMot_de_passe());
-                    pstmPassager.setInt(6, passager.getTelephonne());
-                    pstmPassager.setString(7, passager.getPhoto_profil());
-                    pstmPassager.setInt(8, 0);
+            // 1️⃣ Insérer directement dans la table 'passager'
+            String queryPassager = "INSERT INTO passager (nom, prenom, email, mot_de_passe, telephonne, photo_profil, nbTrajetsEffectues) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            pstmPassager = cnx.prepareStatement(queryPassager);
+            pstmPassager.setString(1, passager.getNom());
+            pstmPassager.setString(2, passager.getPrenom());
+            pstmPassager.setString(3, passager.getEmail());
+            pstmPassager.setString(4, passager.getMot_de_passe());
+            pstmPassager.setInt(5, passager.getTelephonne());
+            pstmPassager.setString(6, passager.getPhoto_profil());
+            pstmPassager.setInt(7, 0); // Par défaut, nbTrajetsEffectues = 0
 
-                    int rowsInserted = pstmPassager.executeUpdate();
-                    if (rowsInserted > 0) {
-                        System.out.println("✅ Passager ajouté avec succès !");
-                    } else {
-                        System.out.println("⚠️ Erreur lors de l'ajout du passager.");
-                    }
-                }
+            int rowsInserted = pstmPassager.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("✅ Passager ajouté avec succès !");
             } else {
-                System.out.println("❌ Aucune ligne insérée dans la table user.");
+                System.out.println("⚠️ Erreur lors de l'ajout du passager.");
             }
         } catch (SQLException e) {
             System.out.println("⚠️ Erreur SQL : " + e.getMessage());
         } finally {
             try {
                 // ❗ On ferme uniquement les PreparedStatement et ResultSet
-                if (generatedKeys != null) generatedKeys.close();
-                if (pstmUser != null) pstmUser.close();
+                if (rs != null) rs.close();
                 if (pstmPassager != null) pstmPassager.close();
                 // ⚠️ NE PAS FERMER cnx ici !
             } catch (SQLException e) {
@@ -79,6 +66,7 @@ public class ServicePassager implements IService<Passager> {
             }
         }
     }
+
 
     @Override
     public List<Passager> getAll() {

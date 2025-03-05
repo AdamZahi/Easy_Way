@@ -81,6 +81,13 @@
             <artifactId>weka-stable</artifactId>
             <version>3.8.6</version> <!-- Vérifie la dernière version ici : https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable -->
         </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+
 
 
 

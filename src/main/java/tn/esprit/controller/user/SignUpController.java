@@ -42,6 +42,7 @@ public class SignUpController {
     void SignUp(ActionEvent event) {
         ServiceUser su = new ServiceUser();
 
+
         String nom = NomField.getText().trim();
         String prenom = PrenomField.getText().trim();
         String email = EmailField.getText().trim();
