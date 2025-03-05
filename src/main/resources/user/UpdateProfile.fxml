@@ -30,7 +30,7 @@
                             <children>
                                 <ImageView fx:id="profileImageView" fitHeight="150.0" fitWidth="150.0" layoutX="25.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@Images/default_profile.png" />
+                                        <Image url="@Images/Admin.png" />
                                     </image>
                                 </ImageView>
                                 <Button fx:id="changePhotoButton" layoutX="25.0" layoutY="165.0" mnemonicParsing="false" onAction="#changeProfilePhoto" prefHeight="30.0" prefWidth="150.0" style="-fx-background-color: #EFA9A9;" text="Changer la photo" textFill="WHITE">
@@ -96,6 +96,14 @@
                                 <DropShadow />
                             </effect>
                         </Button>
+                  <Button fx:id="saveButton1" layoutX="487.0" layoutY="284.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-color: #EFA9A9;" text="Reclamation" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </Button>
 
                     </children>
                 </AnchorPane>
@@ -107,4 +115,3 @@
         <Label layoutX="814.0" layoutY="578.0" text="Termes" />
     </children>
 </AnchorPane>
-

@@ -1,18 +1,33 @@
 package tn.esprit.controller.covoiturage;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.text.FontWeight;
+
+import javafx.stage.Stage;
 import tn.esprit.models.covoiturage.Posts;
+import tn.esprit.models.covoiturage.Commentaire;
 import tn.esprit.services.covoiturage.ServicePosts;
+import tn.esprit.services.covoiturage.ServiceCommentaire;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import tn.esprit.services.covoiturage.ServiceCommentaire;
-import tn.esprit.models.covoiturage.Commentaire;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import java.time.LocalDate;
 
+import javafx.scene.Node;
+import tn.esprit.services.user.ServiceUser;
+import tn.esprit.util.SessionManager;
 
 public class Viewpostcontrolleur {
 
@@ -20,7 +35,12 @@ public class Viewpostcontrolleur {
     private VBox postsContainer;
 
     private ServicePosts servicePosts = new ServicePosts();
-    private ServiceCommentaire serviceCommentaire = new ServiceCommentaire(); // Instancier ServiceCommentaire
+    private ServiceCommentaire serviceCommentaire = new ServiceCommentaire();
+    private ServiceUser us = new ServiceUser(); // Service pour gérer les utilisateurs
+    private int idUtilisateurConnecte; // Stocke l'ID de l'utilisateur connecté
+
+    // Méthode pour récupérer l'ID utilisateur via son email et l'affecter
+    int idUserConnecte = SessionManager.getInstance().getId_user();
 
     @FXML
     public void initialize() {
@@ -32,43 +52,142 @@ public class Viewpostcontrolleur {
         List<Posts> postsList = servicePosts.getAll();
 
         for (Posts post : postsList) {
-            VBox postBox = new VBox();
-            postBox.setSpacing(10);
-            postBox.setStyle("-fx-background-color: #E5FEB3; -fx-padding: 15px; -fx-border-color: #ccc; -fx-border-radius: 10px;");
+            VBox postBox = new VBox(10);
+            postBox.setStyle("-fx-background-color: #F4EFE2; -fx-padding: 15px; -fx-border-color: #ccc; -fx-border-radius: 10px;");
 
             Label title = new Label("Offre Covoiturage");
-            title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1c7007;");
+            title.setFont(Font.font("System", FontWeight.BOLD, 18));
+            title.setStyle("-fx-text-fill: #000000;");
+            title.setMaxWidth(Double.MAX_VALUE);
+            title.setAlignment(Pos.CENTER);
 
-            Label descriptionLabel = new Label("Description : " + post.getMessage());
+            Label descriptionLabel = new Label("Description du trajet: " + post.getMessage());
+            descriptionLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            descriptionLabel.setStyle("-fx-text-fill: #6b0808;");
+            descriptionLabel.setWrapText(true);
+
             Label villeDepartLabel = new Label("Lieu de départ : " + post.getVilleDepart());
+            villeDepartLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            villeDepartLabel.setStyle("-fx-text-fill: #6b0808;");
+
             Label villeArriveeLabel = new Label("Lieu d’arrivée : " + post.getVilleArrivee());
-            Label dateLabel = new Label("Date : " + post.getDate().toString());
+            villeArriveeLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            villeArriveeLabel.setStyle("-fx-text-fill: #6b0808;");
 
-            TextArea commentaireField = new TextArea();
-            commentaireField.setPromptText("Ajouter un commentaire...");
-            commentaireField.setWrapText(true);
-            commentaireField.setPrefHeight(60);
+            Label dateLabel = new Label("Date: " + post.getDate().toString());
+            dateLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            dateLabel.setStyle("-fx-text-fill: #6b0808;");
 
-            Button envoyerButton = new Button("Envoyer");
-            envoyerButton.setStyle("-fx-background-color: #CF321A; -fx-text-fill: #f4eeee;");
-            envoyerButton.setOnAction(event -> handleAddComment(event, post.getId_post(), commentaireField));
+            // Nouveau : Affichage du prix
+            Label prixLabel = new Label("Prix : " + post.getPrix() + " TND");
+            prixLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            prixLabel.setStyle("-fx-text-fill: #6b0808;");
 
-            Button deleteButton = new Button("Supprimer");
-            deleteButton.setStyle("-fx-background-color: #FF6347; -fx-text-fill: #fff;");
-            deleteButton.setOnAction(event -> handleDeletePost(post));
+            // Nouveau : Affichage du nombre de places
+            Label placesLabel = new Label("Nombre de places : " + post.getNombreDePlaces());
+            placesLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+            placesLabel.setStyle("-fx-text-fill: #6b0808;");
 
-            Button updateButton = new Button("Mettre à jour");
-            updateButton.setStyle("-fx-background-color: #4682B4; -fx-text-fill: #fff;");
-            updateButton.setOnAction(event -> handleUpdatePost(event, post));
+            // Zone de saisie pour ajouter un commentaire
+            TextArea commentInput = new TextArea();
+            commentInput.setPromptText("Ajouter un commentaire...");
+            commentInput.setWrapText(true);
+            commentInput.setPrefHeight(60);
+            commentInput.setPrefWidth(639);
 
-            postBox.getChildren().addAll(title, descriptionLabel, villeDepartLabel, villeArriveeLabel, dateLabel, commentaireField, envoyerButton, deleteButton, updateButton);
+            Button submitCommentButton = new Button("Envoyer");
+            submitCommentButton.setStyle("-fx-background-color: #E5FEB3; -fx-text-fill: #333;");
+            submitCommentButton.setFont(Font.font("System", FontWeight.BOLD, 12));
+            submitCommentButton.setOnAction(event -> handleAddComment(event, post.getId_post(), commentInput));
 
-            // Afficher les commentaires du post
-            afficherCommentaires(post.getId_post(), postBox);
+            VBox commentInputBox = new VBox(10, commentInput, submitCommentButton);
+
+            // Conteneur des commentaires
+            VBox commentsContainer = new VBox();
+            commentsContainer.setSpacing(5);
+            commentsContainer.setStyle("-fx-padding: 10px; -fx-background-color: #f4f4f4; -fx-border-color: #bbb; -fx-border-radius: 5px;");
+
+            Label commentsTitle = new Label("Commentaires :");
+            commentsTitle.setFont(Font.font("System", FontWeight.BOLD, 14));
+            commentsTitle.setStyle("-fx-text-fill: #333;");
+            commentsContainer.getChildren().add(commentsTitle);
+
+            List<Commentaire> commentaires = serviceCommentaire.getCommentsByPostId(post.getId_post());
+            if (commentaires.isEmpty()) {
+                Label noCommentsLabel = new Label("Aucun commentaire pour ce post.");
+                noCommentsLabel.setStyle("-fx-text-fill: #888;");
+                commentsContainer.getChildren().add(noCommentsLabel);
+            } else {
+                for (Commentaire commentaire : commentaires) {
+                    HBox commentRow = new HBox(10);
+                    commentRow.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
+
+
+
+                    Label userNameLabel = new Label(commentaire.getNom());
+
+                    userNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                    userNameLabel.setStyle("-fx-text-fill: black;");
+
+                    String dateString = (commentaire.getDate_creat() != null) ? commentaire.getDate_creat().toString() : "Date inconnue";
+                    Label dateLabelComment = new Label("(" + dateString + ")");
+                    dateLabelComment.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
+                    dateLabelComment.setStyle("-fx-text-fill: #888;");
+
+                    Label commentLabel = new Label(commentaire.getContenu());
+                    commentLabel.setWrapText(true);
+                    commentLabel.setMaxWidth(400);
+                    commentLabel.setStyle("-fx-text-fill: #555; -fx-padding: 5px;");
+
+                    Button deleteCommentButton = new Button("❌");
+                    deleteCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
+                    deleteCommentButton.setOnAction(event -> handleDeleteComment(String.valueOf(commentaire.getId_com()), postBox));
+
+                    Button updateCommentButton = new Button("✏️");
+                    updateCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
+
+                    HBox commentHeader = new HBox(5, userNameLabel, dateLabelComment);
+                    VBox commentBox = new VBox(3, commentHeader, commentLabel, new Separator());
+                    commentBox.setStyle("-fx-padding: 5px; -fx-background-radius: 5px;");
+
+                    commentRow.getChildren().addAll(commentBox, updateCommentButton, deleteCommentButton);
+                    commentsContainer.getChildren().add(commentRow);
+                }
+            }
+
+            HBox postActionButtons = new HBox(10);
+            postActionButtons.setAlignment(Pos.CENTER_LEFT);
+            postActionButtons.setStyle("-fx-padding: 10;");
+
+            if (post.getId_user() == idUserConnecte) {
+                Button deletePostButton = new Button("Supprimer");
+                deletePostButton.setStyle("-fx-background-color: #C10707; -fx-text-fill: #fff;");
+                deletePostButton.setOnAction(event -> handleDeletePost(post));
+
+                Button updatePostButton = new Button("Mettre à jour");
+                updatePostButton.setStyle("-fx-background-color: #C2D4A9; -fx-text-fill: #fff; -fx-padding: 10 20;");
+                updatePostButton.setOnAction(event -> handleUpdatePost(event, post));
+
+                postActionButtons.getChildren().addAll(deletePostButton, updatePostButton);
+            }
+
+            postBox.getChildren().addAll(
+                    title,
+                    descriptionLabel,
+                    villeDepartLabel,
+                    villeArriveeLabel,
+                    dateLabel,
+                    prixLabel, // Ajout du prix
+                    placesLabel, // Ajout du nombre de places
+                    commentInputBox,
+                    commentsContainer,
+                    postActionButtons
+            );
 
             postsContainer.getChildren().add(postBox);
         }
     }
+
 
     private void handleDeletePost(Posts post) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -98,29 +217,68 @@ public class Viewpostcontrolleur {
         VBox dialogVbox = new VBox(10);
         dialogVbox.setStyle("-fx-padding: 20px;");
 
+        // Champ pour le message
         TextField messageField = new TextField(post.getMessage());
-        TextField villeDepartField = new TextField(post.getVilleDepart());
-        TextField villeArriveeField = new TextField(post.getVilleArrivee());
+
+        // Création des ComboBox pour les villes (gouvernorats de Tunisie)
+        ComboBox<String> villeDepartCombo = new ComboBox<>();
+        ComboBox<String> villeArriveeCombo = new ComboBox<>();
+
+        // Liste des 24 gouvernorats
+        List<String> gouvernorats = List.of(
+                "Ariana", "Béja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba",
+                "Kairouan", "Kasserine", "Kef", "Mahdia", "Manouba", "Medenine", "Monastir",
+                "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", "Sousse", "Tataouine", "Tozeur",
+                "Tunis", "Zaghouan", "Kebili"
+        );
+
+        villeDepartCombo.getItems().addAll(gouvernorats);
+        villeArriveeCombo.getItems().addAll(gouvernorats);
+
+        // Sélectionner la valeur actuelle du post si elle figure dans la liste
+        if (gouvernorats.contains(post.getVilleDepart())) {
+            villeDepartCombo.setValue(post.getVilleDepart());
+        }
+        if (gouvernorats.contains(post.getVilleArrivee())) {
+            villeArriveeCombo.setValue(post.getVilleArrivee());
+        }
+
+        // DatePicker pour la date du post
         DatePicker dateField = new DatePicker(post.getDate().toLocalDate());
 
+        // Ajout des éléments au layout du dialogue
         dialogVbox.getChildren().addAll(
                 new Label("Message"), messageField,
-                new Label("Lieu de départ"), villeDepartField,
-                new Label("Lieu d’arrivée"), villeArriveeField,
+                new Label("Lieu de départ"), villeDepartCombo,
+                new Label("Lieu d’arrivée"), villeArriveeCombo,
                 new Label("Date"), dateField
         );
 
         updateDialog.getDialogPane().setContent(dialogVbox);
 
-        ButtonType updateButton = new ButtonType("Mettre à jour", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-        updateDialog.getDialogPane().getButtonTypes().addAll(updateButton, cancelButton);
+        ButtonType updateButtonType = new ButtonType("Mettre à jour", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        updateDialog.getDialogPane().getButtonTypes().addAll(updateButtonType, cancelButtonType);
+
+        // Récupération et désactivation initiale du bouton de mise à jour
+        Node updateButton = updateDialog.getDialogPane().lookupButton(updateButtonType);
+        updateButton.setDisable(true);
+
+        // Ajout des écouteurs pour la validation en temps réel
+        messageField.textProperty().addListener((obs, oldVal, newVal) ->
+                validateUpdateFields(messageField, villeDepartCombo, villeArriveeCombo, dateField, updateButton));
+        villeDepartCombo.valueProperty().addListener((obs, oldVal, newVal) ->
+                validateUpdateFields(messageField, villeDepartCombo, villeArriveeCombo, dateField, updateButton));
+        villeArriveeCombo.valueProperty().addListener((obs, oldVal, newVal) ->
+                validateUpdateFields(messageField, villeDepartCombo, villeArriveeCombo, dateField, updateButton));
+        dateField.valueProperty().addListener((obs, oldVal, newVal) ->
+                validateUpdateFields(messageField, villeDepartCombo, villeArriveeCombo, dateField, updateButton));
 
         updateDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == updateButton) {
+            if (dialogButton == updateButtonType) {
                 post.setMessage(messageField.getText());
-                post.setVilleDepart(villeDepartField.getText());
-                post.setVilleArrivee(villeArriveeField.getText());
+                post.setVilleDepart(villeDepartCombo.getValue());
+                post.setVilleArrivee(villeArriveeCombo.getValue());
                 post.setDate(java.sql.Date.valueOf(dateField.getValue()));
 
                 servicePosts.update(post);
@@ -134,67 +292,33 @@ public class Viewpostcontrolleur {
         updateDialog.showAndWait();
     }
 
-    @FXML
-    private void afficherCommentaires(int id_post, VBox postContainer) {
-        ServiceCommentaire serviceCommentaire = new ServiceCommentaire();
-        List<String> commentaires = serviceCommentaire.getCommentsByPostId(id_post);
-
-        VBox commentsSection = new VBox();
-        commentsSection.setSpacing(5);
-        commentsSection.setStyle("-fx-padding: 5; -fx-background-color: #F0F0F0; -fx-border-color: #ccc; -fx-border-radius: 5px;");
-
-        Label title = new Label("Commentaires :");
-        title.setStyle("-fx-font-weight: bold; -fx-text-fill: #333;");
-
-        commentsSection.getChildren().add(title);
-
-        if (commentaires.isEmpty()) {
-            Label noCommentsLabel = new Label("Aucun commentaire pour ce post.");
-            noCommentsLabel.setStyle("-fx-text-fill: #888;");
-            commentsSection.getChildren().add(noCommentsLabel);
-        } else {
-            for (String contenu : commentaires){ // Utilisation de String directement
-                VBox commentBox = new VBox(5);
-                commentBox.setStyle("-fx-padding: 5px; -fx-background-color: white; -fx-border-radius: 5px; -fx-border-color: #ddd; -fx-border-width: 1px;");
-
-                HBox commentRow = new HBox(10);
-                commentRow.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
-
-                Label commentLabel = new Label(contenu); // Utiliser directement la chaîne de caractères
-                commentLabel.setWrapText(true);
-                commentLabel.setStyle("-fx-text-fill: #555;");
-
-                Button deleteButton = new Button("❌");
-                deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
-
-                deleteButton.setOnAction(event -> handleDeleteComment(contenu, postContainer));
-
-                Button updateButton = new Button("✏️");
-                updateButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
-
-              //  updateButton.setOnAction(event -> handleUpdateComment(contenu, postContainer));
-
-                commentRow.getChildren().addAll(commentLabel, updateButton, deleteButton);
-                commentBox.getChildren().addAll(commentRow, new Separator());
-                commentsSection.getChildren().add(commentBox);
-            }
-        }
-
-        postContainer.getChildren().add(commentsSection);
+    /**
+     * Méthode de validation pour le formulaire de mise à jour.
+     * Désactive le bouton de mise à jour si :
+     * - Le message est vide,
+     * - Une des villes n'est pas sélectionnée,
+     * - Les villes de départ et d'arrivée sont identiques,
+     * - La date est nulle ou dans le passé.
+     */
+    private void validateUpdateFields(TextField messageField, ComboBox<String> villeDepartCombo, ComboBox<String> villeArriveeCombo, DatePicker dateField, Node updateButton) {
+        boolean disable = messageField.getText().trim().isEmpty() ||
+                villeDepartCombo.getValue() == null ||
+                villeArriveeCombo.getValue() == null ||
+                villeDepartCombo.getValue().equals(villeArriveeCombo.getValue()) ||
+                dateField.getValue() == null ||
+                dateField.getValue().isBefore(LocalDate.now());
+        updateButton.setDisable(disable);
     }
 
 
     private void handleDeleteComment(String contenu, VBox postContainer) {
         Commentaire commentaireToDelete = null;
-
-
         for (Commentaire c : serviceCommentaire.getAll()) {
             if (c.getContenu().equals(contenu)) {
                 commentaireToDelete = c;
                 break;
             }
         }
-
         if (commentaireToDelete != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Supprimer le commentaire");
@@ -208,57 +332,64 @@ public class Viewpostcontrolleur {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == yesButton) {
                 serviceCommentaire.delete(commentaireToDelete);
-                afficherPosts(); // Refresh the UI after deletion
+                afficherPosts(); // Rafraîchir l'interface
                 System.out.println("Commentaire supprimé !");
             }
         }
     }
-
-
-//    private void handleUpdateComment(String contenu, VBox postContainer) {
-//        Commentaire commentaireToUpdate = null;
-//
-//        // Find the Commentaire object from the content (again, modify this logic as per your needs)
-//        for (Commentaire c : serviceCommentaire.getAll()) {
-//            if (c.getContenu().equals(contenu)) {
-//                commentaireToUpdate = c;
-//                break;
-//            }
-//        }
-//
-//        if (commentaireToUpdate != null) {
-//            TextInputDialog dialog = new TextInputDialog(commentaireToUpdate.getContenu());
-//            dialog.setTitle("Modifier le commentaire");
-//            dialog.setHeaderText("Mettez à jour votre commentaire");
-//            dialog.setContentText("Nouveau contenu :");
-//
-//            Optional<String> result = dialog.showAndWait();
-//            result.ifPresent(newText -> {
-//                commentaireToUpdate.setContenu(newText);
-//                commentaireToUpdate.setDate_creat(new java.sql.Date(System.currentTimeMillis())); // Update the date to current time
-//                serviceCommentaire.update(commentaireToUpdate);
-//                afficherPosts(); // Refresh the UI after update
-//                System.out.println("Commentaire mis à jour !");
-//            });
-//        }
-//    }
-
-
-
-
     private void handleAddComment(ActionEvent event, int postId, TextArea commentaireField) {
         String commentaireText = commentaireField.getText();
-        if (!commentaireText.isEmpty()) {
-            int id_user = 3;
-            java.sql.Date date_creat = new java.sql.Date(System.currentTimeMillis());
 
-            Commentaire newComment = new Commentaire(postId, id_user, commentaireText, date_creat);
-            serviceCommentaire.add(newComment);
+        if (commentaireText.isEmpty()) {
+            showAlert(AlertType.WARNING, "Champ vide", "Veuillez entrer un commentaire.");
+            return;
+        }
 
-            commentaireField.clear();
+        if (!Commentaire.isSafe(commentaireText)) {
+            showAlert(AlertType.ERROR, "Commentaire inapproprié", "Votre commentaire contient des mots interdits. Veuillez le modifier.");
+            return;
+        }
 
-            afficherPosts();
-            System.out.println("Commentaire ajouté avec succès !");
+        // Récupération de l'utilisateur connecté
+        int id_user = SessionManager.getInstance().getId_user();
+        String nom= SessionManager.getInstance().getUsername(); // Ajout du username
+        java.sql.Date date_creat = new java.sql.Date(System.currentTimeMillis());
+
+        // Création de l'objet commentaire avec username
+        Commentaire newComment = new Commentaire(postId, id_user, commentaireText, date_creat, nom);
+        serviceCommentaire.add(newComment); // Modification pour prendre en compte le username
+
+        commentaireField.clear();
+        afficherPosts();
+
+        showAlert(AlertType.INFORMATION, "Succès", "Commentaire ajouté avec succès !");
+    }
+
+    // Méthode pour afficher des alertes
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    @FXML
+    private void goToGestionCov(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Gestioncov.fxml"));
+            Parent root = loader.load();
+
+            // Get current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set new scene
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+
+
 }

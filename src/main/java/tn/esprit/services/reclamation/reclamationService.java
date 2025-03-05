@@ -24,7 +24,8 @@ public class reclamationService implements IService<reclamations> {
             return;
         }
 
-        String req = "INSERT INTO reclamation (categorieId, email, sujet, description, statu, date_creation) VALUES (?, ?, ?, ?, ?, ?)";
+        // Corriger la requête : Ajouter le paramètre 'user_id' dans la requête SQL
+        String req = "INSERT INTO reclamation (categorieId, email, sujet, description, statu, date_creation, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, categorie.getId()); // Utilisation de l'ID de la catégorie récupérée
@@ -33,6 +34,7 @@ public class reclamationService implements IService<reclamations> {
             pst.setString(4, reclamation.getDescription());
             pst.setString(5, reclamation.getStatu());
             pst.setString(6, reclamation.getDate_creation());
+            pst.setInt(7, reclamation.getUser_id()); // Ajout de user_id ici
             pst.executeUpdate();
             System.out.println("Réclamation ajoutée avec la catégorie : " + categorie.getType());
         } catch (SQLException e) {
@@ -41,9 +43,10 @@ public class reclamationService implements IService<reclamations> {
     }
 
 
+
     @Override
     public void update(reclamations reclamation) {
-        String req = "UPDATE reclamation SET categorieId=?, email=?, sujet=?, description=?, statu=?, date_creation=? WHERE id=?";
+        String req = "UPDATE reclamation SET categorieId=?, email=?, sujet=?, description=?, statu=?, date_creation=?, user_id=? WHERE id=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, reclamation.getCategorie().getId()); // Utilisation de l'objet categorie
@@ -53,6 +56,7 @@ public class reclamationService implements IService<reclamations> {
             pst.setString(5, reclamation.getStatu());
             pst.setString(6, reclamation.getDate_creation());
             pst.setInt(7, reclamation.getId());
+            pst.setInt(8, reclamation.getUser_id());
             int rowsUpdated = pst.executeUpdate();
             System.out.println(rowsUpdated > 0 ? "Réclamation modifiée" : "Aucune réclamation trouvée");
         } catch (SQLException e) {
@@ -76,7 +80,7 @@ public class reclamationService implements IService<reclamations> {
     @Override
     public List<reclamations> getAll() {
         List<reclamations> reclamationsList = new ArrayList<>();
-        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, " +
+        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, r.user_id, " +
                 "c.id AS categorieId, c.type AS categorieType " +
                 "FROM reclamation r JOIN categories c ON r.categorieId = c.id";
         try {
@@ -91,7 +95,8 @@ public class reclamationService implements IService<reclamations> {
                         rs.getString("sujet"),
                         rs.getString("statu"),
                         rs.getString("description"),
-                        rs.getString("date_creation")
+                        rs.getString("date_creation"),
+                        rs.getInt("user_id")
                 ));
             }
         } catch (SQLException e) {
@@ -102,7 +107,7 @@ public class reclamationService implements IService<reclamations> {
 
     @Override
     public reclamations getById(int id) {
-        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, " +
+        String req = "SELECT r.id, r.email, r.sujet, r.description, r.statu, r.date_creation, r.user_id, " +
                 "c.id AS categorieId, c.type AS categorieType " +
                 "FROM reclamation r JOIN categories c ON r.categorieId = c.id WHERE r.id = ?";
         reclamations reclamation = null;
@@ -119,7 +124,8 @@ public class reclamationService implements IService<reclamations> {
                         rs.getString("sujet"),
                         rs.getString("statu"),
                         rs.getString("description"),
-                        rs.getString("date_creation")
+                        rs.getString("date_creation"),
+                        rs.getInt("user_id")
                 );
             }
         } catch (SQLException e) {
@@ -130,7 +136,7 @@ public class reclamationService implements IService<reclamations> {
 
     public List<reclamations> getAllReclamationsSansId() {
         List<reclamations> reclamationsList = new ArrayList<>();
-        String query = "SELECT id, email, categorieId, sujet, description, statu, date_creation FROM reclamation";
+        String query = "SELECT id, email, categorieId, sujet, description, statu, date_creation, user_id FROM reclamation";
         categorieService cs = new categorieService(); // Déclaration avant la boucle
 
         try (Statement stmt = connection.createStatement();
@@ -144,7 +150,8 @@ public class reclamationService implements IService<reclamations> {
                         rs.getString("sujet"),
                         rs.getString("statu"),
                         rs.getString("description"),
-                        rs.getString("date_creation")
+                        rs.getString("date_creation"),
+                        rs.getInt("user_id")
                 );
                 reclamationsList.add(rec);
             }
