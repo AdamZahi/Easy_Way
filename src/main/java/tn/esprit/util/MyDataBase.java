@@ -26,7 +26,7 @@ public class MyDataBase {
         return instance;
     }
 
-    public static Connection getConnection() {
+    public static Connection getCnx() {
         return cnx;
     }
 

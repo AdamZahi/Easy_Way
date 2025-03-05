@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<BorderPane stylesheets="easyway.css" fx:controller="tn.esprit.controller.vehicule.VehiculeController" xmlns:fx="http://javafx.com/fxml/1">
+    <!-- Left Sidebar -->
+    <left>
+        <VBox styleClass="sidebar" spacing="15" prefWidth="200">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="EasyWay" styleClass="logo"/>
+
+            <Button text="Ajouter event" styleClass="nav-button" fx:id="addEventButton" />
+            <Button text="Véhicules" styleClass="nav-button, active"/>
+            <Button text="My Events" styleClass="nav-button"/>
+            <Button text="Reclamation" styleClass="nav-button"/>
+            <Button text="Notification" styleClass="nav-button"/>
+            <Button text="Settings" styleClass="nav-button"/>
+            <Button text="Logout" styleClass="nav-button"/>
+        </VBox>
+    </left>
+
+    <!-- Top Header -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <TextField fx:id="searchField" promptText="Search" styleClass="search-field" HBox.hgrow="ALWAYS"/>
+
+            <ComboBox fx:id="languageSelector" styleClass="language-selector">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="English"/>
+                        <String fx:value="Français"/>
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="English"/>
+                </value>
+            </ComboBox>
+
+            <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="profile-section">
+                <Label text="Amine"/>
+                <Label text="Admin" styleClass="admin-label"/>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- Center Content with Tabs -->
+    <center>
+        <TabPane fx:id="tabPane">
+            <!-- Bus Tab -->
+            <Tab text="Bus" closable="false" fx:id="busTab">
+                <VBox spacing="20" alignment="CENTER" styleClass="content-area">
+                    <Label text="Gestion des Véhicules (Bus)" styleClass="title-label">
+                        <font>
+                            <Font size="28"/>
+                        </font>
+                    </Label>
+
+
+                    <TableView fx:id="busTable">
+                        <columns>
+                            <TableColumn fx:id="immaColumn" text="Immatricule"/>
+                            <TableColumn fx:id="CapColumn" text="Capacité"/>
+                            <TableColumn fx:id="etatColumn" text="Etat"/>
+                            <TableColumn fx:id="conducteurColumn" text="Conducteur"/>
+                            <TableColumn fx:id="TrajetColumn" text="Trajet"/>
+                            <TableColumn fx:id="nombrePorteColumn" text="Nombre Portes"/>
+                            <TableColumn fx:id="TypeServiceColumn" text="Type de Service"/>
+                            <TableColumn fx:id="PlacesColumn" text="Places"/>
+                            <TableColumn fx:id="compagnieColumn" text="Compagnie"/>
+                            <TableColumn fx:id="climatisationColumn" text="Climatisation"/>
+                        </columns>
+                    </TableView>
+                    <Button styleClass="add-button" onAction="#handleAddBus">
+                        <graphic>
+                            <Label text="+   " styleClass="icon-label"/>
+                        </graphic>
+                        Ajouter
+                    </Button>
+                </VBox>
+            </Tab>
+
+            <!-- Metro Tab -->
+            <Tab text="Metro" closable="false" fx:id="metroTab">
+                <VBox spacing="20" alignment="CENTER" styleClass="content-area">
+                    <Label text="Gestion des Véhicules (Metro)" styleClass="title-label">
+                        <font>
+                            <Font size="28"/>
+                        </font>
+                    </Label>
+                    <TableView fx:id="metroTable">
+                        <columns>
+                            <TableColumn fx:id="immaColumn1" text="Immatricule"/>
+                            <TableColumn fx:id="CapColumn1" text="Capacité"/>
+                            <TableColumn fx:id="etatColumn1" text="Etat"/>
+                            <TableColumn fx:id="conducteurColumn1" text="Conducteur"/>
+                            <TableColumn fx:id="TrajetColumn1" text="Trajet"/>
+                            <TableColumn fx:id="LongeurReseauColumn" text="Longeur Reseau"/>
+                            <TableColumn fx:id="NombreligneColumn" text="Nombre de Lignes"/>
+                            <TableColumn fx:id="RamesColumn" text="Rames"/>
+                            <TableColumn fx:id="PropietaireColumn" text="Propriétaire"/>
+                        </columns>
+                    </TableView>
+                    <Button styleClass="add-button" onAction="#handleAddMetro">
+                        <graphic>
+                            <Label text="+   " styleClass="icon-label"/>
+                        </graphic>
+                        Ajouter
+                    </Button>
+                </VBox>
+            </Tab>
+
+            <!-- Train Tab -->
+            <Tab text="Train" closable="false" fx:id="trainTab">
+                <VBox spacing="20" alignment="CENTER" styleClass="content-area">
+                    <Label text="Gestion des Véhicules (Train)" styleClass="title-label">
+                        <font>
+                            <Font size="28"/>
+                        </font>
+                    </Label>
+                    <TableView fx:id="trainTable">
+                        <columns>
+                            <TableColumn fx:id="immaColumn2" text="Immatricule"/>
+                            <TableColumn fx:id="CapColumn2" text="Capacité"/>
+                            <TableColumn fx:id="etatColumn2" text="Etat"/>
+                            <TableColumn fx:id="conducteurColumn2" text="Conducteur"/>
+                            <TableColumn fx:id="TrajetColumn2" text="Trajet"/>
+                            <TableColumn fx:id="LongueurReseauColumn2" text="LongueurReseau"/>
+                            <TableColumn fx:id="nombreLignesColumn2" text="Nombre Lignes"/>
+                            <TableColumn fx:id="nombreWagonsColumn" text="Nombre Wagons"/>
+                            <TableColumn fx:id="VitesseMax" text="Vitesse"/>
+                            <TableColumn fx:id="PropriétaireColumn" text="Propriétaire"/>
+                        </columns>
+                    </TableView>
+                    <Button styleClass="add-button" onAction="#handleAddTrain">
+                        <graphic>
+                            <Label text="+   " styleClass="icon-label"/>
+                        </graphic>
+                        Ajouter
+                    </Button>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>
