@@ -11,9 +11,10 @@ public class reclamations {
     private String statu;
     private String description;
     private String date_creation;
+    private int user_id;
 
     // Constructeur avec ID
-    public reclamations(int id, String email, categories categorie, String sujet, String statu, String description, String date_creation) {
+    public reclamations(int id, String email, categories categorie, String sujet, String statu, String description, String date_creation, int user_id) {
         this.id = id;
         this.email = email;
         this.categorie = categorie;
@@ -21,20 +22,23 @@ public class reclamations {
         this.statu = statu;
         this.description = description;
         this.date_creation = date_creation;
+        this.user_id = user_id;
     }
 
     // Constructeur sans ID (pour les insertions)
-    public reclamations(String email, categories categorie, String sujet, String statu, String description, String date_creation) {
+    public reclamations(String email, categories categorie, String sujet, String statu, String description, String date_creation, int user_id) {
         this.email = email;
         this.categorie = categorie;
         this.sujet = sujet;
         this.statu = statu;
         this.description = description;
         this.date_creation = date_creation;
+        this.user_id = user_id;
     }
 
-    public reclamations() {
+    public reclamations(int user_id) {
 
+        this.user_id = user_id;
     }
 
     // Getters et Setters
@@ -94,6 +98,9 @@ public class reclamations {
         this.date_creation = date_creation;
     }
 
+    public int getUser_id() { return user_id; }
+    public void setUser_id(int user_id) { this.user_id = user_id; }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -103,12 +110,13 @@ public class reclamations {
                 Objects.equals(sujet, that.sujet) &&
                 Objects.equals(statu, that.statu) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(date_creation, that.date_creation);
+                Objects.equals(date_creation, that.date_creation) &&
+                Objects.equals(user_id, that.user_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, categorie, sujet, statu, description, date_creation);
+        return Objects.hash(id, email, categorie, sujet, statu, description, date_creation, user_id);
     }
 
     @Override
@@ -121,6 +129,7 @@ public class reclamations {
                 ", statu='" + statu + '\'' +
                 ", description='" + description + '\'' +
                 ", date_creation='" + date_creation + '\'' +
+                ", id_user=" + user_id +
                 '}';
     }
 }

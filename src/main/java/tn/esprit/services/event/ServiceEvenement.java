@@ -1,5 +1,9 @@
 package tn.esprit.services.event;
 
+import com.vonage.client.VonageClient;
+import com.vonage.client.sms.SmsSubmissionResponse;
+import com.vonage.client.sms.SmsSubmissionResponseMessage;
+import com.vonage.client.sms.messages.TextMessage;
 import tn.esprit.interfaces.IEvent;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.models.Events.StatusEvenement;
@@ -21,28 +25,89 @@ public class ServiceEvenement implements IEvent<Evenements> {
     public void add(Evenements evenements) {
         String query = "INSERT INTO `evenement`(`type`, `description`, `date_debut`, `date_fin`, `ligne_affectee`, `statut`, `id_createur`) " +
                 "VALUES (?,?,?,?,?,?,?)";
-        try{
-            PreparedStatement pstm = cnx.prepareStatement(query);
-            pstm.setString(1,evenements.getType_evenement().name());//type event
-            pstm.setString(2,evenements.getDescription());// description
-            pstm.setDate(3,new java.sql.Date(evenements.getDate_debut().getTime()));// date debut
-            pstm.setDate(4,new java.sql.Date(evenements.getDate_fin().getTime()));// date fin
-            pstm.setInt(5,evenements.getId_ligne_affectee());// id ligne affected
-            pstm.setString(6,evenements.getStatus_evenement().name()); // status event
-            pstm.setInt(7,evenements.getId_createur());
+        List<Integer> userIds = null;
+        List<Integer> phoneNumbers = null;
+        try (Connection conn = MyDataBase.getInstance().getCnx();
+             PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
+            ps.setString(1, evenements.getType_evenement().name());//type event
+            ps.setString(2, evenements.getDescription());// description
+            ps.setDate(3, new java.sql.Date(evenements.getDate_debut().getTime()));// date debut
+            ps.setDate(4, new java.sql.Date(evenements.getDate_fin().getTime()));// date fin
+            ps.setInt(5, evenements.getId_ligne_affectee());// id ligne affected
+            ps.setString(6, evenements.getStatus_evenement().name()); // status event
+            ps.setInt(7, evenements.getId_createur());
 
-            int rowsAdd = pstm.executeUpdate();
-            if (rowsAdd > 0) {
-                System.out.println("L'evenement a été crée avec succès.");
-            } else {
-                System.out.println("Error de creation!");
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating event failed, no rows affected.");
             }
+
+            // api messaging
+            userIds = getUsersIdByLine(
+                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[0],
+                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[1],
+                    conn);
+            phoneNumbers = getPhoneNumbers(userIds, conn);
+//            for (Integer phoneNumber : phoneNumbers) {
+//                VonageClient client = VonageClient.builder().apiKey("c8c34ce3")
+//                        .apiSecret("FChHt3T5SB9XvulI")
+//                        .build();
+//                TextMessage message = new TextMessage("Easy Way",
+//                        "+216"+phoneNumber,  // Replace with the recipient's number
+//                        "\uD83D\uDEA8 A new event has been created on your reserved line!\n" +
+//                        "Type: "+evenements.getType_evenement().toString()+"\n"+
+//                        "Description: "+evenements.getDescription()+"\n");
+//
+//                SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
+//                for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
+//                    System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
+//                }
+//            }
+
+
+            // twilio api
+//            List<Integer> userIds = getUsersIdByLine(
+//                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[0],
+//                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[1],
+//                    conn);
+//            List<Integer> phoneNumbers = getPhoneNumbers(userIds, conn);
+//
+//            // Send SMS notifications
+//            ServiceTwilio twilioService = new ServiceTwilio();
+//            for (int phone : phoneNumbers) {
+//                String message = "⚠️ Un nouvel événement a été créé pour votre ligne ! " +
+//                        "\nType: " + evenements.getType_evenement() +
+//                        "\nDescription: " + evenements.getDescription()+"\n";
+//                twilioService.sendSMS("+216"+phone, message);
+//            }
+//
+//            System.out.println("✅ SMS envoyés à tous les utilisateurs concernés.");
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
+        if (userIds != null && phoneNumbers != null) {
+            for (Integer phoneNumber : phoneNumbers) {
+                VonageClient client = VonageClient.builder()
+                        .apiKey("c8c34ce3")
+                        .apiSecret("FChHt3T5SB9XvulI")
+                        .build();
+                TextMessage message = new TextMessage(
+                        "Easy Way",
+                        "+216" + phoneNumber,  // Replace with the recipient's number
+                        "\uD83D\uDEA8 A new event has been created on your reserved line!\n" +
+                                "Type: " + evenements.getType_evenement().toString() + "\n" +
+                                "Description: " + evenements.getDescription() + "\n");
 
+                SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
+                for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
+                    System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
+                }
+
+            }
+        }
+    }
     @Override
     public List<Evenements> getAll() {
         ArrayList<Evenements> events = new ArrayList<>();
@@ -148,10 +213,82 @@ public class ServiceEvenement implements IEvent<Evenements> {
                 ligneInfo = depart + " - " + arret;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return ligneInfo;
     }
+
+    public List<String> getAllLineInfo(){
+        List<String> lines = new ArrayList<>();
+        String query = "SELECT depart, arret FROM ligne";
+        try {
+            Statement stm = cnx.createStatement();
+            ResultSet rs =stm.executeQuery(query);
+            while (rs.next()) {
+                lines.add(rs.getString("depart") + " - " + rs.getString("arret"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return lines;
+    }
+
+    public int getLineIdByDepartArret(String depart, String arret) {
+        int lineId = 0;
+        String query = "SELECT id FROM ligne WHERE depart = ? AND arret = ?";
+        try {
+            PreparedStatement pstm = cnx.prepareStatement(query);
+            pstm.setString(1, depart);
+            pstm.setString(2, arret);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                lineId = rs.getInt("id");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return lineId;
+    }
+
+    public List<Integer> getUsersIdByLine(String depart, String arret, Connection conn){
+        List<Integer> usersIds = new ArrayList<>();
+        String query = "SELECT `user_id` FROM `reservation` WHERE depart = ? AND arret = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, depart);
+            ps.setString(2, arret);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                usersIds.add(rs.getInt("user_id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return usersIds;
+    }
+
+    public List<Integer> getPhoneNumbers(List<Integer> userIds, Connection conn) {
+        List<Integer> phoneNumbers = new ArrayList<>();
+        String query = "SELECT telephonne FROM user WHERE id_user = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+            for (int userId : userIds) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    phoneNumbers.add(rs.getInt("telephonne"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return phoneNumbers;
+    }
+
 
     public Connection getCnx() {
         return cnx;

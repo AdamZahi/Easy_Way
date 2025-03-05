@@ -1,137 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #e5feb3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.user.UsersListController">
+
    <children>
-      <AnchorPane layoutX="62.0" layoutY="75.0" style="-fx-background-color: #ffffff;">
+      <!-- Conteneur Principal -->
+      <AnchorPane layoutX="24.0" layoutY="50.0" prefHeight="600.0" prefWidth="950.0" style="-fx-background-color: #ffffff; -fx-border-color: #ccc; -fx-border-width: 1px;" AnchorPane.rightAnchor="25.600000000000023">
          <children>
-            <AnchorPane prefHeight="67.0" prefWidth="875.0" style="-fx-background-color: #ffffff;">
+
+            <!-- Titre et icônes -->
+            <HBox layoutX="20.0" layoutY="15.0" spacing="15">
                <children>
-                  <Text layoutX="132.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gestion des utilisateurs">
-                     <font>
-                        <Font name="Arial Bold" size="21.0" />
-                     </font>
-                  </Text>
-                  <ImageView fitHeight="48.0" fitWidth="90.0" layoutX="71.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Images/users.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="90.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="48.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@Images/logo.png" />
                      </image>
                   </ImageView>
-                  <TextField layoutX="624.0" layoutY="25.0" prefHeight="26.0" prefWidth="188.0" promptText="Entrer le nom de l'utilisateur " />
-                  <ImageView fitHeight="34.0" fitWidth="48.0" layoutX="804.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="48.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/users.png" />
+                     </image>
+                  </ImageView>
+                  <Text text="Gestion des utilisateurs">
+                     <font>
+                        <Font name="Arial Bold" size="21.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+
+            <!-- Barre de recherche -->
+            <HBox layoutX="600.0" layoutY="20.0" spacing="10">
+               <children>
+                  <TextField prefWidth="200.0" promptText="Rechercher un utilisateur..." />
+                  <ImageView fitHeight="34.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@Images/search.png" />
                      </image>
                   </ImageView>
                </children>
-            </AnchorPane>
-            <ImageView fitHeight="48.0" fitWidth="100.0" layoutX="14.0" layoutY="501.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Images/log-out.jpg" />
-               </image>
-            </ImageView>
-            <Text layoutX="55.0" layoutY="530.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Se déconnecter">
-               <font>
-                  <Font name="Arial Bold" size="13.0" />
-               </font>
-            </Text>
-            <AnchorPane layoutX="115.0" layoutY="140.0" />
-            <GridPane fx:id="userGridPane" layoutX="10.0" layoutY="71.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.20001220703125" minWidth="10.0" prefWidth="95.4000244140625" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="43.5999755859375" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.00001220703126" minWidth="10.0" prefWidth="61.60003662109375" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.39998779296877" minWidth="10.0" prefWidth="53.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.2" minWidth="10.0" prefWidth="99.4" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.59999999999997" minWidth="10.0" prefWidth="85.80002441406248" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.80000000000007" minWidth="10.0" prefWidth="192.60002441406243" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.00004882812505" minWidth="10.0" prefWidth="110.19997558593752" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.00004882812505" minWidth="10.0" prefWidth="110.19997558593752" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="66.4" minHeight="10.0" prefHeight="47.200018310546874" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="85.59998168945313" minHeight="8.79999999999999" prefHeight="79.99999389648437" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="105.59998168945313" minHeight="10.0" prefHeight="10.400006103515608" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label fx:id="idUser" prefHeight="29.0" prefWidth="106.0" text="ID Utilisateur">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="NomUser" text="Nom" textAlignment="CENTER" GridPane.columnIndex="1">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="PrenomUSer" text="Prénom" GridPane.columnIndex="2">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="EmailUSer" text="Email" GridPane.columnIndex="3">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="MotDePasseUser" prefHeight="34.0" prefWidth="94.0" text="Mot de passe" GridPane.columnIndex="4">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="telephonneUser" prefHeight="18.0" prefWidth="81.0" text="Téléphonne" GridPane.columnIndex="5">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="dateCreationUser" text="Date de création du compte " GridPane.columnIndex="6">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="PhotoProfilUser" text="Photo de profil " GridPane.columnIndex="7">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="OptionField" text="Option" GridPane.columnIndex="8">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Label>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="8" GridPane.rowIndex="1">
-                     <children>
-                        <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="75.0" style="-fx-background-color: #ef9a9a;" text="Modifier">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin></Button>
-                        <Button mnemonicParsing="false" text="Supprimer" />
-                     </children>
-                  </VBox>
+            </HBox>
 
+            <!-- Tableau des utilisateurs -->
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutX="25.0" layoutY="82.0" prefHeight="450.0" prefWidth="900.0">
+               <content>
+                  <GridPane fx:id="userGridPane" hgap="10" style="-fx-padding: 10px;" vgap="10">
+                     <columnConstraints>
+                        <ColumnConstraints maxWidth="80.19998168945312" minWidth="69.79998779296875" prefWidth="69.79998779296875" />
+                        <ColumnConstraints maxWidth="120.20001220703125" minWidth="43.20001831054688" prefWidth="43.20001831054688" />
+                        <ColumnConstraints maxWidth="194.1999816894531" minWidth="68.99996032714841" prefWidth="68.99996032714841" />
+                        <ColumnConstraints maxWidth="263.40003967285156" minWidth="104.0" prefWidth="104.0" />
+                        <ColumnConstraints maxWidth="238.39999999999998" minWidth="85.79998779296875" prefWidth="103.60001220703123" />
+                        <ColumnConstraints maxWidth="195.19998779296873" minWidth="66.0" prefWidth="84.79997558593743" />
+                        <ColumnConstraints maxWidth="175.19998779296873" minWidth="42.39998779296877" prefWidth="79.39998779296877" />
+                        <ColumnConstraints maxWidth="145.0000122070312" minWidth="13.5999755859375" prefWidth="79.79998779296875" />
+                        <ColumnConstraints maxWidth="161.199951171875" minWidth="13.5999755859375" prefWidth="75.80001220703127" />
+                        <ColumnConstraints maxWidth="78.4000244140625" minWidth="4.800048828125" prefWidth="70.40007324218755" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints prefHeight="40.0" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="ID Utilisateur" GridPane.columnIndex="0" />
+                        <Label text="Nom" GridPane.columnIndex="1" />
+                        <Label text="Prénom" GridPane.columnIndex="2" />
+                        <Label text="Email" GridPane.columnIndex="3" />
+                        <Label text="Mot de passe" GridPane.columnIndex="4" />
+                        <Label text="Téléphone" GridPane.columnIndex="5" />
+                      <Label text="Photo " GridPane.columnIndex="6" />
+                        <Label text="Rôle" GridPane.columnIndex="7" />
+
+                        <HBox spacing="10" GridPane.columnIndex="9" />
+                        <Label prefHeight="18.0" prefWidth="53.0" text="option" GridPane.columnIndex="8" />
+                     </children>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+
+            <!-- Bouton de déconnexion -->
+            <HBox layoutX="20.0" layoutY="550.0" spacing="10">
+               <children>
+                  <ImageView fitHeight="48.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/log-out.jpg" />
+                     </image>
+                  </ImageView>
+                  <Text text="Se déconnecter">
+                     <font>
+                        <Font name="Arial Bold" size="13.0" />
+                     </font>
+                  </Text>
                </children>
-            </GridPane>
+            </HBox>
+
          </children>
       </AnchorPane>
    </children>

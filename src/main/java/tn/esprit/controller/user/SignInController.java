@@ -46,7 +46,7 @@ public class SignInController {
         String mdp = MdpField.getText().trim();
 
         if (email.isEmpty() || mdp.isEmpty()) {
-            showAlert("Erreur", "Veuillez remplir tous les champs.");
+            showAlert("Erreur", "Veuillez remplir tous les champs.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
             return;
         }
 
@@ -54,36 +54,37 @@ public class SignInController {
         User user = serviceUser.getUserByEmail(email);
 
         if (user == null) {
-            showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.");
+            showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
         } else if (!user.getMot_de_passe().equals(mdp)) {
-            showAlert("Erreur", "Mot de passe incorrect.");
+            showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
         } else {
-
-            showAlert("Succès", "Connexion réussie !");
+            showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION); // Utilisation d'AlertType.INFORMATION pour succès
             // Stocker l'utilisateur dans la session
             SessionManager.getInstance().setId_user(user.getId_user());
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
                 Parent root = loader.load();
                 Stage stage = (Stage) signInButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
-                showAlert("Erreur", "Impossible de charger l'interface utilisateur.");
+                showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
             }
         }
     }
 
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type); // Utilisation du type passé en paramètre
         alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        alert.setHeaderText(null); // Supprime l'en-tête
+        alert.setContentText(content); // Définit le message de contenu
+        alert.showAndWait(); // Affiche l'alerte et attend la fermeture
     }
+
 
     @FXML
     void RedirectToSignUp(MouseEvent event) {

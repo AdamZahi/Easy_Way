@@ -13,6 +13,7 @@ import tn.esprit.models.Events.StatusEvenement;
 import tn.esprit.models.Events.TypeEvenement;
 import tn.esprit.services.event.ServiceEvenement;
 import java.io.IOException;
+import java.time.LocalDate;
 
 
 public class AddEventController {
@@ -31,46 +32,48 @@ public class AddEventController {
     private ChoiceBox<StatusEvenement> statusChoiceBox;
 
     @FXML
-    private ChoiceBox<TypeEvenement> typeChoiceBox;
+    private ChoiceBox<TypeEvenement> typeCB;
     private final ServiceEvenement se = new ServiceEvenement();
 
     @FXML
     public void initialize() {
         // Populate ChoiceBoxes with Enum values
-        typeChoiceBox.getItems().setAll(TypeEvenement.values());
+        typeCB.getItems().setAll(TypeEvenement.values());
         statusChoiceBox.getItems().setAll(StatusEvenement.values());
     }
     @FXML
     void addEventToDB(ActionEvent event) {
         String description = descText.getText();
-        TypeEvenement type = typeChoiceBox.getValue();
+        TypeEvenement type = typeCB.getValue();
         int ligne = Integer.parseInt(ligneField.getText());
+
 
         java.time.LocalDate localDateDebut = dateDebutPicker.getValue();
         java.sql.Date dateDebut = java.sql.Date.valueOf(localDateDebut);
 
+
         java.time.LocalDate localDateFin = dateFinPicker.getValue();
-        if (localDateFin == null) {
-            java.sql.Date dateFin = null;
-        }
         java.sql.Date dateFin = java.sql.Date.valueOf(localDateFin);
 
         StatusEvenement status = statusChoiceBox.getValue();
 
-        if (dateDebut.before(dateFin)|| description.isEmpty() || type == null || ligneField.getText()==null || dateDebut == null || status == null) {
+        if (ligneField.getText()==null || description.isEmpty() || type == null || ligneField.getText()==null || dateDebut == null || status == null) {
             showAlert("Erreur", "Veuillez remplir tous les champs.");
             return;
+        }else if (dateDebut.after(dateFin)) {
+            showAlert("Erreur", "Il faut que la date debut soit apres la date fin.");
+        }else {
+            Evenements newEvent = new Evenements(0,
+                    type,
+                    ligne,
+                    description,
+                    dateDebut,
+                    dateFin,
+                    status,
+                    4);
+            se.add(newEvent);
+            showAlert("Succès", "Événement ajouté avec succès!");
         }
-        Evenements newEvent = new Evenements(0,
-                type,
-                ligne,
-                description,
-                dateDebut,
-                dateFin,
-                status,
-                4);
-        se.add(newEvent);
-        showAlert("Succès", "Événement ajouté avec succès!");
     }
 
     private void showAlert(String title, String message) {
@@ -81,7 +84,7 @@ public class AddEventController {
     }
     @FXML
     void clearAll(ActionEvent event) {
-        typeChoiceBox.getItems().clear();
+        typeCB.getItems().clear();
         statusChoiceBox.getItems().clear();
         ligneField.setText("");
         dateDebutPicker.setValue(null);
