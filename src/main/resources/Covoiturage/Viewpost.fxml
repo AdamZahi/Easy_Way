@@ -19,9 +19,9 @@
       <BorderPane prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
          <center>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="836.0" spacing="20">
-               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Home" />
-               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Our Solution" />
-               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Community" />
+               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Accueil" />
+               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Notre Solution" />
+               <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Communauté" />
             </HBox>
          </center>
          <right>
@@ -93,13 +93,24 @@
                </HBox>
             </children>
          </VBox>
-         <Button mnemonicParsing="false" text="Go Back" onAction="#goToGestionCov">
-            <VBox.margin>
-               <Insets left="20.0" top="20.0" />
-            </VBox.margin>
-         </Button>
+
 
          <VBox layoutY="500.0" spacing="10">
+            <Button mnemonicParsing="false" text="⬅ Retour" onAction="#goToGestionCov"
+                    style="-fx-font-size: 16px;
+               -fx-padding: 10 20;
+               -fx-background-color: #f8f8f8;
+               -fx-text-fill: #333333;
+               -fx-font-weight: bold;
+               -fx-background-radius: 12;
+               -fx-border-radius: 12;
+               -fx-border-color: #A11010;
+               -fx-border-width: 2;
+               -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 2, 2);" >
+               <VBox.margin>
+                  <Insets left="20.0" top="20.0" />
+               </VBox.margin>
+            </Button>
             <ToggleButton style="-fx-font-size: 14px; -fx-text-fill: #333; -fx-background-color: #DDDEC6;" text="Light Mode">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0">
