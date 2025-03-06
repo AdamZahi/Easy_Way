@@ -6,6 +6,9 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.lookups.v1.PhoneNumber;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -678,7 +681,7 @@ public class vehiculeController {
     @FXML
     private void handleAddMetro() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/formulaireMetro.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/formulaireMetro.fxml"));
             Scene scene = new Scene(loader.load());
             AjouterMetroController controller = loader.getController();
 
@@ -703,7 +706,7 @@ public class vehiculeController {
     @FXML
     public void handleAddTrain() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/formulaireTrain.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/formulaireTrain.fxml"));
             Scene scene = new Scene(loader.load());
             AjouterTrainController controller = loader.getController();
 
@@ -781,6 +784,7 @@ public class vehiculeController {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
+        // Initialisation des champs
         TextField immatriculationField = new TextField(bus.getImmatriculation());
         TextField capaciteField = new TextField(String.valueOf(bus.getCapacite()));
         ComboBox<String> etatBox = new ComboBox<>();
@@ -852,13 +856,13 @@ public class vehiculeController {
 
         dialog.getDialogPane().setContent(grid);
 
-
-
-        dialog.getDialogPane().setContent(grid);
+        // Initialisation de Twilio
+        Twilio.init("ACbd76408a41c47b98e14ee113fc7f4b93", "e6198f395d107e5ba9850cbab9ff3a3e");
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 try {
+                    String oldEtat = bus.getEtat().toString(); // État avant modification
                     bus.setImmatriculation(immatriculationField.getText());
                     bus.setCapacite(Integer.parseInt(capaciteField.getText()));
                     bus.setEtat(Etat.valueOf(etatBox.getValue()));
@@ -880,6 +884,27 @@ public class vehiculeController {
                     if (conducteurId != -1 && trajetId != -1) {
                         bus.setIdConducteur(conducteurId);
                         bus.setIdTrajet(trajetId);
+
+                        // Vérifie si l'état a changé
+                        if (!oldEtat.equals(bus.getEtat().toString())) {
+                            String messageBody = "";
+                            switch (bus.getEtat()) {
+                                case DISPONIBLE:
+                                    messageBody = "Votre bus est maintenant DISPONIBLE pour les trajets.";
+                                    break;
+                                case HORS_SERVICE:
+                                    messageBody = "Votre bus est actuellement HORS SERVICE. Veuillez vérifier sa disponibilité.";
+                                    break;
+                                case EN_MAINTENANCE:
+                                    messageBody = "Votre bus est en MAINTENANCE et n'est pas disponible pour le moment.";
+                                    break;
+                                default:
+                                    messageBody = "L'état du bus a été mis à jour.";
+                                    break;
+                            }
+                            // Envoi d'un SMS uniquement si l'état a changé
+                            envoyerSms("Le statut de votre bus a été mis à jour en : " + bus.getEtat().toString());
+                        }
                         return bus;
                     } else {
                         showAlert("Erreur", "Conducteur ou trajet non trouvé");
@@ -897,6 +922,20 @@ public class vehiculeController {
             vehiculeService.update(updatedBus);
             loadBusCards();
         });
+    }
+
+    private void envoyerSms(String messageBody) {
+        try {
+            Message message = Message.creator(
+                    new com.twilio.type.PhoneNumber("+21628897633"),
+                    new com.twilio.type.PhoneNumber("+19896013337"),  // Ton numéro Twilio
+                    messageBody  // Message
+            ).create();
+
+            System.out.println("Message SID: " + message.getSid());  // Affiche l'ID du message pour suivi
+        } catch (Exception e) {
+            e.printStackTrace();  // Gérer les exceptions
+        }
     }
 
     private void openEditDialogMetro(Metro metro) {
@@ -1004,7 +1043,8 @@ public class vehiculeController {
                         return null;
                     }
 
-                    // Mise à jour des données du métro
+                    // Vérification si l'état du métro a changé
+                    String oldEtat = metro.getEtat().toString();
                     metro.setImmatriculation(immatriculationField.getText());
                     metro.setCapacite(capacite);
                     metro.setEtat(Etat.valueOf(etatBox.getValue()));
@@ -1014,6 +1054,30 @@ public class vehiculeController {
                     metro.setProprietaire(proprietaireField.getText());
                     metro.setIdConducteur(conducteurId);
                     metro.setIdTrajet(trajetId);
+                    // Initialisation de Twilio
+                    Twilio.init("ACbd76408a41c47b98e14ee113fc7f4b93", "e6198f395d107e5ba9850cbab9ff3a3e");
+
+                    // Si l'état a changé, envoyer un SMS
+                    if (!oldEtat.equals(metro.getEtat().toString())) {
+                        String messageBody = "";
+                        switch (metro.getEtat()) {
+                            case DISPONIBLE:
+                                messageBody = "Le métro est maintenant DISPONIBLE pour les trajets.";
+                                break;
+                            case HORS_SERVICE:
+                                messageBody = "Le métro est actuellement HORS SERVICE. Veuillez vérifier sa disponibilité.";
+                                break;
+                            case EN_MAINTENANCE:
+                                messageBody = "Le métro est en MAINTENANCE et n'est pas disponible pour le moment.";
+                                break;
+                            default:
+                                messageBody = "Le statut du métro a été mis à jour.";
+                                break;
+                        }
+
+                        // Envoi du SMS
+                        envoyerSms("Le statut de votre métro a été mis à jour : " + messageBody);
+                    }
 
                     return metro;
 
@@ -1032,6 +1096,7 @@ public class vehiculeController {
             loadMetroCards(); // Mise à jour de l'affichage des cards
         });
     }
+
 
     private void openEditDialogTrain(Train train) {
         Dialog<Train> dialog = new Dialog<>();
@@ -1142,6 +1207,9 @@ public class vehiculeController {
                         return null;
                     }
 
+                    String oldEtat = train.getEtat().toString();
+
+
                     // Mise à jour des données du train
                     train.setImmatriculation(immatriculationField.getText());
                     train.setCapacite(capacite);
@@ -1154,7 +1222,32 @@ public class vehiculeController {
                     train.setIdConducteur(conducteurId);
                     train.setIdTrajet(trajetId);
 
+                    // Initialisation de Twilio
+                    Twilio.init("ACbd76408a41c47b98e14ee113fc7f4b93", "e6198f395d107e5ba9850cbab9ff3a3e");
+
+                    if (!oldEtat.equals(train.getEtat().toString())) {
+                        String messageBody = "";
+                        switch (train.getEtat()) {
+                            case DISPONIBLE:
+                                messageBody = "Le train est maintenant DISPONIBLE pour les trajets.";
+                                break;
+                            case HORS_SERVICE:
+                                messageBody = "Le train est actuellement HORS SERVICE. Veuillez vérifier sa disponibilité.";
+                                break;
+                            case EN_MAINTENANCE:
+                                messageBody = "Le train est en MAINTENANCE et n'est pas disponible pour le moment.";
+                                break;
+                            default:
+                                messageBody = "Le statut du train a été mis à jour.";
+                                break;
+                        }
+
+                        // Envoi du SMS
+                        envoyerSms("Le statut de votre train a été mis à jour : " + messageBody);
+                    }
+
                     return train;
+
 
                 } catch (NumberFormatException e) {
                     showAlert("Erreur de saisie",
