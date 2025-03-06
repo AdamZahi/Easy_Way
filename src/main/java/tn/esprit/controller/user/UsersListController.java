@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -23,7 +25,8 @@ public class UsersListController {
 
     @FXML
     private GridPane userGridPane;
-
+    @FXML
+    private ImageView image;
     private final ServiceUser userService = new ServiceUser();
     private List<User> userList;
 
@@ -38,7 +41,6 @@ public class UsersListController {
             System.out.println("Aucun utilisateur trouvé.");
             return;
         }
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         int row = 1;

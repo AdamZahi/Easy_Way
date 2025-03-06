@@ -22,11 +22,7 @@
    <children>
       <AnchorPane prefHeight="721.0" prefWidth="202.0" styleClass="nav-form" stylesheets="@dashboardDesign.css">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="21.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="551.2" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="30.0">
-               <image>
-                  <Image url="@Images/Admin.png" />
-               </image>
-            </ImageView>
+            <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="21.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="551.2" AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="30.0" />
 
             <Label layoutX="61.0" layoutY="223.0" text="Welcome," textFill="WHITE">
                <font>

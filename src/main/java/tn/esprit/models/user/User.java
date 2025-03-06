@@ -17,6 +17,16 @@ public class User {
     private LocalDateTime dateCreation;
     private Role role;
 
+    public User(int id,String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, Role role) {
+        this.id_user = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.mot_de_passe = mot_de_passe;
+        this.telephonne = telephonne;
+        this.photo_profil = photo_profil;
+        this.role = role;
+    }
     public User(String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, Role role) {
         this.nom = nom;
         this.prenom = prenom;
