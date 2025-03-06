@@ -7,15 +7,27 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
 import tn.esprit.models.Events.StatusEvenement;
 import tn.esprit.models.Events.TypeEvenement;
+import tn.esprit.models.user.User;
 import tn.esprit.services.event.ServiceEvenement;
+import tn.esprit.services.user.ServiceUser;
+import tn.esprit.util.SessionManager;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class AddEventController {
+    @FXML
+    private ImageView imageProfile;
+    @FXML
+    private Label username;
     @FXML
     private DatePicker dateDebutPicker;
 
@@ -33,9 +45,15 @@ public class AddEventController {
     @FXML
     private ChoiceBox<TypeEvenement> typeCB;
     private final ServiceEvenement se = new ServiceEvenement();
+    private final ServiceUser su = new ServiceUser();
 
     @FXML
     public void initialize() {
+
+        User u=su.getById(SessionManager.getInstance().getId_user());
+        username.setText(u.getNom()+" "+u.getPrenom());
+        imageProfile.setImage(new Image(new File(u.getPhoto_profil()).toURI().toString()));
+
         // Populate ChoiceBoxes with Enum values
         typeCB.getItems().setAll(TypeEvenement.values());
         statusChoiceBox.getItems().setAll(StatusEvenement.values());
@@ -106,5 +124,82 @@ public class AddEventController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    void RedirectToVehicules(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToUsers(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToLigne(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToReclamation(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/CardView.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToTrajet(ActionEvent event) {
+
+    }
+
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de Déconnexion");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous vraiment vous déconnecter ?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            SessionManager.getInstance().logout();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
     }
 }

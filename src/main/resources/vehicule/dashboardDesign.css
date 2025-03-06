@@ -27,7 +27,7 @@
 }
 
 .nav-form{
-    -fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-background-color:linear-gradient(to bottom right, #c71b1b, #e25b5b);
 }
 
 .nav-btn{
@@ -58,13 +58,13 @@
 }
 
 .card{
-    -fx-background-color:linear-gradient(to right, #2b303c, #525968);
+    -fx-background-color:linear-gradient(to right, #c71b1b, #e25b5b);
     -fx-background-radius:5px;
 }
 
 .table-view{
     -fx-background-color:transparent;
-    -fx-border-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-border-color:linear-gradient(to bottom right, #c71b1b, #e25b5b);
     -fx-border-radius:8px;
     -fx-padding:0px;
 }
@@ -72,7 +72,7 @@
     -fx-alignment:CENTER;
 }
 .table-view .column-header-background{
-    -fx-background-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-background-color:linear-gradient(to bottom right, #c71b1b, #e25b5b);
     -fx-background-insets: 0 0 0 0;
     -f-background-radius:8px 8px 0px 0px;
 }
@@ -99,7 +99,7 @@
 
 .search{
     -fx-background-color:transparent;
-    -fx-border-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-border-color:linear-gradient(to bottom right, #c71b1b, #e25b5b);
     -fx-border-radius:5px;
     -fx-font-size:13px;
     -fx-font-family:"Arial";
@@ -166,7 +166,7 @@
 
 .label-info{
     -fx-background-color:transparent;
-    -fx-border-color:linear-gradient(to bottom right, #272b3f, #256b51);
+    -fx-border-color:linear-gradient(to bottom right, #c71b1b, #e25b5b);
     -fx-border-radius:4px;
     -fx-padding:0px 0px 0px 8px;
 }

@@ -16,13 +16,15 @@ import tn.esprit.models.user.User;
 import tn.esprit.services.user.ServiceUser;
 import tn.esprit.util.SessionManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
 public class UsersListController {
-
+    @FXML
+    private Label username;
     @FXML
     private GridPane userGridPane;
     @FXML
@@ -35,7 +37,9 @@ public class UsersListController {
             System.out.println("Erreur : GridPane non trouvé.");
             return;
         }
-
+        User currentUser = userService.getById(SessionManager.getInstance().getId_user());
+        image.setImage(new Image(new File(currentUser.getPhoto_profil()).toURI().toString()));
+        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         userList = userService.getAll();
         if (userList.isEmpty()) {
             System.out.println("Aucun utilisateur trouvé.");

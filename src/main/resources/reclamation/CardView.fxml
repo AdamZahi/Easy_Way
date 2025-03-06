@@ -25,7 +25,7 @@
     <children>
         <AnchorPane prefHeight="721.0" prefWidth="202.0" styleClass="nav-form" stylesheets="@dashboardDesign.css">
             <children>
-                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="550.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="550.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
                     <image>
                         <Image url="@images/rec.png" />
                     </image>

@@ -30,11 +30,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import tn.esprit.models.user.User;
 import tn.esprit.models.vehicules.*;
 import tn.esprit.services.VehiculeService.ServiceVehicule;
+import tn.esprit.services.user.ServiceUser;
 import tn.esprit.util.SessionManager;
 
 import java.awt.*;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -45,7 +48,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class vehiculeController {
-
+    @FXML
+    private ImageView image;
     @FXML
     private WebView mapWebView;
 
@@ -71,7 +75,10 @@ public class vehiculeController {
     @FXML private TextField searchField;
     @FXML private TextField searchField1;
     @FXML private TextField searchField2;
-
+    @FXML
+    private Label username;
+    private ServiceUser su = new ServiceUser();
+    private User currentUser = su.getById(SessionManager.getInstance().getId_user());
     private ServiceVehicule vehiculeService = new ServiceVehicule();
     private Scene scene;
     private BorderPane rootPane;
@@ -79,6 +86,8 @@ public class vehiculeController {
 
     @FXML
     private void initialize() {
+        image.setImage(new Image(new File(currentUser.getPhoto_profil()).toURI().toString()));
+        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         // Chargement du CSS
         String cssPath = getClass().getResource("/vehicule/easyway.css").toExternalForm();
 

@@ -7,11 +7,14 @@ import com.itextpdf.layout.element.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,6 +24,7 @@ import javafx.stage.Stage;
 import tn.esprit.models.reclamation.reclamations;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +32,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import tn.esprit.models.user.User;
 import tn.esprit.services.reclamation.reclamationService;
+import tn.esprit.services.user.ServiceUser;
 import tn.esprit.util.MyDataBase;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.Document;
@@ -37,17 +44,11 @@ import tn.esprit.util.SessionManager;
 
 public class CardView {
 
+    @FXML
+    private ImageView profileImage;
     public Button suppbtn;
     public Button modfbtn;
-    @FXML
-    private ScrollPane scroll;
-    @FXML
-    private VBox cardBox;
     private final Connection connection = MyDataBase.getInstance().getCnx();
-    @FXML
-    private TextField txtId;
-    @FXML
-    private Button refreshBtn;
     @FXML
     private Label lblMessage;
     @FXML
@@ -65,9 +66,12 @@ public class CardView {
     @FXML
     private Button stqButton;
     @FXML
+    private Label username;
+    @FXML
     private Button pdfButton;
     private final reclamationService reclamationService = new reclamationService(); // ✅ Ajout de cette ligne
-    
+    private ServiceUser su = new ServiceUser();
+
 
     public void gotoAjoutReclamation(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/ajoutReclamation.fxml")));
@@ -87,6 +91,9 @@ public class CardView {
 
     @FXML
     private void initialize() {
+        User currentUser = su.getById(SessionManager.getInstance().getId_user());
+        profileImage.setImage(new Image(new File(currentUser.getPhoto_profil()).toURI().toString()));
+        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         System.out.println("Initialisation de l'interface...");
         afficherReclamations(); // Appel automatique de l'affichage des réclamations
         comboBoxTrier.getItems().addAll("email", "sujet", "description", "date");
@@ -573,6 +580,7 @@ public class CardView {
             stage.show();
         }
     }
+
 
 
 }
