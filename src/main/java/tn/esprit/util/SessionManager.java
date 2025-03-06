@@ -2,7 +2,8 @@ package tn.esprit.util;
 
 public class SessionManager {
     private static SessionManager instance; // Singleton
-    private int id_user; // Attribut de session
+    private int id_user,id_admin;
+
 
     // Constructeur privé pour empêcher l'instanciation directe
     private SessionManager() {}
@@ -23,8 +24,9 @@ public class SessionManager {
     public void setId_user(int id_user) {
         this.id_user = id_user;
     }
-    public void logout() {
-        id_user = 0; // Réinitialiser la session
-    }
+
+
+
+
 
 }

@@ -1,43 +1,31 @@
 package tn.esprit.test;
 
-import tn.esprit.services.trajet.ServicePaiement;
-import tn.esprit.services.trajet.ServiceReservation;
-import tn.esprit.models.trajet.Reservation;
-
-import java.util.List;
+import tn.esprit.models.trajet.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-        // Create an instance of ServicePaiement to retrieve reservation IDs
-        ServicePaiement servicePaiement = new ServicePaiement();
+        // Set the address to "Tunis, Tunisia"
+        String address = "Tunis, Tunisia";
 
-        // Get the list of reservation IDs from ServicePaiement
-        List<Integer> reservationIds = servicePaiement.getReservationIds();
+        // Get the coordinates for the specified address
+        double[] coordinates = Map.getCoordinates(address);
 
-        // Check if we have reservation IDs
-        if (reservationIds != null && !reservationIds.isEmpty()) {
-            System.out.println("Reservation IDs: ");
-            for (Integer id : reservationIds) {
-                System.out.println(id);
-            }
+        // Print the coordinates to verify
+        System.out.println("Coordinates for " + address + ": Latitude = " + coordinates[0] + ", Longitude = " + coordinates[1]);
 
-            // Now, use the reservation IDs to fetch reservation details from ServiceReservation
-            ServiceReservation serviceReservation = new ServiceReservation();
-            List<Reservation> reservations = serviceReservation.getReservationsByIds(reservationIds);
+        // Check if the coordinates are valid (non-zero)
+        if (coordinates[0] != 0 && coordinates[1] != 0) {
+            // Call getPlaceNameFromCoordinates to get the metadata (place name)
+            String placeName = Map.getPlaceNameFromCoordinates(coordinates[0], coordinates[1]);
 
-            // Print the reservation details
-            System.out.println("\nReservation Details:");
-            for (Reservation reservation : reservations) {
-                System.out.println("Depart: " + reservation.getDepart());
-                System.out.println("Arret: " + reservation.getArret());
-                System.out.println("Vehicule: " + reservation.getVehicule());
-                System.out.println("Nb: " + reservation.getNb());
-                System.out.println("-----------------------------");
-            }
-
+            // Print the place name (formatted address or metadata) to the console
+            System.out.println("Place Name: " + placeName);  // Output the metadata of the place
         } else {
-            System.out.println("No reservation IDs found.");
+            System.out.println("Error: Unable to retrieve coordinates for the address: " + address);
         }
     }
 }
+//Tunis, Tunisia
+//mourouj
+//sfax
