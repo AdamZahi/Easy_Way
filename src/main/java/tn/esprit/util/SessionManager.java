@@ -25,9 +25,10 @@ public class SessionManager {
     public void setId_user(int id_user) {
         this.id_user = id_user;
     }
-    public void logout() {
-        id_user = 0; // Réinitialiser la session
-    }
+
+
+
+
 
     public String getUsername(){
         return se.getById(id_user).getNom();
