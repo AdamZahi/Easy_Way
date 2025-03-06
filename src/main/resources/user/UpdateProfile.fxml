@@ -96,6 +96,14 @@
                                 <DropShadow />
                             </effect>
                         </Button>
+                  <Button fx:id="saveButton1" layoutX="487.0" layoutY="284.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="172.0" style="-fx-background-color: #EFA9A9;" text="Reclamation" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </Button>
 
                     </children>
                 </AnchorPane>
@@ -107,4 +115,3 @@
         <Label layoutX="814.0" layoutY="578.0" text="Termes" />
     </children>
 </AnchorPane>
-

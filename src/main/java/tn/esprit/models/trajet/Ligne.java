@@ -1,20 +1,24 @@
 package tn.esprit.models.trajet;
 
 public class Ligne {
-    private int id;
+    private int id,admin_id;
     private String dep,arr,type;
 
     public Ligne() {}
-    public Ligne(int id, String dep, String arr, String type) {
+
+    public Ligne(int id, String dep, String arr, String type, int admin_id) {
         this.id = id;
         this.dep = dep;
         this.arr = arr;
         this.type = type;
+        this.admin_id = admin_id;
     }
-    public Ligne(String dep, String arr, String type) {
+
+    public Ligne(String dep, String arr, String type, int admin_id) {
         this.dep = dep;
         this.arr = arr;
         this.type = type;
+        this.admin_id = admin_id;
     }
 
     public int getId() {
@@ -23,6 +27,14 @@ public class Ligne {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getAdmin_id() {
+        return admin_id;
+    }
+
+    public void setAdmin_id(int admin_id) {
+        this.admin_id = admin_id;
     }
 
     public String getDep() {

@@ -7,13 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tn.esprit.models.trajet.Paiement;
 import tn.esprit.models.trajet.PaiementAPI;
+import tn.esprit.models.trajet.Reservation;
 import tn.esprit.services.trajet.ServicePaiement;
+import tn.esprit.services.trajet.ServiceReservation;
+import tn.esprit.util.SessionManager;
 
 import java.io.IOException;
 
@@ -34,6 +36,10 @@ public class AjouterPaiement {
     @FXML
     private Text t2;
 
+    private int reservation_id;
+    public void set_reservation_id(int reservation_id){
+        this.reservation_id = reservation_id;
+    }
     public void setDepartArret(String departValue, String arretValue) {
         t1.setText(departValue);
         t2.setText(arretValue);
@@ -72,6 +78,9 @@ public class AjouterPaiement {
     void Valider(ActionEvent event) {
         double amount = Double.parseDouble(montant.getText());
         String cardId = card_id.getText();
+        int reservation_id = this.reservation_id;
+        System.out.println("ahawa" + reservation_id);
+        int user_id = SessionManager.getInstance().getId_user();
 
         if (!cardId.matches("^(\\d{4}\\s){3}\\d{4}$")) {
             error1.setText("Invalide. Utilisez XXXX XXXX XXXX XXXX.");
@@ -88,9 +97,22 @@ public class AjouterPaiement {
             Paiement paiement = new Paiement();
             paiement.setMontant(amount);
             paiement.setPay_id(paymentIntentId);
+            paiement.setRes_id(reservation_id);
+            paiement.setUser_id(user_id);
+
 
             paiementService.add(paiement);
             System.out.println("succès.");
+            try {
+                FXMLLoader load = new FXMLLoader(getClass().getResource("/trajet/AfficherPaiement.fxml"));
+                Parent root = load.load();
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println("Paiement échoué.");
         }

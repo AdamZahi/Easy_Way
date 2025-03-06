@@ -49,63 +49,39 @@ public class ServiceEvenement implements IEvent<Evenements> {
                     getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[1],
                     conn);
             phoneNumbers = getPhoneNumbers(userIds, conn);
-//            for (Integer phoneNumber : phoneNumbers) {
-//                VonageClient client = VonageClient.builder().apiKey("c8c34ce3")
-//                        .apiSecret("FChHt3T5SB9XvulI")
-//                        .build();
-//                TextMessage message = new TextMessage("Easy Way",
-//                        "+216"+phoneNumber,  // Replace with the recipient's number
-//                        "\uD83D\uDEA8 A new event has been created on your reserved line!\n" +
-//                        "Type: "+evenements.getType_evenement().toString()+"\n"+
-//                        "Description: "+evenements.getDescription()+"\n");
-//
-//                SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
-//                for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
-//                    System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
-//                }
-//            }
 
 
-            // twilio api
-//            List<Integer> userIds = getUsersIdByLine(
-//                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[0],
-//                    getLigneInfo(evenements.getId_ligne_affectee()).split(" - ")[1],
-//                    conn);
-//            List<Integer> phoneNumbers = getPhoneNumbers(userIds, conn);
-//
-//            // Send SMS notifications
-//            ServiceTwilio twilioService = new ServiceTwilio();
-//            for (int phone : phoneNumbers) {
-//                String message = "⚠️ Un nouvel événement a été créé pour votre ligne ! " +
-//                        "\nType: " + evenements.getType_evenement() +
-//                        "\nDescription: " + evenements.getDescription()+"\n";
-//                twilioService.sendSMS("+216"+phone, message);
-//            }
-//
-//            System.out.println("✅ SMS envoyés à tous les utilisateurs concernés.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        if (userIds != null && phoneNumbers != null) {
             for (Integer phoneNumber : phoneNumbers) {
-                VonageClient client = VonageClient.builder()
-                        .apiKey("c8c34ce3")
+                VonageClient client = VonageClient.builder().apiKey("c8c34ce3")
                         .apiSecret("FChHt3T5SB9XvulI")
                         .build();
-                TextMessage message = new TextMessage(
-                        "Easy Way",
-                        "+216" + phoneNumber,  // Replace with the recipient's number
+                TextMessage message = new TextMessage("Easy Way",
+                        "+216"+phoneNumber,  // Replace with the recipient's number
                         "\uD83D\uDEA8 A new event has been created on your reserved line!\n" +
-                                "Type: " + evenements.getType_evenement().toString() + "\n" +
-                                "Description: " + evenements.getDescription() + "\n");
+                        "Type: "+evenements.getType_evenement().toString()+"\n"+
+                        "Description: "+evenements.getDescription()+"\n");
 
                 SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
                 for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
                     System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
                 }
-
             }
+
+
+             //twilio api
+            // Send SMS notifications
+            ServiceTwilio twilioService = new ServiceTwilio();
+            for (int phone : phoneNumbers) {
+                String message = "⚠️ Un nouvel événement a été créé pour votre ligne ! " +
+                        "\nType: " + evenements.getType_evenement() +
+                        "\nDescription: " + evenements.getDescription()+"\n";
+                twilioService.sendSMS("+216"+phone, message);
+            }
+
+            System.out.println("✅ SMS envoyés à tous les utilisateurs concernés.");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
     @Override

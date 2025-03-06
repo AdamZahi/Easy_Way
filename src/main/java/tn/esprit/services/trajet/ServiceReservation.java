@@ -15,13 +15,14 @@ public class ServiceReservation implements IService<Reservation> {
 
     @Override
     public void add(Reservation reservation) {
-        String query = "INSERT INTO `reservation` (`depart`, `arret`, `vehicule`, `nb`) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO reservation (`depar`,`arret`, `vehicule`, `nb`, `user_id`) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, reservation.getDepart());
             pstm.setString(2, reservation.getArret());
             pstm.setString(3, reservation.getVehicule());
             pstm.setInt(4, reservation.getNb());
+            pstm.setInt(5, reservation.getUser_id());
             pstm.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
@@ -42,6 +43,7 @@ public class ServiceReservation implements IService<Reservation> {
                 l.setArret(rs.getString("arret"));
                 l.setVehicule(rs.getString("vehicule"));
                 l.setNb(rs.getInt("nb"));
+                l.setNb(rs.getInt("user_id"));
                 reservations.add(l);
             }
             System.out.println(reservations);
@@ -55,14 +57,15 @@ public class ServiceReservation implements IService<Reservation> {
 
     @Override
     public void update(Reservation reservation) {
-        String query = "UPDATE `reservation` SET `depart` = ?, `arret` = ?, `vehicule` = ?, `nb` = ? WHERE `id` = ?";
+        String query = "UPDATE `reservation` SET `depart` = ?, `arret` = ?, `vehicule` = ?, `nb` = ?, `nb` = ? WHERE `id` = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
             pstm.setString(1, reservation.getDepart());
             pstm.setString(2, reservation.getArret());
             pstm.setString(3, reservation.getVehicule());
             pstm.setInt(4, reservation.getNb());
-            pstm.setInt(5, reservation.getId());
+            pstm.setInt(5, reservation.getUser_id());
+            pstm.setInt(6, reservation.getId());
             pstm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -95,10 +98,73 @@ public class ServiceReservation implements IService<Reservation> {
                 reservation.setArret(rs.getString("arret"));
                 reservation.setVehicule(rs.getString("vehicule"));
                 reservation.setNb(rs.getInt("nb"));
+                reservation.setNb(rs.getInt("user_id"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return reservation;
     }
+
+    public int add2(Reservation reservation) {
+        String query = "INSERT INTO `reservation` (`depart`, `arret`, `vehicule`, `nb`, `user_id`) VALUES (?, ?, ?, ?, ?)";
+        int reservationId = -1;  // Initialize to an invalid ID
+
+        try {
+            // Prepare the statement
+            PreparedStatement pstm = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstm.setString(1, reservation.getDepart());
+            pstm.setString(2, reservation.getArret());
+            pstm.setString(3, reservation.getVehicule());
+            pstm.setInt(4, reservation.getNb());
+            pstm.setInt(5, reservation.getUser_id());
+
+            // Execute the update
+            pstm.executeUpdate();
+
+            // Get the generated ID (auto-incremented)
+            ResultSet rs = pstm.getGeneratedKeys();
+            if (rs.next()) {
+                reservationId = rs.getInt(1);  // Retrieve the generated ID
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return reservationId;
+    }
+    public List<Reservation> getReservationsByIds(List<Integer> reservationIds) {
+        List<Reservation> reservations = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder("SELECT depart, arret, vehicule, nb FROM reservation WHERE id IN (");
+
+        for (int i = 0; i < reservationIds.size(); i++) {
+            queryBuilder.append("?");
+            if (i < reservationIds.size() - 1) {
+                queryBuilder.append(",");
+            }
+        }
+
+        queryBuilder.append(")");
+
+        String query = queryBuilder.toString();
+
+        try (PreparedStatement pstm = cnx.prepareStatement(query)) {
+            for (int i = 0; i < reservationIds.size(); i++) {
+                pstm.setInt(i + 1, reservationIds.get(i));
+            }
+
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                Reservation reservation = new Reservation();
+                reservation.setDepart(rs.getString("depart"));
+                reservation.setArret(rs.getString("arret"));
+                reservation.setVehicule(rs.getString("vehicule"));
+                reservation.setNb(rs.getInt("nb"));
+                reservations.add(reservation);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving reservations: " + e.getMessage());
+        }
+        return reservations;
+    }
+
 }

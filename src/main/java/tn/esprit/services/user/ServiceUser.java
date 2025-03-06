@@ -74,6 +74,7 @@ public class ServiceUser implements IService<User> {
 
             if (rs.next()) {
                 user = new User(
+                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
@@ -166,6 +167,7 @@ public class ServiceUser implements IService<User> {
 
             if (rs.next()) {
                 user = new User(
+                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
@@ -263,7 +265,7 @@ public class ServiceUser implements IService<User> {
         return id;
     }
 
-        public String getUserNameById(int id_user) {
+    public String getUserNameById(int id_user) {
         String nomUtilisateur = null; // Utiliser null pour gérer les cas d'absence
 
         String query = "SELECT nom FROM user WHERE id_user = ?"; // Correction du nom de table
