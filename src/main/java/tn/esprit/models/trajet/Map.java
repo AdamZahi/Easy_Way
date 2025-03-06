@@ -8,10 +8,9 @@ import java.net.URL;
 
 public class Map {
 
-    // Replace with your actual OpenCage API Key
-    private static final String API_KEY = "ff72fda5ad874ffca77411b17e2e0b30";
+    private static final String API_KEY = "ff72fda5ad874ffca77411b17e2e0b30"; // Your OpenCage API Key
 
-    // Method to get coordinates for a given address
+    // Method to get coordinates for a given address (Geocoding)
     public static double[] getCoordinates(String address) {
         double[] coordinates = new double[2];
         try {
@@ -41,8 +40,6 @@ public class Map {
 
             // Parse the response to extract latitude and longitude
             JSONObject jsonResponse = new JSONObject(response.toString());
-
-            // Get the status object and check the code
             JSONObject status = jsonResponse.getJSONObject("status");
             int statusCode = status.getInt("code");
 
@@ -64,5 +61,37 @@ public class Map {
             e.printStackTrace();
         }
         return coordinates;
+    }
+
+    // Method to get place name from coordinates (Reverse Geocoding)
+    public static String getPlaceNameFromCoordinates(double latitude, double longitude) {
+        String placeName = "";
+        try {
+            // Construct URL for reverse geocoding
+            String urlString = "https://api.opencagedata.com/geocode/v1/json?key=" + API_KEY + "&q=" + latitude + "," + longitude;
+
+            // Open the connection to the API
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Parse the response to extract place name
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            JSONObject firstResult = jsonResponse.getJSONArray("results").getJSONObject(0);
+            placeName = firstResult.getString("formatted");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return placeName;
     }
 }
