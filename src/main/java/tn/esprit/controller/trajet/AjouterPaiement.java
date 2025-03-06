@@ -12,9 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tn.esprit.models.trajet.Paiement;
 import tn.esprit.models.trajet.PaiementAPI;
-import tn.esprit.models.trajet.Reservation;
 import tn.esprit.services.trajet.ServicePaiement;
-import tn.esprit.services.trajet.ServiceReservation;
 import tn.esprit.util.SessionManager;
 
 import java.io.IOException;

@@ -13,13 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import tn.esprit.models.trajet.Paiement;
+import tn.esprit.models.trajet.Map;
 import tn.esprit.models.trajet.Reservation;
 import tn.esprit.services.trajet.ServiceMap;
 //import tn.esprit.services.trajet.ServicePaiement;
@@ -73,6 +74,20 @@ public class AjoutReservation {
         loc.setVisible(true);
         ServiceMap serviceMap = new ServiceMap();
         serviceMap.initializeMap(map);
+    }
+
+    @FXML
+    void key_pressed(KeyEvent event) {
+        if (event.getCode().toString().equals("ENTER")) {
+            String address = depart.getText().trim();
+            if (!address.isEmpty()) {
+                double[] coordinates = Map.getCoordinates(address);
+                if (coordinates[0] != 0 && coordinates[1] != 0) {
+                    String placeName = Map.getPlaceNameFromCoordinates(coordinates[0], coordinates[1]);
+                    depart.setText(placeName);
+                }
+            }
+        }
     }
 
     @FXML
@@ -164,7 +179,8 @@ public class AjoutReservation {
     }
     @FXML
     void addReservation(ActionEvent event) {
-        SessionManager.getInstance().setId_user(20);
+        SessionManager.getInstance().setId_user(4);
+
 
         ServiceReservation sp = new ServiceReservation();
         if(!depart.getText().isEmpty() && !arret.getText().isEmpty() && vehicule.getValue() != null && nb.getValue() <= 4){

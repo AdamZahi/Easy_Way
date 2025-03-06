@@ -1,5 +1,6 @@
 package tn.esprit.test;
 
+<<<<<<< HEAD
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.SmsSubmissionResponseMessage;
@@ -12,7 +13,7 @@ import tn.esprit.models.trajet.Reservation;
 
 import tn.esprit.services.event.ServiceEvenement;
 import tn.esprit.services.event.ServiceTwilio;
-
+import tn.esprit.models.trajet.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,6 +31,9 @@ public class Main {
         for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
             System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
         }
-    }
 
+    }
 }
+//Tunis, Tunisia
+//mourouj
+//sfax
