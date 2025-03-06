@@ -74,6 +74,7 @@ public class ServiceUser implements IService<User> {
 
             if (rs.next()) {
                 user = new User(
+                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
@@ -166,6 +167,7 @@ public class ServiceUser implements IService<User> {
 
             if (rs.next()) {
                 user = new User(
+                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),

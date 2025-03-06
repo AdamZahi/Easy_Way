@@ -32,4 +32,6 @@ public class SessionManager {
     public String getUsername(){
         return se.getById(id_user).getNom();
     }
+
+
 }

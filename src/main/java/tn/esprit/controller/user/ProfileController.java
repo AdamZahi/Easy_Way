@@ -2,7 +2,10 @@ package tn.esprit.controller.user;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -10,10 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import tn.esprit.models.user.User;
 import tn.esprit.services.user.ServiceUser;
+import tn.esprit.util.SessionManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,14 +54,18 @@ public class ProfileController implements Initializable {
 
     private final ServiceUser userService = new ServiceUser();
     private User currentUser;
-
+    @FXML
+    private ImageView image;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Charger l'utilisateur actuel (supposons que l'ID est 1 pour l'exemple)
-        currentUser = userService.getById(1);
+        currentUser = userService.getById(SessionManager.getInstance().getId_user());
+        System.out.println(currentUser);
         if (currentUser != null) {
             loadUserData();
         }
+
+
     }
 
     private void loadUserData() {
@@ -135,5 +145,14 @@ public class ProfileController implements Initializable {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.show();
+    }
+
+    @FXML
+    void RedirectToSignIn(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Choix.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) nomField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
