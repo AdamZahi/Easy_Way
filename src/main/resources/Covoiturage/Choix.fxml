@@ -19,9 +19,9 @@
             <center>
                 <HBox alignment="CENTER" prefHeight="60.0" prefWidth="836.0" spacing="20">
                     <children>
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Home" />
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Our Solution" />
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Community" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Accueil" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Notre Solution" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Communauté" />
                     </children>
                 </HBox>
             </center>
@@ -71,6 +71,7 @@
                                 </Label>
                             </children>
                         </HBox>
+
                     </children>
                 </VBox>
                 <VBox layoutY="500.0" spacing="10">
@@ -95,13 +96,13 @@
         <!-- Main Content -->
         <AnchorPane layoutX="272.0" layoutY="109.0" prefHeight="400.0" prefWidth="600.0">
             <children>
-                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                <VBox alignment="CENTER" prefHeight="524.0" prefWidth="706.0" spacing="20" style="-fx-padding: 20;" AnchorPane.bottomAnchor="-124.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-106.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Choisissez votre mode de transport">
+                        <Label prefHeight="35.0" prefWidth="732.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Bienvenue sur EasyWay – Votre Solution de Transport !">
                      <font>
-                        <Font name="Freestyle Script" size="12.0" />
+                        <Font name="Blackadder ITC" size="8.0" />
                      </font></Label>
-                  <ImageView fitHeight="225.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="132.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@tuni.png" />
                      </image>
@@ -116,6 +117,8 @@
                                 <Button style="-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #A11010;" text="Transport Public" textFill="#f8f3f3" />
                             </children>
                         </HBox>
+                        <Label maxWidth="500.0" prefHeight="179.0" prefWidth="500.0" style="-fx-font-size: 16px; -fx-text-alignment: center;" text="Explorez une nouvelle façon de vous déplacer à Tunis avec notre application intuitive et pratique. Que vous optiez pour le covoiturage ou le transport public, nous vous offrons une expérience fluide et efficace." wrapText="true" />
+
                     </children>
                 </VBox>
             </children>

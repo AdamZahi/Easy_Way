@@ -78,14 +78,20 @@ public class ServiceCommentaire implements IService<Commentaire> {
             pstm.setInt(1, commentaire.getId_post());
             pstm.setInt(2, commentaire.getId_user());
             pstm.setString(3, commentaire.getContenu());
-            pstm.setString(5, commentaire.getNom());// Utilisation du bon getter
-            pstm.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Nouvelle date actuelle
-            pstm.setInt(5, commentaire.getId_com()); // Utilisation du bon getter
-            pstm.executeUpdate();
+            pstm.setString(5, commentaire.getNom());
+            pstm.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+            pstm.setInt(6, commentaire.getId_com());  // Vérifiez si le bon ID est passé
+            int rowsAffected = pstm.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Le commentaire a été mis à jour.");
+            } else {
+                System.out.println("Aucune mise à jour effectuée. Vérifiez si l'ID est correct.");
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     @Override
     public void delete(Commentaire commentaire) {
@@ -98,10 +104,22 @@ public class ServiceCommentaire implements IService<Commentaire> {
             System.out.println(e.getMessage());
         }
     }
+    public void deleteComment(int id_com) {
+        String qry = "DELETE FROM commentaire WHERE id_com = ?";
+        try {
+            PreparedStatement pstm = cnx.prepareStatement(qry);
+            pstm.setInt(1, id_com);
+            pstm.executeUpdate();
+            System.out.println("Commentaire supprimé avec succès !");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la suppression du commentaire : " + e.getMessage());
+        }
+    }
+
 
     public List<Commentaire> getCommentsByPostId(int id_post) {
         List<Commentaire> commentaires = new ArrayList<>();
-        String query = "SELECT c.contenu, c.date_creat, u.nom " +
+        String query = "SELECT c.id_com, c.id_user, c.contenu, c.date_creat, u.nom " +
                 "FROM commentaire c " +
                 "JOIN user u ON c.id_user = u.id_user " +
                 "WHERE c.id_post = ?";
@@ -111,13 +129,14 @@ public class ServiceCommentaire implements IService<Commentaire> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+                int id_com = rs.getInt("id_com"); // Récupération de l'ID du commentaire
+                int id_user = rs.getInt("id_user"); // Récupération de l'ID de l'utilisateur
                 String contenu = rs.getString("contenu");
                 Date date_creat = rs.getDate("date_creat");
                 String nom = rs.getString("nom");
-                // On récupère le nom d'utilisateur
 
-                // On passe maintenant aussi le username dans l'objet Commentaire
-                commentaires.add(new Commentaire(id_post, 0, contenu, date_creat, nom));
+                // Ajout de l'objet Commentaire avec le bon id_user et id_com
+                commentaires.add(new Commentaire(id_com, id_post, id_user, contenu, date_creat, nom));
             }
         } catch (SQLException e) {
             e.printStackTrace();

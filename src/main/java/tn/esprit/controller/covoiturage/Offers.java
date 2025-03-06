@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -146,7 +148,7 @@ public class Offers {
 
         for (Posts post : postsList) {
             VBox postBox = new VBox(10);
-            postBox.setStyle("-fx-background-color: #F4EFE2; -fx-padding: 15px; -fx-border-color: #ccc; -fx-border-radius: 10px;");
+            postBox.setStyle("-fx-background-color: #F4EFE2; -fx-padding: 15px; -fx-border-color: #A11010; -fx-border-radius: 30px;");
 
             Label title = new Label("Offre Covoiturage");
             title.setFont(Font.font("System", FontWeight.BOLD, 18));
@@ -158,6 +160,7 @@ public class Offers {
             descriptionLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
             descriptionLabel.setStyle("-fx-text-fill: #6b0808;");
             descriptionLabel.setWrapText(true);
+            descriptionLabel.setMaxWidth(600);
 
             Label villeDepartLabel = new Label("Lieu de départ : " + post.getVilleDepart());
             villeDepartLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
@@ -207,8 +210,6 @@ public class Offers {
 
 
 
-
-
             // Zone de saisie pour ajouter un commentaire
             TextArea commentInput = new TextArea();
             commentInput.setPromptText("Ajouter un commentaire...");
@@ -233,7 +234,6 @@ public class Offers {
             commentsTitle.setStyle("-fx-text-fill: #333;");
             commentsContainer.getChildren().add(commentsTitle);
 
-            // Récupérer les commentaires avec les noms des utilisateurs
             List<Commentaire> commentaires = serviceCommentaire.getCommentsByPostId(post.getId_post());
             if (commentaires.isEmpty()) {
                 Label noCommentsLabel = new Label("Aucun commentaire pour ce post.");
@@ -244,49 +244,49 @@ public class Offers {
                     HBox commentRow = new HBox(10);
                     commentRow.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
 
-                    // Création des labels pour le nom, la date et le contenu du commentaire
-                    // Récupération du nom de l'utilisateur via ServiceUser
-                    ServiceUser serviceUser = new ServiceUser();
-                    String userName = serviceUser.getUserNameById(commentaire.getId_user());
-
-                    if (userName == null || userName.isEmpty()) {
-                        userName = "Utilisateur inconnu"; // Valeur par défaut si le nom est introuvable
-                    }
-
-// Création du label pour le nom d'utilisateur
-                    Label userNameLabel = new Label(userName + " : ");
+                    Label userNameLabel = new Label(commentaire.getNom());
                     userNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
                     userNameLabel.setStyle("-fx-text-fill: black;");
 
-// Gestion de la date de création du commentaire
                     String dateString = (commentaire.getDate_creat() != null) ? commentaire.getDate_creat().toString() : "Date inconnue";
                     Label dateLabelComment = new Label("(" + dateString + ")");
                     dateLabelComment.setFont(Font.font("Arial", FontWeight.NORMAL, 10));
                     dateLabelComment.setStyle("-fx-text-fill: #888;");
 
-// Label du contenu du commentaire
                     Label commentLabel = new Label(commentaire.getContenu());
                     commentLabel.setWrapText(true);
-                    commentLabel.setMaxWidth(400); // Éviter les dépassements de texte
+                    commentLabel.setMaxWidth(400);
                     commentLabel.setStyle("-fx-text-fill: #555; -fx-padding: 5px;");
 
-// Bouton de suppression du commentaire
-                    Button deleteCommentButton = new Button("❌");
-                    deleteCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
-                    deleteCommentButton.setOnAction(event -> handleDeleteComment(String.valueOf(commentaire.getId_com()), postBox));
-
-                    Button updateCommentButton = new Button("✏️");
-                    updateCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
-                    // Ajouter ici l’action pour modifier le commentaire
-
                     HBox commentHeader = new HBox(5, userNameLabel, dateLabelComment);
-                    VBox commentBox = new VBox(3, commentHeader, commentLabel, new Separator());
-                    commentBox.setStyle("-fx-padding: 5px; -fx-background-radius: 5px;");
+                    HBox.setHgrow(commentHeader, Priority.ALWAYS); // Étend l'espace disponible
 
-                    commentRow.getChildren().addAll(commentBox, updateCommentButton, deleteCommentButton);
+                    VBox commentBox = new VBox(3, commentHeader, commentLabel, new Separator());
+                    System.out.println("Utilisateur du commentaire : " + commentaire.getId_user() +
+                            " | Utilisateur connecté : " + idUserConnecte);
+                    if (commentaire.getId_user() == idUserConnecte) {
+                        System.out.println("Ajout des boutons pour l'utilisateur connecté.");
+
+                        Button deleteCommentButton = new Button("❌");
+                        deleteCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
+                        deleteCommentButton.setOnAction(event -> handleDeleteComment(String.valueOf(commentaire.getId_com()), postBox));
+
+                        Button updateCommentButton = new Button("✏️");
+                        updateCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
+                        updateCommentButton.setOnAction(event -> handleUpdateComment(commentaire));
+
+                        Region spacer = new Region();
+                        HBox.setHgrow(spacer, Priority.ALWAYS); // Pousse les boutons à droite
+
+                        commentHeader.getChildren().addAll(spacer, updateCommentButton, deleteCommentButton);
+                    }
+
+
+                    commentRow.getChildren().add(commentBox);
                     commentsContainer.getChildren().add(commentRow);
                 }
             }
+
 
             // Boutons d'actions pour les posts (conditionnés par l'ID utilisateur)
             HBox postActionButtons = new HBox(10);
@@ -317,32 +317,32 @@ public class Offers {
 
     }
 
-    private void handleDeleteComment(String contenu, VBox postContainer) {
-        Commentaire commentaireToDelete = null;
-        for (Commentaire c : serviceCommentaire.getAll()) {
-            if (c.getContenu().equals(contenu)) {
-                commentaireToDelete = c;
-                break;
-            }
-        }
-        if (commentaireToDelete != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Supprimer le commentaire");
-            alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
-            alert.setContentText("Cette action est irréversible.");
+    private void handleDeleteComment(String commentId, VBox postBox) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText("Voulez-vous vraiment supprimer ce commentaire ?");
+        alert.setContentText("Cette action est irréversible.");
 
-            ButtonType yesButton = new ButtonType("Oui");
-            ButtonType noButton = new ButtonType("Non", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(yesButton, noButton);
+        ButtonType buttonYes = new ButtonType("Oui");
+        ButtonType buttonNo = new ButtonType("Non", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == yesButton) {
-                serviceCommentaire.delete(commentaireToDelete);
-                afficherPosts(); // Rafraîchir l'interface
-                System.out.println("Commentaire supprimé !");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonYes) {
+            try {
+                int id_com = Integer.parseInt(commentId); // Convertir l'ID en entier
+                serviceCommentaire.deleteComment(id_com); // Utiliser la bonne méthode
+                afficherPosts(); // Rafraîchir l'affichage
+                System.out.println("Commentaire supprimé avec succès !");
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : ID du commentaire invalide.");
             }
+        } else {
+            System.out.println("Suppression annulée.");
         }
     }
+
+
     private void handleAddComment(ActionEvent event, int postId, TextArea commentaireField) {
         String commentaireText = commentaireField.getText();
 
@@ -358,11 +358,11 @@ public class Offers {
 
         // Récupération de l'utilisateur connecté
         int id_user = SessionManager.getInstance().getId_user();
-        String username = SessionManager.getInstance().getUsername(); // Ajout du username
+        String nom= SessionManager.getInstance().getUsername(); // Ajout du username
         java.sql.Date date_creat = new java.sql.Date(System.currentTimeMillis());
 
         // Création de l'objet commentaire avec username
-        Commentaire newComment = new Commentaire(postId, id_user, commentaireText, date_creat, username);
+        Commentaire newComment = new Commentaire(postId, id_user, commentaireText, date_creat, nom);
         serviceCommentaire.add(newComment); // Modification pour prendre en compte le username
 
         commentaireField.clear();
@@ -371,6 +371,7 @@ public class Offers {
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Commentaire ajouté avec succès !");
     }
 
+
     // Méthode pour afficher des alertes
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
@@ -378,6 +379,38 @@ public class Offers {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void handleUpdateComment(Commentaire commentaire) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Modifier le commentaire");
+
+        VBox dialogVbox = new VBox(10);
+        dialogVbox.setStyle("-fx-padding: 20px;");
+
+        TextField commentField = new TextField(commentaire.getContenu());
+
+        dialogVbox.getChildren().add(commentField);
+        dialog.getDialogPane().setContent(dialogVbox);
+
+        ButtonType updateButton = new ButtonType("Modifier", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(updateButton, cancelButton);
+
+        dialog.setResultConverter(button -> {
+            if (button == updateButton) {
+                return commentField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newContent -> {
+            commentaire.setContenu(newContent);
+            serviceCommentaire.update(commentaire);  // Remplacer 'updateComment' par 'update'
+            afficherPosts(); // Rafraîchir l'affichage
+            System.out.println("Commentaire modifié avec succès !");
+        });
     }
 
 
