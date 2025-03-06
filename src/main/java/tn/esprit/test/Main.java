@@ -1,6 +1,5 @@
 package tn.esprit.test;
 
-<<<<<<< HEAD
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.SmsSubmissionResponseMessage;

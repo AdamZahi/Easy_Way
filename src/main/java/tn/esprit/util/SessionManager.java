@@ -3,13 +3,12 @@ package tn.esprit.util;
 import tn.esprit.services.user.ServiceUser;
 
 public class SessionManager {
-    private static SessionManager instance; // Singleton
-    private int id_user; // Attribut de session
-    private ServiceUser se;
-    // Constructeur privé pour empêcher l'instanciation directe
+    private static SessionManager instance;
+    private int id_user;
+    private ServiceUser se = new ServiceUser();
+
     private SessionManager() {}
 
-    // Méthode pour obtenir l'instance unique de SessionManager
     public static SessionManager getInstance() {
         if (instance == null) {
             instance = new SessionManager();
@@ -26,7 +25,9 @@ public class SessionManager {
         this.id_user = id_user;
     }
 
-
+    public void logout(){
+        this.id_user = 0;
+    }
 
 
 
