@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,7 +16,7 @@
         <!-- Header -->
         <BorderPane prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
             <center>
-                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="836.0" spacing="20">
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="762.0" spacing="20">
                     <children>
                         <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Home" />
                         <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Our Solution" />
@@ -25,13 +24,6 @@
                     </children>
                 </HBox>
             </center>
-            <right>
-                <Button style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
-                    <BorderPane.margin>
-                        <Insets right="10.0" top="15.0" />
-                    </BorderPane.margin>
-                </Button>
-            </right>
             <left>
                 <ImageView fitHeight="60.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -42,54 +34,48 @@
         </BorderPane>
 
         <!-- Sidebar -->
-        <VBox layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+        <VBox alignment="TOP_CENTER" layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
             <children>
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
+                <Label alignment="TOP_CENTER" contentDisplay="TOP" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
                     <font>
                         <Font name="Franklin Gothic Demi Cond" size="18.0" />
                     </font>
                     <VBox.margin>
-                        <Insets bottom="10.0" left="60.0" right="10.0" top="10.0" />
+                        <Insets />
                     </VBox.margin>
                 </Label>
-                <VBox layoutX="20.0" layoutY="20.0" prefHeight="91.0" prefWidth="202.0">
-                    <children>
-                        <HBox layoutX="20.0" layoutY="20.0" prefHeight="25.0" prefWidth="186.0" spacing="10">
-                            <VBox.margin>
-                                <Insets left="40.0" right="40.0" />
-                            </VBox.margin>
-                            <children>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@profil.png" />
-                                    </image>
-                                </ImageView>
-                                <Label style="-fx-font-size: 16px; -fx-text-fill: #333;" text="Profile">
-                                    <font>
-                                        <Font size="15.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-                <VBox layoutY="500.0" spacing="10">
-                    <children>
-                        <ToggleButton style="-fx-font-size: 14px; -fx-text-fill: #333; -fx-background-color: #DDDEC6;" text="Light Mode">
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0">
-                                    <image>
-                                        <Image url="@idea.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </ToggleButton>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="360.0" />
-                    </VBox.margin>
-                </VBox>
+            <Button fx:id="ReclamationBtn" mnemonicParsing="false" onAction="#RedirectToProfile" prefHeight="31.0" prefWidth="160.0" style="-fx-background-color: transparent;" text="My profile">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="ReclamationBtn1" layoutX="90.0" layoutY="92.0" mnemonicParsing="false" onAction="#RedirectToTrajet" prefHeight="41.0" prefWidth="197.0" style="-fx-background-color: transparent;" text="Suivre nos Trajet">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="ReclamationBtn11" layoutX="68.0" layoutY="132.0" mnemonicParsing="false" onAction="#RedirectToLigne" prefHeight="41.0" prefWidth="209.0" style="-fx-background-color: transparent;" text="Decouvrir nos lignes">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="ReclamationBtn2" layoutX="56.0" layoutY="80.0" mnemonicParsing="false" onAction="#RedirectToReclamation" prefHeight="31.0" prefWidth="160.0" style="-fx-background-color: transparent;" text="Reclamer">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+                <Button onAction="#logout" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="230.0" />
+               </VBox.margin>
+                </Button>
             </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
         </VBox>
 
         <!-- Main Content -->

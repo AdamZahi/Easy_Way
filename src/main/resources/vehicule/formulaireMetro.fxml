@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:controller="tn.esprit.controller.vehicule.AjouterMetroController" xmlns:fx="http://javafx.com/fxml/1" spacing="10" alignment="CENTER" styleClass="form-container" stylesheets="easyway.css">
+<VBox fx:controller="tn.esprit.controller.vehicule.AjouterMetroController" xmlns:fx="http://javafx.com/fxml/1" spacing="10" alignment="CENTER" styleClass="form-container" stylesheets="@easyway.css">
     <Label text="Affectez un Metro" styleClass="form-title">
         <font>
             <Font size="24"/>

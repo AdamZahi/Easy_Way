@@ -1,9 +1,11 @@
 package tn.esprit.util;
 
+import tn.esprit.services.user.ServiceUser;
+
 public class SessionManager {
     private static SessionManager instance; // Singleton
     private int id_user; // Attribut de session
-
+    private ServiceUser se;
     // Constructeur privé pour empêcher l'instanciation directe
     private SessionManager() {}
 
@@ -26,5 +28,10 @@ public class SessionManager {
     public void logout() {
         id_user = 0; // Réinitialiser la session
     }
+
+    public String getUsername(){
+        return se.getById(id_user).getNom();
+    }
+
 
 }

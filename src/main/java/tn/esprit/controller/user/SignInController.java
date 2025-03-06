@@ -51,25 +51,34 @@ public class SignInController {
         }
 
         ServiceUser serviceUser = new ServiceUser();
-        User user = serviceUser.getUserByEmail(email);
+        User myUser = serviceUser.getUserByEmail(email);
 
-        if (user == null) {
+        if (myUser == null) {
             showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
-        } else if (!user.getMot_de_passe().equals(mdp)) {
+        } else if (!myUser.getMot_de_passe().equals(mdp)) {
             showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
         } else {
             showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION); // Utilisation d'AlertType.INFORMATION pour succès
             // Stocker l'utilisateur dans la session
-            SessionManager.getInstance().setId_user(user.getId_user());
-
+            SessionManager.getInstance().setId_user(myUser.getId_user());
+            System.out.println(myUser);
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) signInButton.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
+                if(myUser.getRole()== User.Role.Admin){
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) signInButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }else {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Choix.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) signInButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }
+
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
                 showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
             }
         }
@@ -95,7 +104,7 @@ public class SignInController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -108,7 +117,7 @@ public class SignInController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
