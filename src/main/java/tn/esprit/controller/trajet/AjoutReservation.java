@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import javafx.scene.control.SpinnerValueFactory;
 import tn.esprit.util.SessionManager;
+import tn.esprit.models.trajet.geminiAPI;
 
 public class AjoutReservation {
 
@@ -65,15 +66,44 @@ public class AjoutReservation {
     @FXML
     private WebView map;
 
+
+    @FXML
+    private TextField input;
+
+    @FXML
+    private TextArea texAreaa;
+
+    @FXML
+    void click_on_robot(MouseEvent event) {
+        texAreaa.setVisible(true);
+        input.setVisible(true);
+    }
+
+    @FXML
+    void enter(MouseEvent event) {
+        String userInput = input.getText().trim();
+        if (!userInput.isEmpty()) {
+            String response = sendToGeminiAPI(userInput);
+            texAreaa.setText(response);
+        }
+    }
+
+    private String sendToGeminiAPI(String userInput) {
+        return geminiAPI.getResponse(userInput);
+    }
+
     @FXML
     public void initialize() {
         // spinner
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1); //min=0 max=100
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1);
         nb.setValueFactory(valueFactory);
         loc.setVisible(true);
         ServiceMap serviceMap = new ServiceMap();
         serviceMap.initializeMap(map);
+
+        texAreaa.setVisible(false);
+        input.setVisible(false);
     }
 
     @FXML
@@ -90,7 +120,7 @@ public class AjoutReservation {
         }
     }
 
-    @FXML
+   /* @FXML
     void payer(ActionEvent event) {
         ServiceReservation sp = new ServiceReservation();
         List<Reservation> reservations = sp.getAll();
@@ -111,7 +141,7 @@ public class AjoutReservation {
         stage.setScene(scene);
         stage.show();
     }
-
+*/
 
 //magic link
 

@@ -10,6 +10,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
@@ -102,7 +103,18 @@
                      <Label fx:id="control1" layoutX="85.0" layoutY="159.0" prefHeight="18.0" prefWidth="275.0" />
                      <Label fx:id="control2" layoutX="79.0" layoutY="244.0" prefHeight="18.0" prefWidth="287.0" />
                      <Label fx:id="control3" layoutX="123.0" layoutY="364.0" prefHeight="18.0" prefWidth="222.0" />
-                     <Hyperlink layoutX="446.0" layoutY="627.0" onAction="#payer" text="payer" />
+                     <ImageView fitHeight="79.0" fitWidth="82.0" layoutX="427.0" layoutY="584.0" onMouseClicked="#click_on_robot" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@bot.png" />
+                        </image>
+                     </ImageView>
+                     <TextArea fx:id="texAreaa" editable="false" layoutX="25.0" layoutY="99.0" prefHeight="483.0" prefWidth="441.0" />
+                     <TextField fx:id="input" layoutX="33.0" layoutY="512.0" prefHeight="61.0" prefWidth="426.0" />
+                     <ImageView fitHeight="43.0" fitWidth="47.0" layoutX="409.0" layoutY="522.0" onMouseClicked="#enter" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@enter.png" />
+                        </image>
+                     </ImageView>
                         </children>
                     </AnchorPane>
                 </children>
