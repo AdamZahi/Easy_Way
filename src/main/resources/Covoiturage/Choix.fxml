@@ -16,11 +16,11 @@
         <!-- Header -->
         <BorderPane prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
             <center>
-                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="762.0" spacing="20">
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="836.0" spacing="20">
                     <children>
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Home" />
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Our Solution" />
-                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Community" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Accueil" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Notre Solution" />
+                        <Button style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-color: #DDDEC6; -fx-text-fill: #A11010;" text="Communauté" />
                     </children>
                 </HBox>
             </center>
@@ -34,9 +34,9 @@
         </BorderPane>
 
         <!-- Sidebar -->
-        <VBox alignment="TOP_CENTER" layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20.0" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+        <VBox fx:id="sideBar" alignment="TOP_CENTER" layoutY="60.0" prefHeight="640.0" prefWidth="250.0" spacing="20" style="-fx-background-color: #DDDEC6; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
             <children>
-                <Label alignment="TOP_CENTER" contentDisplay="TOP" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A11010;" text="EasyWay" textAlignment="CENTER">
                     <font>
                         <Font name="Franklin Gothic Demi Cond" size="18.0" />
                     </font>
@@ -44,50 +44,62 @@
                         <Insets />
                     </VBox.margin>
                 </Label>
-            <Button fx:id="ReclamationBtn" mnemonicParsing="false" onAction="#RedirectToProfile" prefHeight="31.0" prefWidth="160.0" style="-fx-background-color: transparent;" text="My profile">
-               <font>
-                  <Font name="System Bold" size="19.0" />
-               </font>
-            </Button>
-            <Button fx:id="ReclamationBtn1" layoutX="90.0" layoutY="92.0" mnemonicParsing="false" onAction="#RedirectToTrajet" prefHeight="41.0" prefWidth="197.0" style="-fx-background-color: transparent;" text="Suivre nos Trajet">
-               <font>
-                  <Font name="System Bold" size="19.0" />
-               </font>
-            </Button>
-            <Button fx:id="ReclamationBtn11" layoutX="68.0" layoutY="132.0" mnemonicParsing="false" onAction="#RedirectToLigne" prefHeight="41.0" prefWidth="209.0" style="-fx-background-color: transparent;" text="Decouvrir nos lignes">
-               <font>
-                  <Font name="System Bold" size="19.0" />
-               </font>
-            </Button>
-            <Button fx:id="ReclamationBtn2" layoutX="56.0" layoutY="80.0" mnemonicParsing="false" onAction="#RedirectToReclamation" prefHeight="31.0" prefWidth="160.0" style="-fx-background-color: transparent;" text="Reclamer">
-               <font>
-                  <Font name="System Bold" size="19.0" />
-               </font>
-            </Button>
-                <Button onAction="#logout" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="230.0" />
-               </VBox.margin>
-                </Button>
+                <VBox alignment="TOP_CENTER" layoutX="20.0" layoutY="20.0" prefHeight="549.0" prefWidth="250.0" spacing="10.0">
+               <children>
+                  <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#RedirectToProfile" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Mon profile">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <Button alignment="TOP_LEFT" layoutX="36.0" layoutY="10.0" mnemonicParsing="false" onAction="#RedirectToTrajet" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Suivre les trajet">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button alignment="TOP_LEFT" layoutX="36.0" layoutY="50.0" mnemonicParsing="false" onAction="#RedirectToLigne" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Decouvrir nos lignes">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button alignment="TOP_LEFT" layoutX="36.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleCovoiturage" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Espace de covoiturage">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button alignment="TOP_LEFT" layoutX="36.0" layoutY="90.0" mnemonicParsing="false" onAction="#RedirectToReclamation" prefHeight="26.0" prefWidth="199.0" style="-fx-background-color: transparent;" text="Soumettre reclamation">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button onAction="#logout" prefHeight="38.0" prefWidth="126.0" style="-fx-background-color: #AA1010; -fx-text-fill: white;" text="Logout">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="250.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+                </VBox>
             </children>
          <padding>
-            <Insets top="20.0" />
+            <Insets top="30.0" />
          </padding>
         </VBox>
 
         <!-- Main Content -->
         <AnchorPane layoutX="272.0" layoutY="109.0" prefHeight="400.0" prefWidth="600.0">
             <children>
-                <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                <VBox alignment="CENTER" prefHeight="524.0" prefWidth="706.0" spacing="20" style="-fx-padding: 20;" AnchorPane.bottomAnchor="-124.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-106.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Choisissez votre mode de transport">
+                        <Label prefHeight="35.0" prefWidth="732.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Bienvenue sur EasyWay – Votre Solution de Transport !">
                      <font>
-                        <Font name="Freestyle Script" size="12.0" />
+                        <Font name="Blackadder ITC" size="8.0" />
                      </font></Label>
-                  <ImageView fitHeight="225.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="132.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@tuni.png" />
                      </image>
@@ -102,6 +114,8 @@
                                 <Button style="-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #A11010;" text="Transport Public" textFill="#f8f3f3" />
                             </children>
                         </HBox>
+                        <Label maxWidth="500.0" prefHeight="179.0" prefWidth="500.0" style="-fx-font-size: 16px; -fx-text-alignment: center;" text="Explorez une nouvelle façon de vous déplacer à Tunis avec notre application intuitive et pratique. Que vous optiez pour le covoiturage ou le transport public, nous vous offrons une expérience fluide et efficace." wrapText="true" />
+
                     </children>
                 </VBox>
             </children>

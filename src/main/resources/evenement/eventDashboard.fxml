@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -9,102 +8,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane prefHeight="600.0" prefWidth="1080.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.event.EventDashboard">
-    <VBox prefHeight="600.0" prefWidth="190.0" style="-fx-background-color: white;">
-        <VBox alignment="CENTER" prefHeight="252.0" prefWidth="190.0" styleClass="profile-layout" stylesheets="@profileCard.css">
-            <ImageView fitHeight="129.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@assets/avatar.jpg" />
-            </ImageView>
-            <Label text="Adam Zahi" textFill="WHITE">
-                <VBox.margin>
-                    <Insets top="20.0" />
-                </VBox.margin>
-                <font>
-                    <Font name="Corbel Bold" size="28.0" />
-                </font>
-            </Label>
-        </VBox>
-        <VBox alignment="CENTER" prefHeight="450.0" prefWidth="292.0" style="-fx-background-color: white;">
-            <VBox.margin>
-                <Insets left="10.0" right="10.0" />
-            </VBox.margin>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Vehicule" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Evenement" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="45.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Reclamation" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="80.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Trajet" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="116.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Ligne" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="151.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Covoiturage" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-            <Button layoutX="10.0" layoutY="186.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="114.0" style="-fx-background-color: D32F2F;" text="Diconnecter" textFill="WHITE">
-                <font>
-                    <Font name="Corbel Bold" size="13.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="15.0" />
-                </VBox.margin>
-            </Button>
-        </VBox>
-    </VBox>
     <Label alignment="CENTER" layoutX="274.0" layoutY="25.0" text="Tableau de Bord des Événements">
         <font>
             <Font name="Corbel Bold" size="42.0" />
         </font>
     </Label>
     <GridPane fx:id="eventGrid" hgap="20" layoutX="20" layoutY="50" vgap="20" />
-    <ChoiceBox fx:id="statusFilter" layoutX="299.0" layoutY="119.0" prefHeight="25.0" prefWidth="100.0" />
-    <ChoiceBox fx:id="typeFilter" layoutX="437.0" layoutY="119.0" prefHeight="25.0" prefWidth="100.0" />
-    <TextField fx:id="searchField" layoutX="574.0" layoutY="118.0" prefHeight="25.0" prefWidth="180.0" promptText="Rechercher un événement..." />
-    <BarChart fx:id="eventChart" layoutX="233.0" layoutY="155.0" prefHeight="449.0" prefWidth="567.0">
+    <ChoiceBox fx:id="statusFilter" layoutX="234.0" layoutY="119.0" prefHeight="25.0" prefWidth="100.0" />
+    <ChoiceBox fx:id="typeFilter" layoutX="369.0" layoutY="119.0" prefHeight="25.0" prefWidth="100.0" />
+    <TextField fx:id="searchField" layoutX="530.0" layoutY="118.0" prefHeight="25.0" prefWidth="180.0" promptText="Rechercher un événement..." />
+    <BarChart fx:id="eventChart" layoutX="34.0" layoutY="155.0" prefHeight="449.0" prefWidth="695.0">
         <xAxis>
             <CategoryAxis label="Type d'Événement" fx:id="xAxis" />
         </xAxis>
@@ -112,9 +32,9 @@
             <NumberAxis fx:id="yAxis" label="Nombre" />
         </yAxis>
     </BarChart>
-   <ScrollPane fx:id="scrollPane" layoutX="822.0" layoutY="135.0" prefHeight="427.0" prefWidth="236.0">
+   <ScrollPane fx:id="scrollPane" layoutX="746.0" layoutY="135.0" prefHeight="427.0" prefWidth="312.0">
       <content>
-         <GridPane fx:id="grid" prefHeight="410.0" prefWidth="233.0">
+         <GridPane fx:id="grid" prefHeight="418.0" prefWidth="302.0">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
            </columnConstraints>
@@ -124,6 +44,11 @@
          </GridPane>
       </content>
    </ScrollPane>
+   <Button layoutX="64.0" layoutY="113.0" mnemonicParsing="false" onAction="#RedirectToEvent" prefHeight="25.0" prefWidth="128.0" style="-fx-background-color: transparent;" text="&lt; Retourner">
+      <font>
+         <Font name="System Bold" size="16.0" />
+      </font>
+   </Button>
 
 
 </Pane>

@@ -64,7 +64,7 @@ public class SignInController {
             System.out.println(myUser);
             try {
                 if(myUser.getRole()== User.Role.Admin){
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
                     Parent root = loader.load();
                     Stage stage = (Stage) signInButton.getScene().getWindow();
                     stage.setScene(new Scene(root));

@@ -18,15 +18,14 @@ import java.util.Optional;
 public class Choix {
 
     @FXML
-    private Button ReclamationBtn;
+    private Button ReclamationBtn = new Button();
     @FXML
     private void handleCovoiturage(ActionEvent event) throws IOException {
-        Parent optionView = FXMLLoader.load(getClass().getResource("/Covoiturage/option.fxml"));
-        Scene optionScene = new Scene(optionView);
-
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(optionScene);
-        window.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/option.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
@@ -39,7 +38,7 @@ public class Choix {
     void RedirectToReclamation(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ajoutReclamation.fxml"));
         Parent root = loader.load();
-        Stage stage = (Stage) ReclamationBtn.getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -53,7 +52,7 @@ public class Choix {
     void RedirectToProfile(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserProfile.fxml"));
         Parent root = loader.load();
-        Stage stage = (Stage) ReclamationBtn.getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }

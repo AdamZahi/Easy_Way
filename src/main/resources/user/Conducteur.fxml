@@ -18,14 +18,14 @@
             <Circle fill="#d1d1d1" layoutX="24.0" layoutY="26.0" radius="14.0" stroke="LIGHTGRAY" strokeType="INSIDE" />
             <AnchorPane layoutX="10.0" layoutY="40.0" prefHeight="442.0" prefWidth="700.0">
                <children>
-                  <Text layoutX="11.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un compte">
+                  <Text layoutX="11.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un compte">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="24.0" />
                      </font>
                   </Text>
 
                   <!-- Champ Numéro de Permis -->
-                  <Label layoutX="14.0" layoutY="75.0" text="Numéro de permis">
+                  <Label fx:id="component" layoutX="14.0" layoutY="75.0" text="Numéro de permis">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -59,6 +59,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
+                  <Button layoutX="11.0" layoutY="7.0" mnemonicParsing="false" onAction="#RedirectToSignIn" style="-fx-background-color: transparent;" text=" &lt;  Revenir pour se connecter" />
                </children>
             </AnchorPane>
          </children>
