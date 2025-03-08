@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class Map {
 
-    private static final String API_KEY = "ff72fda5ad874ffca77411b17e2e0b30"; // Your OpenCage API Key
+    private static final String API_KEY = "secret"; // Your OpenCage API Key
 
     // Method to get coordinates for a given address (Geocoding)
     public static double[] getCoordinates(String address) {
