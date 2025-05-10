@@ -13,13 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import tn.esprit.models.trajet.Paiement;
+import tn.esprit.models.trajet.Map;
 import tn.esprit.models.trajet.Reservation;
 import tn.esprit.services.trajet.ServiceMap;
 //import tn.esprit.services.trajet.ServicePaiement;
@@ -27,6 +28,7 @@ import tn.esprit.services.trajet.ServiceReservation;
 import java.io.IOException;
 import java.util.List;
 import javafx.scene.control.SpinnerValueFactory;
+import tn.esprit.util.SessionManager;
 
 public class AjoutReservation {
 
@@ -72,6 +74,20 @@ public class AjoutReservation {
         loc.setVisible(true);
         ServiceMap serviceMap = new ServiceMap();
         serviceMap.initializeMap(map);
+    }
+
+    @FXML
+    void key_pressed(KeyEvent event) {
+        if (event.getCode().toString().equals("ENTER")) {
+            String address = depart.getText().trim();
+            if (!address.isEmpty()) {
+                double[] coordinates = Map.getCoordinates(address);
+                if (coordinates[0] != 0 && coordinates[1] != 0) {
+                    String placeName = Map.getPlaceNameFromCoordinates(coordinates[0], coordinates[1]);
+                    depart.setText(placeName);
+                }
+            }
+        }
     }
 
     @FXML
@@ -163,9 +179,12 @@ public class AjoutReservation {
     }
     @FXML
     void addReservation(ActionEvent event) {
+        SessionManager.getInstance().setId_user(4);
+
+
         ServiceReservation sp = new ServiceReservation();
         if(!depart.getText().isEmpty() && !arret.getText().isEmpty() && vehicule.getValue() != null && nb.getValue() <= 4){
-            sp.add(new Reservation(depart.getText(), arret.getText(), vehicule.getValue(), nb.getValue()));
+            int reservation_id = sp.add2(new Reservation(depart.getText(), arret.getText(), vehicule.getValue(), nb.getValue(),SessionManager.getInstance().getId_user()));
             loc.setVisible(true);
             arret.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
             depart.setStyle("-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;");
@@ -179,9 +198,11 @@ public class AjoutReservation {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/trajet/AjouterPaiement.fxml"));
                 Parent root = fxmlLoader.load();
 
-                AjouterPaiement paiementController = fxmlLoader.getController();
-                paiementController.setDepartArret(depart.getText(), arret.getText());
-                paiementController.setMontant(numberOfPlaces, vehicleType);
+                AjouterPaiement Controller = fxmlLoader.getController();
+                //l'affichage mta3 depart wl arret fl controller paiement
+                Controller.setDepartArret(depart.getText(), arret.getText());
+                Controller.setMontant(numberOfPlaces, vehicleType);
+                Controller.set_reservation_id(reservation_id);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);

@@ -18,13 +18,16 @@ import tn.esprit.services.reclamation.reclamationService;
 import tn.esprit.util.MyDataBase;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import tn.esprit.services.reclamation.MailService;
 import tn.esprit.services.reclamation.WhatsAppService;
-
+import tn.esprit.util.SessionManager;
 
 
 public class AjoutReclamation {
@@ -108,6 +111,9 @@ public class AjoutReclamation {
         String descriptionText = this.descriptionn.getText();
         LocalDate dateIncident = date.getValue();
         this.statu.getValue();
+        int user_id = getUserIdByEmail(emailText);
+        SessionManager.getInstance().setId_user(user_id);
+        System.out.println("ID utilisateur récupéré : " + user_id);
 
         // Réinitialiser les messages d'erreur
         emailcontrol.setText("");
@@ -160,11 +166,11 @@ public class AjoutReclamation {
                 try {
                     if (currentId > 0) {
                         // Mode modification
-                        reclamationService.update(new reclamations(currentId, emailText, selectedCategorie, sujetText, "En attente", descriptionText, dateIncident.toString()));
+                        reclamationService.update(new reclamations(currentId, emailText, selectedCategorie, sujetText, "En attente", descriptionText, dateIncident.toString(), user_id));
                         messagerec.setText("Réclamation mise à jour avec succès !");
                     } else {
                         // Mode ajout
-                        reclamationService.add(new reclamations(emailText, selectedCategorie, sujetText, "En attente", descriptionText, dateIncident.toString()));
+                        reclamationService.add(new reclamations(emailText, selectedCategorie, sujetText, "En attente", descriptionText, dateIncident.toString(), user_id));;
                         messagerec.setText("Réclamation ajoutée avec succès !");
 
                         // ✅ Envoi d'un mail de confirmation
@@ -220,6 +226,21 @@ public class AjoutReclamation {
         }
     }
 
+    public int getUserIdByEmail(String email) {
+        // Exemple de code pour récupérer l'ID utilisateur en fonction de l'email
+        String query = "SELECT id_user FROM user WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id_user"); // Retourner l'ID utilisateur si trouvé
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;  // Retourner 0 si l'utilisateur n'existe pas
+    }
+
 
     private void clearFields() {
         email.clear();
@@ -230,9 +251,9 @@ public class AjoutReclamation {
         statu.setValue(null);
     }
 
-
-    public void gotoCardView(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/CardView.fxml")));
+    @FXML
+    void RedirectToOffers(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Covoiturage/Choix.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

@@ -9,24 +9,26 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
+import tn.esprit.models.user.User;
 import tn.esprit.services.event.ServiceEvenement;
+import tn.esprit.services.user.ServiceUser;
+import tn.esprit.util.SessionManager;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class EventTable implements Initializable {
-
+    ServiceUser su = new ServiceUser();
     ServiceEvenement se = new ServiceEvenement();
     List<Evenements> events = se.getAll();
     @FXML
@@ -35,15 +37,18 @@ public class EventTable implements Initializable {
     private TextField searchField;
     private ObservableList<Evenements> allEvents = FXCollections.observableArrayList();
     private ObservableList<Evenements> filteredEvents = FXCollections.observableArrayList();
+    @FXML
+    private Label username;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        User currentUser = su.getById(SessionManager.getInstance().getId_user());
+        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         loadEvents(events);
         allEvents.setAll(se.getAll()); // Charger tous les événements
         filteredEvents.setAll(allEvents);
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterEvents(newValue);
-        });
+        searchField.textProperty().addListener((observable, oldValue, newValue) ->filterEvents(newValue));
     }
 
     private void filterEvents(String searchText) {
@@ -94,7 +99,7 @@ public class EventTable implements Initializable {
         Text description = new Text("📝 Description: " + evenement.getDescription());
         Text dateDebut = new Text("📅 Début: " + evenement.getDate_debut());
         Text dateFin = new Text("📅 Fin: " + evenement.getDate_fin());
-        Text ligne = new Text("🚋 Ligne: " + evenement.getId_ligne_affectee());
+        Text ligne = new Text("🚋 Ligne: " + se.getLigneInfo(evenement.getId_ligne_affectee()));
         Text status = new Text("\uD83D\uDEA6 Status: " + evenement.getStatus_evenement());
 
         Button editButton = new Button("✏ Modifier");
@@ -140,15 +145,31 @@ public class EventTable implements Initializable {
     private void handleDelete(int id_event) throws IOException {
         se.delete(id_event);
         editPageController epc = new editPageController();
-        if(se.getById(id_event)==null) {
+        if(se.getById(id_event)==null)
             epc.showAlert("Success", "Événement est supprimée avec succès!");
-            loadEvents(events);
-        }
+
         else
             epc.showAlert("Error","Error lors de supprission de ce Événement");
 
+        loadEvents(events);
+
     }
 
+    @FXML
+    void RedirectToVehicules(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
 
     @FXML
     void goToAddForm(ActionEvent event) throws IOException {
@@ -166,12 +187,86 @@ public class EventTable implements Initializable {
         stage.show();
     }
     @FXML
-    void ClearAll(ActionEvent event) {
+    void ClearAll() {
         loadEvents(events);
         searchField.clear();
     }
 
+    @FXML
+    void goToDashboard(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventDashboard.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
 
+    @FXML
+    void RedirectToUsers(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
 
+    @FXML
+    void RedirectToLigne(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RedirectToReclamation(ActionEvent event) throws IOException {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        // Load the new FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/CardView.fxml"));
+        root = loader.load();
+        // Get the stage from the event source
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        // Set the new scene and show
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void RedirectToTrajet(ActionEvent event) {
+
+    }
+
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de Déconnexion");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous vraiment vous déconnecter ?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            SessionManager.getInstance().logout();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+    }
 
 }

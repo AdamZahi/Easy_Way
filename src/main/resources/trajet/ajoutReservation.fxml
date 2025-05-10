@@ -30,7 +30,7 @@
                                     <Image url="@logo.png" />
                                 </image>
                      </ImageView>
-                            <TextField fx:id="depart" layoutX="103.0" layoutY="109.0" onMousePressed="#depart_pressed" prefHeight="40.0" prefWidth="270.0" promptText="Votre localisation" scaleX="1.3" scaleY="1.22" style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;">
+                            <TextField fx:id="depart" layoutX="103.0" layoutY="109.0" onKeyPressed="#key_pressed" onMousePressed="#depart_pressed" prefHeight="40.0" prefWidth="270.0" promptText="Votre localisation" scaleX="1.3" scaleY="1.22" style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #aeaeae; -fx-background-color: white;">
                                 <font>
                                     <Font name="Calibri Light" size="12.0" />
                                 </font>
