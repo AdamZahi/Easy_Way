@@ -40,12 +40,12 @@ public class eventItemController implements Initializable {
     private Button viewButton;
     ServiceEvenement se = new ServiceEvenement();
     public void setData(Evenements event){
-        idType.setText(event.getType_evenement().name());
+        idType.setText(event.getType_evenement());
         idDesc.setText(event.getDescription());
         idDateDebut.setText(event.getDate_debut().toString());
         idDateFin.setText(event.getDate_fin().toString());
         idLigne.setText(se.getLigneInfo(event.getId_ligne_affectee()));
-        idStatus.setText(event.getStatus_evenement().name());
+        idStatus.setText(event.getStatus_evenement());
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

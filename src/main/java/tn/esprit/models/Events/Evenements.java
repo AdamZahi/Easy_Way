@@ -4,13 +4,12 @@ import java.util.Date;
 
 public class Evenements {
     private int id_event, id_ligne_affectee, id_createur ;
-    private TypeEvenement type_evenement ;
+    private String type_evenement,status_evenement ;
     private String description ;
     private java.sql.Date date_debut,date_fin;
-    private StatusEvenement status_evenement ;
 
     public Evenements() {}
-    public Evenements(int id_event,TypeEvenement type_evenement, int id_ligne_affectee, String description, java.sql.Date date_debut, java.sql.Date date_fin, StatusEvenement status_evenement , int id_createur) {
+    public Evenements(int id_event,String type_evenement, int id_ligne_affectee, String description, java.sql.Date date_debut, java.sql.Date date_fin, String status_evenement , int id_createur) {
         this.id_event = id_event;
         this.type_evenement = type_evenement;
         this.id_ligne_affectee = id_ligne_affectee;
@@ -36,11 +35,11 @@ public class Evenements {
         this.id_ligne_affectee = id_ligne_affectee;
     }
 
-    public TypeEvenement getType_evenement() {
+    public String getType_evenement() {
         return type_evenement;
     }
 
-    public void setType_evenement(TypeEvenement type_evenement) {
+    public void setType_evenement(String type_evenement) {
         this.type_evenement = type_evenement;
     }
 
@@ -68,11 +67,11 @@ public class Evenements {
         this.date_fin = date_fin;
     }
 
-    public StatusEvenement getStatus_evenement() {
+    public String getStatus_evenement() {
         return status_evenement;
     }
 
-    public void setStatus_evenement(StatusEvenement status_evenement) {
+    public void setStatus_evenement(String status_evenement) {
         this.status_evenement = status_evenement;
     }
 

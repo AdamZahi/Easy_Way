@@ -11,8 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.models.Events.StatusEvenement;
-import tn.esprit.models.Events.TypeEvenement;
 import tn.esprit.models.user.User;
 import tn.esprit.services.event.ServiceEvenement;
 import tn.esprit.services.user.ServiceUser;
@@ -37,10 +35,10 @@ public class editPageController {
     @FXML
     private Label username;
     @FXML
-    private ChoiceBox<StatusEvenement> statusChoiceBox;
+    private ChoiceBox<String> statusChoiceBox;
 
     @FXML
-    private ChoiceBox<TypeEvenement> typeChoiceBox;
+    private ChoiceBox<String> typeChoiceBox;
 
     @FXML
     private TextField ligneField;
@@ -50,11 +48,11 @@ public class editPageController {
 
     @FXML
     public void initialize() {
-        User u =  su.getById(SessionManager.getInstance().getId_user());
-        username.setText(u.getNom()+" "+u.getPrenom());
-        imageProfile.setImage(new Image(new File(u.getPhoto_profil()).toURI().toString()));
-        typeChoiceBox.getItems().setAll(TypeEvenement.values());
-        statusChoiceBox.getItems().setAll(StatusEvenement.values());
+//        User u =  su.getById(SessionManager.getInstance().getId_user());
+//        username.setText(u.getNom()+" "+u.getPrenom());
+//        imageProfile.setImage(new Image(new File(u.getPhoto_profil()).toURI().toString()));
+        typeChoiceBox.getItems().setAll("Retard", "Incident", "Greve");
+        statusChoiceBox.getItems().setAll("En cours", "Annulé", "Résolu");
     }
 
     public void initData(Evenements event) {

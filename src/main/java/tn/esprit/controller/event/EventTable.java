@@ -42,8 +42,8 @@ public class EventTable implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        User currentUser = su.getById(SessionManager.getInstance().getId_user());
-        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
+//        User currentUser = su.getById(SessionManager.getInstance().getId_user());
+//        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         loadEvents(events);
         allEvents.setAll(se.getAll()); // Charger tous les événements
         filteredEvents.setAll(allEvents);
