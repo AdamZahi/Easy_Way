@@ -112,6 +112,10 @@ public class AjoutReclamation {
         LocalDate dateIncident = date.getValue();
         this.statu.getValue();
         int user_id = getUserIdByEmail(emailText);
+        if (user_id == 0) {
+            emailcontrol.setText("Aucun utilisateur trouvé avec cet email.");
+            return; // Stoppe l'exécution ici
+        }
         SessionManager.getInstance().setId_user(user_id);
         System.out.println("ID utilisateur récupéré : " + user_id);
 

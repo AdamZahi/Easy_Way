@@ -56,13 +56,13 @@ public class StaticStatu implements Initializable {
             int totalReclamations = totalRs.next() ? totalRs.getInt(1) : 1; // Éviter division par zéro
 
             // Récupérer le nombre de réclamations par statut
-            String query = "SELECT statu, COUNT(*) FROM reclamation GROUP BY statu";
+            String query = "SELECT statut, COUNT(*) FROM reclamation GROUP BY statut";
             PreparedStatement pstmt = connection.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
 
             // Ajouter les données au PieChart
             while (rs.next()) {
-                String statut = rs.getString("statu");
+                String statut = rs.getString("statut");
                 int count = rs.getInt(2);
                 double percentage = (count * 100.0) / totalReclamations;
 
@@ -100,7 +100,7 @@ public class StaticStatu implements Initializable {
 
         try {
             // Requête pour récupérer les emails des réclamations selon le statut
-            String query = "SELECT email FROM reclamation WHERE statu = ?";
+            String query = "SELECT email FROM reclamation WHERE statut = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, statut);
             ResultSet rs = pstmt.executeQuery();
@@ -147,9 +147,9 @@ public class StaticStatu implements Initializable {
                                 modifyButton.setOnAction(e -> {
                                     try {
                                         // Récupérer les détails de la réclamation associée à l'email sélectionné
-                                        String query = "SELECT r.id, r.sujet, r.description, r.date_creation, r.statu, c.id AS categorieId " +
+                                        String query = "SELECT r.id, r.sujet, r.description, r.date_creation, r.statut, c.id AS categorieId " +
                                                 "FROM reclamation r " +
-                                                "JOIN categorie c ON r.categorieId = c.id " +
+                                                "JOIN categorie c ON r.category_id_id = c.id " +
                                                 "WHERE r.email = ?";
 
                                         PreparedStatement pstmt = connection.prepareStatement(query);
@@ -162,7 +162,7 @@ public class StaticStatu implements Initializable {
                                             String description = rs.getString("description");
                                             int categorieId = rs.getInt("categorieId");
                                             String date_creation = rs.getString("date_creation");
-                                            String statu = rs.getString("statu");
+                                            String statu = rs.getString("statut");
 
                                             // Charger la fenêtre ModifierReclamation.fxml
                                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/reclamation/ModifierReclamation.fxml"));
@@ -215,10 +215,10 @@ public class StaticStatu implements Initializable {
     private void showEmailDetails(String email) {
         try {
             // Requête corrigée pour récupérer les détails de la réclamation associée à l'email
-            String query = "SELECT r.sujet, r.description, r.date_creation, r.statu, " +
+            String query = "SELECT r.sujet, r.description, r.date_creation, r.statut, " +
                     "c.id AS categorieId, c.type AS categorieType " +
                     "FROM reclamation r " +
-                    "JOIN categorie c ON r.categorieId = c.id " +
+                    "JOIN categorie c ON r.category_id_id = c.id " +
                     "WHERE r.email = ?";
 
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -230,7 +230,7 @@ public class StaticStatu implements Initializable {
                 String description = rs.getString("description");
                 String categorieType = rs.getString("categorieType");  // Le type de la catégorie
                 String date_creation = rs.getString("date_creation");
-                String statu = rs.getString("statu");
+                String statu = rs.getString("statut");
 
                 // Création de l'objet categorie
                 int categorieId = rs.getInt("categorieId");  // Récupération de l'ID de la catégorie

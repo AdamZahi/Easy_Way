@@ -28,6 +28,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ModifierReclamation {
 
@@ -54,6 +56,7 @@ public class ModifierReclamation {
     private final tn.esprit.services.reclamation.categorieService categorieService = new categorieService();
 
     private int currentId; // Pour garder l'ID de la réclamation en cours
+
 
     @FXML
     public void initialize() {
@@ -86,23 +89,35 @@ public class ModifierReclamation {
     }
 
 
-    public void setReclamationDetails(int id, String sujet, String description, int categorieId, String date, String statut) {
+    public void setReclamationDetails(int id, String sujet, String description, int category_id_id, String date, String statut) {
         this.nouvSujet.setText(sujet);
-        this.nouvDescriptionn.setText(description);
-        this.nouvDate.setValue(LocalDate.parse(date));
-        nouvStatu.setValue(statut); // ✅ Corrigé ici
+        this.nouvSujet.setEditable(false); // lecture seule
 
-        // Sélectionner la catégorie dans le ComboBox
-        for (categories cat : nouvCategorie.getItems()) { // ✅ Utilisation correcte
-            if (cat.getId() == categorieId) {
+        this.nouvDescriptionn.setText(description);
+        this.nouvDescriptionn.setEditable(false); // lecture seule
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
+        this.nouvDate.setValue(dateTime.toLocalDate());
+        this.nouvDate.setDisable(true); // lecture seule
+
+
+        // Sélectionner la catégorie
+        for (categories cat : nouvCategorie.getItems()) {
+            if (cat.getId() == category_id_id) {
                 nouvCategorie.setValue(cat);
                 break;
             }
         }
+        nouvCategorie.setDisable(true);
+      
 
-        // Stocker l'ID pour l'utiliser lors de la mise à jour
+
+        nouvStatu.setValue(statut); // seul champ modifiable
+
         this.currentId = id;
     }
+
 
     @FXML
     void gotoCardView1(ActionEvent event) throws IOException {
@@ -116,52 +131,29 @@ public class ModifierReclamation {
     @FXML
     void modifierReclamation(ActionEvent event) {
         try {
-            // Validation des champs avant mise à jour
-            if (nouvSujet.getText().isEmpty() || nouvDescriptionn.getText().isEmpty()) {
-                messageRecModifier.setText("Le sujet et la description sont obligatoires !");
+            if (nouvStatu.getValue() == null) {
+                messageRecModifier.setText("Veuillez sélectionner un statut !");
                 return;
             }
 
-            // Vérifier si la catégorie est sélectionnée
-            if (nouvCategorie.getValue() == null) {
-                messageRecModifier.setText("Veuillez sélectionner une catégorie !");
-                return;
-            }
-
-            // Vérifier si la date est sélectionnée
-            if (nouvDate.getValue() == null) {
-                messageRecModifier.setText("Veuillez sélectionner une date !");
-                return;
-            }
-
-            // Mettre à jour la réclamation dans la base de données
-            String query = "UPDATE reclamation SET sujet = ?, description = ?, categorieId = ?, statu = ?, date_creation = ? WHERE id = ?";
+            String query = "UPDATE reclamation SET statut = ? WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, nouvSujet.getText());
-            pstmt.setString(2, nouvDescriptionn.getText());
-            categories selectedCategory = nouvCategorie.getValue();
-            pstmt.setInt(3, selectedCategory.getId());
-            pstmt.setString(4, nouvStatu.getValue()); // ✅ Correct si c'est un ComboBox<String>
-            pstmt.setString(5, nouvDate.getValue().toString()); // Utilisation de LocalDate.toString()
-            pstmt.setInt(6, currentId);
-
-
-            // ✅ Vider les champs après l'ajout hellooooo
-            clearFields();
+            pstmt.setString(1, nouvStatu.getValue());
+            pstmt.setInt(2, currentId);
 
             int rowsUpdated = pstmt.executeUpdate();
             if (rowsUpdated > 0) {
-                messageRecModifier.setText("Réclamation mise à jour avec succès !");
-                System.out.println("Réclamation mise à jour avec succès !");
+                messageRecModifier.setText("Statut mis à jour avec succès !");
             } else {
-                messageRecModifier.setText("Erreur lors de la mise à jour de la réclamation !");
+                messageRecModifier.setText("Erreur lors de la mise à jour !");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            messageRecModifier.setText("Erreur lors de la mise à jour de la réclamation !");
+            messageRecModifier.setText("Erreur SQL lors de la mise à jour !");
         }
     }
+
 
     public void gogotoStatestique(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/reclamation/staticStatu.fxml")));

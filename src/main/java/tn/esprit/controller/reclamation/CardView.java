@@ -7,14 +7,11 @@ import com.itextpdf.layout.element.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,31 +21,35 @@ import javafx.stage.Stage;
 import tn.esprit.models.reclamation.reclamations;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
-import tn.esprit.models.user.User;
 import tn.esprit.services.reclamation.reclamationService;
-import tn.esprit.services.user.ServiceUser;
 import tn.esprit.util.MyDataBase;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.Document;
-import tn.esprit.util.SessionManager;
 
 
 public class CardView {
 
-    @FXML
-    private ImageView profileImage;
     public Button suppbtn;
     public Button modfbtn;
+    @FXML
+    private ScrollPane scroll;
+    @FXML
+    private VBox cardBox;
     private final Connection connection = MyDataBase.getInstance().getCnx();
+    @FXML
+    private TextField txtId;
+    @FXML
+    private Button refreshBtn;
     @FXML
     private Label lblMessage;
     @FXML
@@ -66,11 +67,8 @@ public class CardView {
     @FXML
     private Button stqButton;
     @FXML
-    private Label username;
-    @FXML
     private Button pdfButton;
     private final reclamationService reclamationService = new reclamationService(); // ✅ Ajout de cette ligne
-    private ServiceUser su = new ServiceUser();
 
 
     public void gotoAjoutReclamation(ActionEvent event) throws IOException {
@@ -91,9 +89,6 @@ public class CardView {
 
     @FXML
     private void initialize() {
-        User currentUser = su.getById(SessionManager.getInstance().getId_user());
-        profileImage.setImage(new Image(new File(currentUser.getPhoto_profil()).toURI().toString()));
-        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
         System.out.println("Initialisation de l'interface...");
         afficherReclamations(); // Appel automatique de l'affichage des réclamations
         comboBoxTrier.getItems().addAll("email", "sujet", "description", "date");
@@ -274,7 +269,7 @@ public class CardView {
                 lblMessage.setText("Aucune réclamation trouvée avec cet ID.");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             lblMessage.setText("Erreur lors de la suppression de la réclamation.");
         }
     }
@@ -287,7 +282,7 @@ public class CardView {
 
         try {
             // Récupérer les détails de la réclamation depuis la base de données
-            String query = "SELECT id, categorieId, email, sujet, description, statu, date_creation FROM reclamation WHERE id = ?";
+            String query = "SELECT id, category_id_id, email, sujet, description, statut, date_creation FROM reclamation WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, reclamationId);
             ResultSet rs = pstmt.executeQuery();
@@ -305,9 +300,9 @@ public class CardView {
                         reclamationId,
                         rs.getString("sujet"),
                         rs.getString("description"),
-                        rs.getInt("categorieId"),
+                        rs.getInt("categorie_id_id"),
                         rs.getString("date_creation"),
-                        rs.getString("statu")
+                        rs.getString("statut")
                 );
 
                 // Afficher la nouvelle scène
@@ -498,91 +493,6 @@ public class CardView {
         }
     }
 
-    @FXML
-    void RedirectToEvent(ActionEvent event) throws IOException {
-        Stage stage;
-        Scene scene;
-        Parent root;
-        // Load the new FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/evenement/eventTable.fxml"));
-        root = loader.load();
-        // Get the stage from the event source
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        // Set the new scene and show
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void RedirectToLigne(ActionEvent event) {
-
-    }
-
-    @FXML
-    void RedirectToTrajet(ActionEvent event) {
-
-    }
-
-    @FXML
-    void RedirectToUsers(ActionEvent event) throws IOException {
-        Stage stage;
-        Scene scene;
-        Parent root;
-        // Load the new FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UsersList.fxml"));
-        root = loader.load();
-        // Get the stage from the event source
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        // Set the new scene and show
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void RedirectToVehicule(ActionEvent event) throws IOException {
-        Stage stage;
-        Scene scene;
-        Parent root;
-        // Load the new FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vehicule/test.fxml"));
-        root = loader.load();
-        // Get the stage from the event source
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        // Set the new scene and show
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void logout(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de Déconnexion");
-        alert.setHeaderText(null);
-        alert.setContentText("Voulez-vous vraiment vous déconnecter ?");
-
-        // 🔹 Afficher l'alerte et attendre la réponse de l'utilisateur
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            // 🔹 Si l'utilisateur clique sur "Oui", on procède à la déconnexion
-            SessionManager.getInstance().logout();
-
-            // Charger la nouvelle interface
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
-            Parent root = loader.load();
-
-            // Obtenir la scène et changer l'interface
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        }
-    }
-
-
 
 }
-
 
