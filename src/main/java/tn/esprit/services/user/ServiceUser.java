@@ -1,13 +1,16 @@
 package tn.esprit.services.user;
 
+import org.json.JSONArray;
 import tn.esprit.interfaces.IService;
 import tn.esprit.models.user.User;
+import tn.esprit.models.user.User.Role;
 import tn.esprit.util.MyDataBase;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 public class ServiceUser implements IService<User> {
     private Connection cnx;
@@ -18,28 +21,43 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void add(User user) {
-
-        String query = "INSERT INTO user(nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO `user`(`nom`, `prenom`, `email`, `password`, `telephonne`, `photo_profil`, `roles`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
-            PreparedStatement pstm = cnx.prepareStatement(query);
+            PreparedStatement pstm = cnx.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstm.setString(1, user.getNom());
             pstm.setString(2, user.getPrenom());
             pstm.setString(3, user.getEmail());
             pstm.setString(4, user.getMot_de_passe());
             pstm.setInt(5, user.getTelephonne());
             pstm.setString(6, user.getPhoto_profil());
-            pstm.setString(7, user.getRole().name()); // Stocke le rôle sous forme de chaîne
 
-            pstm.executeUpdate();
+            // Convertir les rôles en JSON
+            JSONArray rolesArray = new JSONArray();
+            rolesArray.put(user.getRole().name());  // Si plusieurs rôles, ajoute-les ici
+            pstm.setString(7, rolesArray.toString());
+
+            int rowsAffected = pstm.executeUpdate();
+
+            // Récupérer l'ID généré automatiquement
+            ResultSet rs = pstm.getGeneratedKeys();
+            if (rs.next()) {
+                int generatedId = rs.getInt(1);  // ID généré
+                user.setId_user(generatedId);  // Mets à jour l'objet utilisateur avec l'ID
+            }
+
+            if (rowsAffected > 0) {
+                System.out.println("Utilisateur ajouté avec succès !");
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());
         }
     }
+
 
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM user";
+        String query = "SELECT * FROM `user`";
         try {
             Statement stm = cnx.createStatement();
             ResultSet rs = stm.executeQuery(query);
@@ -49,10 +67,11 @@ public class ServiceUser implements IService<User> {
                 u.setNom(rs.getString("nom"));
                 u.setPrenom(rs.getString("prenom"));
                 u.setEmail(rs.getString("email"));
-                u.setMot_de_passe(rs.getString("mot_de_passe"));
+                u.setMot_de_passe(rs.getString("password"));
                 u.setTelephonne(rs.getInt("telephonne"));
                 u.setPhoto_profil(rs.getString("photo_profil"));
-                u.setRole(User.Role.valueOf(rs.getString("role"))); // Convertir en ENUM
+                // Conversion de la chaîne en enum Role
+                u.setRole(Role.valueOf(rs.getString("roles")));
 
                 users.add(u);
             }
@@ -74,14 +93,13 @@ public class ServiceUser implements IService<User> {
 
             if (rs.next()) {
                 user = new User(
-                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
-                        rs.getString("mot_de_passe"),
+                        rs.getString("password"),
                         rs.getInt("telephonne"),
                         rs.getString("photo_profil"),
-                        User.Role.valueOf(rs.getString("role"))
+                        Role.valueOf(rs.getString("roles")) // CORRECT : on passe un Role
                 );
                 user.setId_user(rs.getInt("id_user"));
             }
@@ -93,7 +111,7 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void update(User user) {
-        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ?, photo_profil = ?, role = ? WHERE id_user = ?";
+        String query = "UPDATE user SET nom = ?, prenom = ?, email = ?, password = ?, telephonne = ?, photo_profil = ?, roles = ? WHERE id_user = ?";
 
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
@@ -136,22 +154,26 @@ public class ServiceUser implements IService<User> {
         }
     }
 
-    public boolean updateRole(int id_user, User.Role newRole) {
-        String query = "UPDATE user SET role = ? WHERE id_user = ?";
+    // Méthode pour mettre à jour les rôles de l'utilisateur
+    public boolean updateRoles(int id_user, List<String> newRoles) {
+        String query = "UPDATE user SET roles = ? WHERE id_user = ?"; // `role` est de type string dans la BD
 
         try (PreparedStatement pstm = cnx.prepareStatement(query)) {
-            pstm.setString(1, newRole.name());
-            pstm.setInt(2, id_user);
+            // Convertir la liste des rôles en JSON (par exemple ["ROLE_USER", "ROLE_PASSAGER"])
+            String rolesString = String.join(",", newRoles);  // Convertir la liste en chaîne séparée par des virgules
+
+            pstm.setString(1, rolesString);  // Stocker les rôles sous forme de chaîne
+            pstm.setInt(2, id_user);  // ID de l'utilisateur à mettre à jour
 
             int rowsUpdated = pstm.executeUpdate();
             if (rowsUpdated > 0) {
-                System.out.println("Le rôle de l'utilisateur avec ID " + id_user + " a été mis à jour en " + newRole);
+                System.out.println("Les rôles de l'utilisateur avec ID " + id_user + " ont été mis à jour.");
                 return true;
             } else {
                 System.out.println("Aucun utilisateur trouvé avec cet ID.");
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la mise à jour du rôle : " + e.getMessage());
+            System.out.println("Erreur lors de la mise à jour des rôles : " + e.getMessage());
         }
         return false;
     }
@@ -166,27 +188,44 @@ public class ServiceUser implements IService<User> {
             ResultSet rs = pstm.executeQuery();
 
             if (rs.next()) {
+                // Nettoyage du champ roles (ex: ["ROLE_PASSAGER"])
+                String rawRole = rs.getString("roles");
+                String roleClean = rawRole.replace("[", "")
+                        .replace("]", "")
+                        .replace("\"", "")
+                        .split(",")[0]
+                        .trim();
+
+                Role role = Role.valueOf(roleClean); // S'assure que c'est un rôle valide dans ton enum
+
                 user = new User(
-                        rs.getInt("id_user"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getInt("telephonne"),  // Assure-toi que telephonne est bien un INT en BD
+                        rs.getString("password"),
+                        rs.getInt("telephonne"),
                         rs.getString("photo_profil"),
-                        User.Role.valueOf(rs.getString("role")) // ✅ Convertir String -> Enum
+                        role
                 );
+
+                // Si ton User a un ID, pense à le définir aussi :
+                user.setId_user(rs.getInt("id_user"));
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération de l'utilisateur : " + e.getMessage());
+            System.out.println("Erreur SQL lors de la récupération de l'utilisateur : " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Rôle inconnu ou mal formé : " + e.getMessage());
         }
 
         return user;
     }
 
-    public boolean updatePassword(int id_user, String mot_de_passe) {
-        String hashedPassword = BCrypt.hashpw(mot_de_passe, BCrypt.gensalt()); // Hachage du mot de passe
-        String query = "UPDATE user SET mot_de_passe = ? WHERE id_user = ?";
+
+
+    // Mise à jour du mot de passe de l'utilisateur avec un ID
+    public boolean updatePassword(int id_user, String password) {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt()); // Hachage du mot de passe
+        String query = "UPDATE user SET password = ? WHERE id_user = ?";
 
         try (PreparedStatement stmt = cnx.prepareStatement(query)) {
             stmt.setString(1, hashedPassword);
@@ -207,29 +246,7 @@ public class ServiceUser implements IService<User> {
         }
     }
 
-    public boolean updatePasswordByEmail(String email, String newPassword) {
-        String query = "UPDATE user SET mot_de_passe = ? WHERE email = ?";
-
-        try (Connection conn = MyDataBase.getInstance().getCnx();
-             PreparedStatement pstm = conn.prepareStatement(query)) {
-
-            pstm.setString(1, newPassword);
-            pstm.setString(2, email);
-
-            int rowsUpdated = pstm.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                System.out.println("Mot de passe mis à jour pour l'email : " + email);
-                return true;
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec cet email : " + email);
-                return false;
-            }
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la mise à jour du mot de passe : " + e.getMessage());
-            return false;
-        }
-    }
+    // Récupérer l'ID d'un utilisateur par son email
     public int getUserIdByEmail(String email) {
         System.out.println("Recherche de l'ID pour l'email : " + email);
 
@@ -251,6 +268,7 @@ public class ServiceUser implements IService<User> {
         return -1;
     }
 
+    // Récupérer l'ID du dernier utilisateur inséré
     public int getLastInsertedId() {
         int id = -1;
         try (Connection cnx = MyDataBase.getInstance().getCnx();
@@ -264,26 +282,4 @@ public class ServiceUser implements IService<User> {
         }
         return id;
     }
-
-    public String getUserNameById(int id_user) {
-        String nomUtilisateur = null; // Utiliser null pour gérer les cas d'absence
-
-        String query = "SELECT nom FROM user WHERE id_user = ?"; // Correction du nom de table
-
-        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
-            stmt.setInt(1, id_user);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                nomUtilisateur = rs.getString("nom");
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec cet ID : " + id_user);
-            }
-        } catch (SQLException e) {
-            System.out.println("Erreur SQL lors de la récupération du nom d'utilisateur : " + e.getMessage());
-        }
-
-        return nomUtilisateur;
-    }
-
 }
