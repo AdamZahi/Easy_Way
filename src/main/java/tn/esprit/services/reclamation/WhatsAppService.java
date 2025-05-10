@@ -5,8 +5,8 @@ import com.twilio.type.PhoneNumber;
 
 public class WhatsAppService {
     // Renseigne tes informations Twilio
-    private static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
-    private static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
+    private static final String ACCOUNT_SID = "AC94f122421b29ba1416b1ea0224f4e236";
+    private static final String AUTH_TOKEN = "ec886aa5accef9d36611f21b089ab412";
 
     private static final String TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"; // Numéro Twilio
 

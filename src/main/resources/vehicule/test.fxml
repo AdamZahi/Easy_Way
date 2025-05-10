@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -15,15 +17,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.web.WebView?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TextField?>
-<BorderPane stylesheets="@easyway.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="tn.esprit.controller.vehicule.vehiculeController">
+<BorderPane prefHeight="700.0" prefWidth="1080.0" stylesheets="@easyway.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controller.vehicule.vehiculeController">
     <!-- Left sidebar remains unchanged -->
     <!-- Top header remains unchanged -->
 
     <center>
-        <TabPane fx:id="tabPane">
+        <TabPane fx:id="tabPane" prefHeight="700.0" prefWidth="1116.0">
             <!-- Bus Tab -->
             <Tab fx:id="busTab" closable="false" text="Bus">
                 <VBox alignment="CENTER" spacing="20" styleClass="content-area">
@@ -107,7 +106,7 @@
                                         </graphic>
                                     </Button>
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Button prefHeight="26.0" prefWidth="78.0" styleClass="delete-button" text="Supprimer" onAction="#handleDeleteBus">
+                                    <Button onAction="#handleDeleteBus" prefHeight="26.0" prefWidth="78.0" styleClass="delete-button" text="Supprimer">
                                         <graphic>
                                             <Region styleClass="delete-icon" />
                                         </graphic>
@@ -117,7 +116,7 @@
                             </VBox>
                         </FlowPane>
                     </ScrollPane>
-                    <Button styleClass="add-button" onAction="#handleAddBus">
+                    <Button onAction="#handleAddBus" styleClass="add-button">
                         <graphic>
                             <Label styleClass="icon-label" text="+" />
                         </graphic>
@@ -211,7 +210,7 @@
                             </VBox>
                         </FlowPane>
                     </ScrollPane>
-                    <Button styleClass="add-button" onAction="#handleAddMetro">
+                    <Button onAction="#handleAddMetro" styleClass="add-button">
                         <graphic>
                             <Label styleClass="icon-label" text="+" />
                         </graphic>
