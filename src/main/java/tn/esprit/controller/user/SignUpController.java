@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 import tn.esprit.models.user.User;
 import tn.esprit.services.user.ServiceUser;
 
@@ -41,7 +42,6 @@ public class SignUpController {
     @FXML
     void SignUp(ActionEvent event) {
         ServiceUser su = new ServiceUser();
-
 
         String nom = NomField.getText().trim();
         String prenom = PrenomField.getText().trim();
@@ -83,7 +83,9 @@ public class SignUpController {
 
         User.Role role = selectedRole.equals("Passager") ? User.Role.ROLE_PASSAGER : User.Role.ROLE_CONDUCTEUR;
         int telephone = Integer.parseInt(telephoneText);
-        String hashedMdp = PasswordHash(mdp);
+
+        // Utilisation de BCrypt pour hacher le mot de passe
+        String hashedMdp = hashPassword(mdp);
 
         // Création du user
         User newUser = new User(nom, prenom, email, hashedMdp, telephone, "photo", role);
@@ -98,6 +100,12 @@ public class SignUpController {
         // Redirection
         redirectToRolePage(newUser, event);
     }
+
+    // Fonction de hachage avec BCrypt
+    private static String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(13));  // 13 est le facteur de coût (même que Symfony)
+    }
+
 
     private void redirectToRolePage(User user, ActionEvent event) {
         try {
@@ -143,21 +151,7 @@ public class SignUpController {
         return phone.matches("\\d{8}");
     }
 
-    public static String PasswordHash(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes());
-            byte[] rbt = md.digest();
-            StringBuilder sb = new StringBuilder();
-            for (byte b : rbt) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     @FXML
     void RedirectToSignIn(MouseEvent event) {

@@ -14,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import tn.esprit.models.user.User;
 import tn.esprit.services.user.ServiceUser;
+import org.mindrot.jbcrypt.BCrypt;
+
 
 import java.io.IOException;
 import tn.esprit.util.SessionManager;
@@ -56,15 +58,15 @@ public class SignInController {
         if (user == null) {
             showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR);
         } else {
-            // Comparer le mot de passe
-            if (user.getMot_de_passe().trim().equals(mdp)) {
+            // Comparer le mot de passe avec BCrypt
+            if (BCrypt.checkpw(mdp, user.getMot_de_passe())) {
                 showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION);
 
                 // Stocker l'utilisateur dans la session
                 SessionManager.getInstance().setId_user(user.getId_user());
 
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/choix.fxml"));
                     Parent root = loader.load();
                     Stage stage = (Stage) signInButton.getScene().getWindow();
                     stage.setScene(new Scene(root));
@@ -78,7 +80,6 @@ public class SignInController {
             }
         }
     }
-
 
 
 
