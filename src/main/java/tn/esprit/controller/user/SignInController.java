@@ -46,34 +46,39 @@ public class SignInController {
         String mdp = MdpField.getText().trim();
 
         if (email.isEmpty() || mdp.isEmpty()) {
-            showAlert("Erreur", "Veuillez remplir tous les champs.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
+            showAlert("Erreur", "Veuillez remplir tous les champs.", Alert.AlertType.ERROR);
             return;
         }
 
-        ServiceUser serviceUser = new ServiceUser();
+        // Vérifier si l'utilisateur existe
         User user = serviceUser.getUserByEmail(email);
 
         if (user == null) {
-            showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
-        } else if (!user.getMot_de_passe().equals(mdp)) {
-            showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
+            showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR);
         } else {
-            showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION); // Utilisation d'AlertType.INFORMATION pour succès
-            // Stocker l'utilisateur dans la session
-            SessionManager.getInstance().setId_user(user.getId_user());
+            // Comparer le mot de passe
+            if (user.getMot_de_passe().trim().equals(mdp)) {
+                showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION);
 
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) signInButton.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR); // Utilisation d'AlertType.ERROR
+                // Stocker l'utilisateur dans la session
+                SessionManager.getInstance().setId_user(user.getId_user());
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UpdateProfile.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) signInButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR);
+                }
+            } else {
+                showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR);
             }
         }
     }
+
 
 
 

@@ -9,7 +9,7 @@ import java.util.Properties;
 public class EmailService {
 
     private final String username = "mejrieya384@gmail.com"; // Remplace par ton email
-    private final String password = "oire xyug itgu dgwx"; // Remplace par ton mot de passe
+    private final String password = "fjgd mfot bmwu ltec"; // Remplace par ton mot de passe
 
     public void sendEmail(String recipient, String subject, String body) throws MessagingException {
         // Configuration des propriétés SMTP
