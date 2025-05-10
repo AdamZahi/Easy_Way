@@ -7,7 +7,7 @@ import com.stripe.param.PaymentIntentCreateParams;
 
 public class PaiementAPI {
     // Your Stripe API Key
-    private static final String STRIPE_API_KEY = "sk_test_51Qv6RFJfspVdInoDmTxfpmACuQYygsgpsNopsq5iRu6TxbHGj9rXL6CW7lXq9ukez8Xt9i8fHeoIw7DIsKZEWWZ300E9wVE1TG";
+    private static final String STRIPE_API_KEY = "secret";
 
     static {
         Stripe.apiKey = STRIPE_API_KEY; // Set your Stripe secret key

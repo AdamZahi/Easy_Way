@@ -81,7 +81,7 @@ public class SignUpController {
             return;
         }
 
-        User.Role role = selectedRole.equals("Passager") ? User.Role.Passager : User.Role.Conducteur;
+        User.Role role = selectedRole.equals("Passager") ? User.Role.ROLE_PASSAGER : User.Role.ROLE_CONDUCTEUR;
         int telephone = Integer.parseInt(telephoneText);
         String hashedMdp = PasswordHash(mdp);
 
@@ -101,11 +101,11 @@ public class SignUpController {
 
     private void redirectToRolePage(User user, ActionEvent event) {
         try {
-            String fxmlPage = user.getRole() == User.Role.Conducteur ? "/user/Conducteur.fxml" : "/user/Passager.fxml";
+            String fxmlPage = user.getRole() == User.Role.ROLE_CONDUCTEUR ? "/user/Conducteur.fxml" : "/user/Passager.fxml";
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPage));
             Parent root = loader.load();
 
-            if (user.getRole() == User.Role.Conducteur) {
+            if (user.getRole() == User.Role.ROLE_CONDUCTEUR) {
                 ConducteurController conducteurController = loader.getController();
                 conducteurController.setUser(user); // ✅ Correction ici
             } else {

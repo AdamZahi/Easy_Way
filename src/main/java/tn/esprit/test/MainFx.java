@@ -15,7 +15,7 @@ public class MainFx extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignIn.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/UserSpace.fxml"));
         try {
             Parent root = loader.load();
             stage.setScene(new Scene(root));
@@ -25,5 +25,4 @@ public class MainFx extends Application {
             System.out.println(e.getMessage());
         }
     }
-    //..
 }

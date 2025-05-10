@@ -45,7 +45,18 @@ public class Viewpostcontrolleur {
     @FXML
     public void initialize() {
         afficherPosts();
+        afficherIds();
     }
+    public void afficherIds() {
+        // Récupération des IDs depuis SessionManager ou autres classes
+        int idUserConnecte = SessionManager.getInstance().getId_user();
+
+
+        // Affichage pour tester si les IDs sont bien récupérés
+        System.out.println("ID utilisateur connecté : " + idUserConnecte);
+
+    }
+
 
     private void afficherPosts() {
         postsContainer.getChildren().clear();
@@ -65,6 +76,7 @@ public class Viewpostcontrolleur {
             descriptionLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
             descriptionLabel.setStyle("-fx-text-fill: #6b0808;");
             descriptionLabel.setWrapText(true);
+            descriptionLabel.setMaxWidth(600);
 
             Label villeDepartLabel = new Label("Lieu de départ : " + post.getVilleDepart());
             villeDepartLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
@@ -122,10 +134,7 @@ public class Viewpostcontrolleur {
                     HBox commentRow = new HBox(10);
                     commentRow.setStyle("-fx-padding: 5px; -fx-alignment: center-left;");
 
-
-
                     Label userNameLabel = new Label(commentaire.getNom());
-
                     userNameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
                     userNameLabel.setStyle("-fx-text-fill: black;");
 
@@ -139,21 +148,36 @@ public class Viewpostcontrolleur {
                     commentLabel.setMaxWidth(400);
                     commentLabel.setStyle("-fx-text-fill: #555; -fx-padding: 5px;");
 
-                    Button deleteCommentButton = new Button("❌");
-                    deleteCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
-                    deleteCommentButton.setOnAction(event -> handleDeleteComment(String.valueOf(commentaire.getId_com()), postBox));
-
-                    Button updateCommentButton = new Button("✏️");
-                    updateCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
-
                     HBox commentHeader = new HBox(5, userNameLabel, dateLabelComment);
-                    VBox commentBox = new VBox(3, commentHeader, commentLabel, new Separator());
-                    commentBox.setStyle("-fx-padding: 5px; -fx-background-radius: 5px;");
+                    HBox.setHgrow(commentHeader, Priority.ALWAYS); // Étend l'espace disponible
 
-                    commentRow.getChildren().addAll(commentBox, updateCommentButton, deleteCommentButton);
+                    VBox commentBox = new VBox(3, commentHeader, commentLabel, new Separator());
+                    System.out.println("Utilisateur du commentaire : " + commentaire.getId_user() +
+                            " | Utilisateur connecté : " + idUserConnecte);
+                    if (commentaire.getId_user() == idUserConnecte) {
+                        System.out.println("Ajout des boutons pour l'utilisateur connecté.");
+
+                        Button deleteCommentButton = new Button("❌");
+                        deleteCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
+                        deleteCommentButton.setOnAction(event -> handleDeleteComment(String.valueOf(commentaire.getId_com()), postBox));
+
+                        Button updateCommentButton = new Button("✏️");
+                        updateCommentButton.setStyle("-fx-background-color: transparent; -fx-text-fill: blue;");
+                        updateCommentButton.setOnAction(event -> handleUpdateComment(commentaire));
+
+                        Region spacer = new Region();
+                        HBox.setHgrow(spacer, Priority.ALWAYS); // Pousse les boutons à droite
+
+                        commentHeader.getChildren().addAll(spacer, updateCommentButton, deleteCommentButton);
+                    }
+
+
+                    commentRow.getChildren().add(commentBox);
                     commentsContainer.getChildren().add(commentRow);
                 }
             }
+
+
 
             HBox postActionButtons = new HBox(10);
             postActionButtons.setAlignment(Pos.CENTER_LEFT);
@@ -311,32 +335,32 @@ public class Viewpostcontrolleur {
     }
 
 
-    private void handleDeleteComment(String contenu, VBox postContainer) {
-        Commentaire commentaireToDelete = null;
-        for (Commentaire c : serviceCommentaire.getAll()) {
-            if (c.getContenu().equals(contenu)) {
-                commentaireToDelete = c;
-                break;
-            }
-        }
-        if (commentaireToDelete != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Supprimer le commentaire");
-            alert.setHeaderText("Êtes-vous sûr de vouloir supprimer ce commentaire ?");
-            alert.setContentText("Cette action est irréversible.");
+    private void handleDeleteComment(String commentId, VBox postBox) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText("Voulez-vous vraiment supprimer ce commentaire ?");
+        alert.setContentText("Cette action est irréversible.");
 
-            ButtonType yesButton = new ButtonType("Oui");
-            ButtonType noButton = new ButtonType("Non", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(yesButton, noButton);
+        ButtonType buttonYes = new ButtonType("Oui");
+        ButtonType buttonNo = new ButtonType("Non", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == yesButton) {
-                serviceCommentaire.delete(commentaireToDelete);
-                afficherPosts(); // Rafraîchir l'interface
-                System.out.println("Commentaire supprimé !");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonYes) {
+            try {
+                int id_com = Integer.parseInt(commentId); // Convertir l'ID en entier
+                serviceCommentaire.deleteComment(id_com); // Utiliser la bonne méthode
+                afficherPosts(); // Rafraîchir l'affichage
+                System.out.println("Commentaire supprimé avec succès !");
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : ID du commentaire invalide.");
             }
+        } else {
+            System.out.println("Suppression annulée.");
         }
     }
+
+
     private void handleAddComment(ActionEvent event, int postId, TextArea commentaireField) {
         String commentaireText = commentaireField.getText();
 
@@ -388,8 +412,37 @@ public class Viewpostcontrolleur {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }private void handleUpdateComment(Commentaire commentaire) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Modifier le commentaire");
 
+        VBox dialogVbox = new VBox(10);
+        dialogVbox.setStyle("-fx-padding: 20px;");
+
+        TextField commentField = new TextField(commentaire.getContenu());
+
+        dialogVbox.getChildren().add(commentField);
+        dialog.getDialogPane().setContent(dialogVbox);
+
+        ButtonType updateButton = new ButtonType("Modifier", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(updateButton, cancelButton);
+
+        dialog.setResultConverter(button -> {
+            if (button == updateButton) {
+                return commentField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(newContent -> {
+            commentaire.setContenu(newContent);
+            serviceCommentaire.update(commentaire);  // Remplacer 'updateComment' par 'update'
+            afficherPosts(); // Rafraîchir l'affichage
+            System.out.println("Commentaire modifié avec succès !");
+        });
+    }
 
 
 }

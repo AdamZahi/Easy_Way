@@ -6,8 +6,6 @@ import com.vonage.client.sms.SmsSubmissionResponseMessage;
 import com.vonage.client.sms.messages.TextMessage;
 import tn.esprit.interfaces.IEvent;
 import tn.esprit.models.Events.Evenements;
-import tn.esprit.models.Events.StatusEvenement;
-import tn.esprit.models.Events.TypeEvenement;
 import tn.esprit.util.MyDataBase;
 
 import java.sql.*;
@@ -23,19 +21,19 @@ public class ServiceEvenement implements IEvent<Evenements> {
 
     @Override
     public void add(Evenements evenements) {
-        String query = "INSERT INTO `evenement`(`type`, `description`, `date_debut`, `date_fin`, `ligne_affectee`, `statut`, `id_createur`) " +
+        String query = "INSERT INTO `evenement`(`type`, `description`, `date_debut`, `date_fin`, `ligne_affectee`, `status`, `id_createur`) " +
                 "VALUES (?,?,?,?,?,?,?)";
         List<Integer> userIds = null;
         List<Integer> phoneNumbers = null;
         try (Connection conn = MyDataBase.getInstance().getCnx();
              PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, evenements.getType_evenement().name());//type event
+            ps.setString(1, evenements.getType_evenement());//type event
             ps.setString(2, evenements.getDescription());// description
             ps.setDate(3, new java.sql.Date(evenements.getDate_debut().getTime()));// date debut
             ps.setDate(4, new java.sql.Date(evenements.getDate_fin().getTime()));// date fin
             ps.setInt(5, evenements.getId_ligne_affectee());// id ligne affected
-            ps.setString(6, evenements.getStatus_evenement().name()); // status event
+            ps.setString(6, evenements.getStatus_evenement()); // status event
             ps.setInt(7, evenements.getId_createur());
 
             int affectedRows = ps.executeUpdate();
@@ -58,7 +56,7 @@ public class ServiceEvenement implements IEvent<Evenements> {
                 TextMessage message = new TextMessage("Easy Way",
                         "+216"+phoneNumber,  // Replace with the recipient's number
                         "\uD83D\uDEA8 A new event has been created on your reserved line!\n" +
-                        "Type: "+evenements.getType_evenement().toString()+"\n"+
+                        "Type: "+evenements.getType_evenement()+"\n"+
                         "Description: "+evenements.getDescription()+"\n");
 
                 SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
@@ -95,11 +93,11 @@ public class ServiceEvenement implements IEvent<Evenements> {
                 Evenements event = new Evenements();
                 event.setId_event(rs.getInt("id_evenement"));
                 event.setId_ligne_affectee(rs.getInt("ligne_affectee"));
-                event.setType_evenement(TypeEvenement.fromString(rs.getString("type")));
+                event.setType_evenement(rs.getString("type"));
                 event.setDescription(rs.getString("description"));
                 event.setDate_debut(rs.getDate("date_debut"));
                 event.setDate_fin(rs.getDate("date_fin"));
-                event.setStatus_evenement(StatusEvenement.fromString(rs.getString("statut")));
+                event.setStatus_evenement(rs.getString("status"));
 
                 events.add(event);
             }
@@ -120,12 +118,12 @@ public class ServiceEvenement implements IEvent<Evenements> {
             if (rs.next()) {
 
                 event = new Evenements(rs.getInt("id_evenement"),
-                        TypeEvenement.fromString(rs.getString("type")),
+                        rs.getString("type"),
                         rs.getInt("ligne_affectee"),
                         rs.getString("description"),
                         rs.getDate("date_debut"),
                         rs.getDate("date_fin"),
-                        StatusEvenement.fromString(rs.getString("statut")),
+                        rs.getString("status"),
                         rs.getInt("id_createur")
                 );
             }
@@ -137,15 +135,15 @@ public class ServiceEvenement implements IEvent<Evenements> {
 
     @Override
     public void update(Evenements evenements) {
-        String query = "UPDATE `evenement` SET `type`=?,`description`=?,`date_debut`=?,`date_fin`=?,`ligne_affectee`=?,`statut`=? WHERE id_evenement = ?";
+        String query = "UPDATE `evenement` SET `type`=?,`description`=?,`date_debut`=?,`date_fin`=?,`ligne_affectee`=?,`status`=? WHERE id_evenement = ?";
         try {
             PreparedStatement pstm = cnx.prepareStatement(query);
-            pstm.setString(1,evenements.getType_evenement().name());//type event
+            pstm.setString(1,evenements.getType_evenement());//type event
             pstm.setString(2,evenements.getDescription());// description
             pstm.setDate(3,evenements.getDate_debut());// date debut
             pstm.setDate(4,evenements.getDate_fin());// date fin
             pstm.setInt(5,evenements.getId_ligne_affectee());// id ligne affected
-            pstm.setString(6,evenements.getStatus_evenement().name()); // status event
+            pstm.setString(6,evenements.getStatus_evenement()); // status event
             pstm.setInt(7,evenements.getId_event());
 
             int rowsUpdated = pstm.executeUpdate();

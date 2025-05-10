@@ -1,15 +1,26 @@
 package tn.esprit.controller.user;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import tn.esprit.models.user.Conducteur;
 import tn.esprit.models.user.User;
 import tn.esprit.services.user.ServiceConducteur;
 import tn.esprit.services.user.ServiceUser;
 
+import java.io.IOException;
+
 public class ConducteurController {
+
+    @FXML
+    private Label component;
 
     @FXML
     private TextField numeroPermisField;
@@ -112,5 +123,13 @@ public class ConducteurController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    @FXML
+    void RedirectToSignIn(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignIn.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) component.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }

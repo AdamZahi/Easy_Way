@@ -3,54 +3,53 @@ package tn.esprit.models.user;
 import java.time.LocalDateTime;
 
 public class User {
+
     public enum Role {
-        Conducteur , Passager , Admin
+        ROLE_PASSAGER,
+        ROLE_CONDUCTEUR,
+        ROLE_ADMIN;
     }
 
     private int id_user;
     private String nom;
     private String prenom;
     private String email;
-    private String mot_de_passe;
+    private String password;
     private int telephonne;  // Corrigé "telephonne" en "telephone"
     private String photo_profil;
     private LocalDateTime dateCreation;
-    private Role role;
+    private Role roles; // Rôle de l'utilisateur (stocké comme une chaîne)
 
-    public User(String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, Role role) {
+    // Constantes pour les rôles
+    public static final String ROLE_PASSAGER = "ROLE_PASSAGER";
+    public static final String ROLE_CONDUCTEUR = "ROLE_CONDUCTEUR";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+    // Constructeur avec tous les attributs
+    public User(String nom, String prenom, String email, String password, int telephonne, String photo_profil, Role roles) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.mot_de_passe = mot_de_passe;
+        this.password = password;
         this.telephonne = telephonne;
         this.photo_profil = photo_profil;
-        this.role = role;
+        this.roles = roles;
     }
-    // ✅ Ajouter un constructeur qui prend uniquement `id_user`
+
+    // Constructeur qui prend uniquement `id_user` (utile pour récupérer un utilisateur par son ID)
     public User(int id_user) {
         this.id_user = id_user;
     }
 
-
-
-//    // ✅ Constructeur sans ID (pour création d'utilisateur)
-//    public User(String nom, String prenom, String email, String mot_de_passe, int telephonne, String photo_profil, Role role) {
-//        this(0, nom, prenom, email, mot_de_passe, telephonne, photo_profil, role, LocalDateTime.now());
-//    }
-//
-    // ✅ Constructeur simplifié pour récupération utilisateur (sans mot de passe)
-//    public User( String nom, String prenom, String email) {
-//        this( nom, prenom, email );
-//    }
-
-    // ✅ Constructeur spécial sans téléphone ni photo
-    public User(String nom, String prenom, String email, String mot_de_passe, Role role) {
-        this(nom, prenom, email, mot_de_passe, 0, null, role);
+    // Constructeur spécial sans téléphone ni photo
+    public User(String nom, String prenom, String email, String password, Role roles) {
+        this(nom, prenom, email, password, 0, null, roles);
     }
 
+    // Constructeur par défaut
     public User() {}
 
-    // ✅ Getters et Setters
+    // Getters et Setters
     public int getId_user() {
         return id_user;
     }
@@ -84,11 +83,11 @@ public class User {
     }
 
     public String getMot_de_passe() {
-        return mot_de_passe;
+        return password;
     }
 
-    public void setMot_de_passe(String mot_de_passe) {
-        this.mot_de_passe = mot_de_passe;
+    public void setMot_de_passe(String password) {
+        this.password = password;
     }
 
     public int getTelephonne() {
@@ -116,14 +115,14 @@ public class User {
     }
 
     public Role getRole() {
-        return role;
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(Role roles) {
+        this.roles = roles;
     }
 
-
+    // Méthode pour afficher l'utilisateur sous forme de chaîne
     @Override
     public String toString() {
         return "User{" +
@@ -131,10 +130,10 @@ public class User {
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
-                ", telephone=" + telephonne +
+                ", telephonne=" + telephonne +
                 ", photo_profil='" + photo_profil + '\'' +
                 ", dateCreation=" + dateCreation +
-                ", role=" + role +
+                ", role='" + roles + '\'' +
                 '}';
     }
 }

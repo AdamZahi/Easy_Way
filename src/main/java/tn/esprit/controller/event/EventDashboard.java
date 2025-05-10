@@ -1,5 +1,6 @@
 package tn.esprit.controller.event;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -128,6 +129,15 @@ public class EventDashboard implements Initializable {
 
         eventChart.getData().clear();
         eventChart.getData().add(series);
+    }
+
+    @FXML
+    void RedirectToEvent(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Evenement/eventTable.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) grid.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     private void openEditPage(Evenements event) {

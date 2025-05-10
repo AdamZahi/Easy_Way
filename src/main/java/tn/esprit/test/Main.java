@@ -12,7 +12,7 @@ import tn.esprit.models.trajet.Reservation;
 
 import tn.esprit.services.event.ServiceEvenement;
 import tn.esprit.services.event.ServiceTwilio;
-
+import tn.esprit.models.trajet.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,6 +30,9 @@ public class Main {
         for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
             System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
         }
-    }
 
+    }
 }
+//Tunis, Tunisia
+//mourouj
+//sfax
