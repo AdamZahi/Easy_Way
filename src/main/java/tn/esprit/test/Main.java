@@ -14,7 +14,6 @@ public class Main {
 
         // Créer une instance de ton service qui contient la méthode add
         ServiceAdmin Serviceadmin = new ServiceAdmin(); // suppose que ta classe s'appelle comme ça
-
         // Appeler la méthode d'ajout
         Serviceadmin.add(admin);
     }
