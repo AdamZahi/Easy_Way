@@ -51,6 +51,11 @@ public class SignInController {
             showAlert("Erreur", "Veuillez remplir tous les champs.", Alert.AlertType.ERROR);
             return;
         }
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            showAlert("Erreur", "Format d'e-mail invalide.", Alert.AlertType.ERROR);
+            return;
+        }
+
 
         // Vérifier si l'utilisateur existe
         User user = serviceUser.getUserByEmail(email);
@@ -76,7 +81,7 @@ public class SignInController {
                     showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR);
                 }
             } else {
-                showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR);
+                showAlert("Erreur de connexion", "Email ou mot de passe incorrect.", Alert.AlertType.ERROR);
             }
         }
     }
@@ -117,4 +122,19 @@ public class SignInController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void redirectTo(String fxmlPath, MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger " + fxmlPath, Alert.AlertType.ERROR);
+        }
+    }
+
 }

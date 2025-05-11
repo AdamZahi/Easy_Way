@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import tn.esprit.models.user.Conducteur;
 import tn.esprit.models.user.User;
@@ -23,24 +22,17 @@ public class ConducteurController {
     private Label component;
 
     @FXML
-    private TextField numeroPermisField;
-
-    @FXML
-    private TextField experienceField;
-
-    @FXML
     private Button createAccountButton;
 
     private final ServiceConducteur conducteurService;
     private final ServiceUser userService;
-    private User user; // Stocke l'utilisateur reçu depuis SignUpController
+    private User user;
 
     public ConducteurController() {
         this.conducteurService = new ServiceConducteur();
         this.userService = new ServiceUser();
     }
 
-    // ✅ Méthode pour recevoir l'utilisateur depuis SignUpController
     public void setUser(User user) {
         this.user = user;
         System.out.println("✅ Utilisateur reçu dans ConducteurController : ID = " + user.getId_user());
@@ -63,58 +55,33 @@ public class ConducteurController {
             return;
         }
 
-        // 🔹 1️⃣ Vérifier si l'utilisateur existe déjà
         int idUser = userService.getUserIdByEmail(user.getEmail());
 
-        if (idUser == 0) { // Si l'utilisateur n'existe pas, on l'ajoute
+        if (idUser == 0) {
             userService.add(user);
-            idUser = userService.getUserIdByEmail(user.getEmail()); // Récupérer son ID
+            idUser = userService.getUserIdByEmail(user.getEmail());
             System.out.println("✅ Utilisateur ajouté avec ID : " + idUser);
         } else {
             System.out.println("ℹ️ Utilisateur déjà existant avec ID : " + idUser);
         }
 
-        user.setId_user(idUser); // Associer l'ID à l'utilisateur
+        user.setId_user(idUser);
 
-        // 🔹 2️⃣ Vérification des champs conducteur
-        String numeroPermis = numeroPermisField.getText().trim();
-        String experience = experienceField.getText().trim();
-
-        if (!validerChamps(numeroPermis, experience)) {
-            return;
-        }
-
-        // 🔹 3️⃣ Création du conducteur
         Conducteur conducteur = new Conducteur(
-                idUser, // Utiliser le même ID utilisateur
+                idUser,
                 user.getNom(),
                 user.getPrenom(),
                 user.getEmail(),
                 user.getMot_de_passe(),
                 user.getTelephonne(),
                 user.getPhoto_profil(),
-                numeroPermis,
-                experience
+                0, // nb_trajet_effectues
+                0  // nb_passager_transportes
         );
 
-        // 🔹 4️⃣ Ajout du conducteur
         conducteurService.add(conducteur);
         System.out.println("🚀 Conducteur ajouté avec ID utilisateur : " + idUser);
         afficherAlerte("Succès", "Conducteur ajouté avec succès !");
-    }
-
-    private boolean validerChamps(String numeroPermis, String experience) {
-        if (numeroPermis.isEmpty() || experience.isEmpty()) {
-            afficherAlerte("Validation", "Tous les champs sont obligatoires !");
-            return false;
-        }
-
-        if (!numeroPermis.matches("\\d{8}")) {
-            afficherAlerte("Validation", "Le numéro de permis doit contenir exactement 8 chiffres !");
-            return false;
-        }
-
-        return true;
     }
 
     private void afficherAlerte(String titre, String message) {
@@ -124,6 +91,7 @@ public class ConducteurController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     @FXML
     void RedirectToSignIn(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/SignIn.fxml"));

@@ -1,38 +1,20 @@
-//package tn.esprit.test;
-//
-//import com.vonage.client.VonageClient;
-//import com.vonage.client.sms.SmsSubmissionResponse;
-//import com.vonage.client.sms.SmsSubmissionResponseMessage;
-//import com.vonage.client.sms.messages.TextMessage;
-//import tn.esprit.services.user.ServiceConducteur ;
-//
-//import tn.esprit.services.trajet.ServicePaiement;
-//import tn.esprit.services.trajet.ServiceReservation;
-//import tn.esprit.models.trajet.Reservation;
-//
-//import tn.esprit.services.event.ServiceEvenement;
-//import tn.esprit.services.event.ServiceTwilio;
-//import tn.esprit.models.trajet.Map;
+//import tn.esprit.models.user.Admin;
 //
 //public class Main {
 //    public static void main(String[] args) {
-//        VonageClient client = VonageClient.builder().apiKey("c8c34ce3")
-//                .apiSecret("FChHt3T5SB9XvulI")
-//                .build();
+//        // Créer un objet Admin avec des données fictives
+//        Admin admin = new Admin();
+//        admin.setNom("Doe");
+//        admin.setPrenom("Jane");
+//        admin.setEmail("jane.doe@example.com");
+//        admin.setMot_de_passe("admin123");
+//        admin.setTelephonne(12345678);
+//        admin.setPhoto_profil("jane.png"); // tu peux aussi mettre null
 //
+//        // Créer une instance de ton service qui contient la méthode add
+//        ServiceAdmin Serviceadmin = new ServiceAdmin(); // suppose que ta classe s'appelle comme ça
 //
-//        TextMessage message = new TextMessage("Easy Way",
-//                "+21694103115",  // Replace with the recipient's number
-//                "🚨 just adam ytesti f api SMS!");
-//
-//        SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
-//
-//        for (SmsSubmissionResponseMessage messageResponse : response.getMessages()) {
-//            System.out.println("📩 SMS Sent! Status: " + messageResponse.getStatus());
-//        }
-//
+//        // Appeler la méthode d'ajout
+//        Serviceadmin.add(admin);
 //    }
 //}
-////Tunis, Tunisia
-////mourouj
-////sfax

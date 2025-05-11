@@ -15,71 +15,122 @@ public  class ServiceConducteur implements IService<Conducteur> {
         cnx = MyDataBase.getInstance().getCnx();
     }
 
+    @Override
     public void add(Conducteur conducteur) {
         Connection cnx = null;
         PreparedStatement pstmUser = null;
         PreparedStatement pstmConducteur = null;
+        ResultSet resultSet = null;
         ResultSet generatedKeys = null;
 
         try {
-            // 🔹 Récupération de la connexion sans fermeture automatique
             cnx = MyDataBase.getInstance().getCnx();
+            cnx.setAutoCommit(false);
 
-            // 1️⃣ Insérer dans la table 'user' avec le rôle 'Conducteur'
-            String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
-            pstmUser.setString(1, conducteur.getNom());
-            pstmUser.setString(2, conducteur.getPrenom());
-            pstmUser.setString(3, conducteur.getEmail());
-            pstmUser.setString(4, conducteur.getMot_de_passe());
-            pstmUser.setInt(5, conducteur.getTelephonne());
-            pstmUser.setString(6, conducteur.getPhoto_profil());
-            pstmUser.setString(7, "Conducteur");
+            // Vérifier si l'utilisateur existe déjà
+            String checkUserQuery = "SELECT id_user FROM user WHERE email = ?";
+            pstmUser = cnx.prepareStatement(checkUserQuery);
+            pstmUser.setString(1, conducteur.getEmail());
+            resultSet = pstmUser.executeQuery();
 
-            int affectedRows = pstmUser.executeUpdate();
-            if (affectedRows > 0) {
+            int idUser = -1;
+            boolean userExists = false;
+
+            if (resultSet.next()) {
+                idUser = resultSet.getInt("id_user");
+                userExists = true;
+                System.out.println("ℹ️ Utilisateur déjà existant avec ID : " + idUser);
+            } else {
+                // Champs obligatoires
+                if (conducteur.getNom() == null || conducteur.getNom().isEmpty() ||
+                        conducteur.getPrenom() == null || conducteur.getPrenom().isEmpty() ||
+                        conducteur.getEmail() == null || conducteur.getEmail().isEmpty() ||
+                        conducteur.getMot_de_passe() == null || conducteur.getMot_de_passe().isEmpty()) {
+                    System.out.println("❌ Un champ obligatoire est vide.");
+                    return;
+                }
+
+                // Insertion dans `user`
+                String insertUserQuery = "INSERT INTO user (nom, prenom, email, password, telephonne, photo_profil, roles) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                pstmUser = cnx.prepareStatement(insertUserQuery, Statement.RETURN_GENERATED_KEYS);
+                pstmUser.setString(1, conducteur.getNom());
+                pstmUser.setString(2, conducteur.getPrenom());
+                pstmUser.setString(3, conducteur.getEmail());
+                pstmUser.setString(4, conducteur.getMot_de_passe());
+                pstmUser.setInt(5, conducteur.getTelephonne());
+                pstmUser.setString(6, conducteur.getPhoto_profil() != null ? conducteur.getPhoto_profil() : "default_profile.png");
+                pstmUser.setString(7, "[\"ROLE_CONDUCTEUR\"]");
+
+                int affectedRows = pstmUser.executeUpdate();
+                if (affectedRows == 0) {
+                    System.out.println("❌ Insertion user échouée.");
+                    cnx.rollback();
+                    return;
+                }
+
                 generatedKeys = pstmUser.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    int id_user = generatedKeys.getInt(1);
-                    System.out.println("✅ Utilisateur ajouté avec ID : " + id_user);
-
-                    // 2️⃣ Insérer dans la table 'conducteur' avec `permis_conduire` et `experience`
-                    String queryConducteur = "INSERT INTO conducteur (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, numero_permis, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    pstmConducteur = cnx.prepareStatement(queryConducteur);
-                    pstmConducteur.setInt(1, id_user);
-                    pstmConducteur.setString(2, conducteur.getNom());
-                    pstmConducteur.setString(3, conducteur.getPrenom());
-                    pstmConducteur.setString(4, conducteur.getEmail());
-                    pstmConducteur.setString(5, conducteur.getMot_de_passe());
-                    pstmConducteur.setInt(6, conducteur.getTelephonne());
-                    pstmConducteur.setString(7, conducteur.getPhoto_profil());
-                    pstmConducteur.setString(8, conducteur.getNumero_permis()); // 🚗 Numéro du permis
-                    pstmConducteur.setString(9, conducteur.getExperience()); // 🏆 Nombre d'années d'expérience
-
-                    int rowsInserted = pstmConducteur.executeUpdate();
-                    if (rowsInserted > 0) {
-                        System.out.println("✅ Conducteur ajouté avec succès !");
-                    } else {
-                        System.out.println("⚠️ Erreur lors de l'ajout du conducteur.");
-                    }
+                    idUser = generatedKeys.getInt(1);
+                    System.out.println("✅ Utilisateur créé avec ID : " + idUser);
+                } else {
+                    System.out.println("❌ ID user non généré.");
+                    cnx.rollback();
+                    return;
                 }
-            } else {
-                System.out.println("❌ Aucune ligne insérée dans la table user.");
             }
+
+            // Vérifie si ce user est déjà conducteur
+            String checkConducteurQuery = "SELECT * FROM conducteur WHERE id_user = ?";
+            PreparedStatement checkConducteurStmt = cnx.prepareStatement(checkConducteurQuery);
+            checkConducteurStmt.setInt(1, idUser);
+            ResultSet conducteurCheckResult = checkConducteurStmt.executeQuery();
+            if (conducteurCheckResult.next()) {
+                System.out.println("⚠️ Ce conducteur est déjà enregistré.");
+                cnx.rollback();
+                return;
+            }
+
+            // Insertion dans `conducteur` (avec TOUS les champs obligatoires)
+            String insertConducteurQuery = "INSERT INTO conducteur (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil, nb_trajet_effectues, nb_passagers_transportes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            pstmConducteur = cnx.prepareStatement(insertConducteurQuery);
+            pstmConducteur.setInt(1, idUser);
+            pstmConducteur.setString(2, conducteur.getNom());
+            pstmConducteur.setString(3, conducteur.getPrenom());
+            pstmConducteur.setString(4, conducteur.getEmail());
+            pstmConducteur.setString(5, conducteur.getMot_de_passe());
+            pstmConducteur.setInt(6, conducteur.getTelephonne());
+            pstmConducteur.setString(7, conducteur.getPhoto_profil() != null ? conducteur.getPhoto_profil() : "default_profile.png");
+            pstmConducteur.setInt(8, conducteur.getNb_trajet_effectues());
+            pstmConducteur.setInt(9, conducteur.getNb_passagers_transportes());
+
+            int rowsInserted = pstmConducteur.executeUpdate();
+            if (rowsInserted > 0) {
+                cnx.commit();
+                System.out.println("✅ Conducteur ajouté avec succès !");
+            } else {
+                System.out.println("⚠️ Échec insertion conducteur.");
+                cnx.rollback();
+            }
+
         } catch (SQLException e) {
             System.out.println("⚠️ Erreur SQL : " + e.getMessage());
+            try {
+                if (cnx != null) cnx.rollback();
+            } catch (SQLException ex) {
+                System.out.println("⚠️ Erreur rollback : " + ex.getMessage());
+            }
         } finally {
             try {
-                // ❗ Fermeture des ressources sauf la connexion
+                if (resultSet != null) resultSet.close();
                 if (generatedKeys != null) generatedKeys.close();
                 if (pstmUser != null) pstmUser.close();
                 if (pstmConducteur != null) pstmConducteur.close();
-            } catch (SQLException e) {
-                System.out.println("⚠️ Erreur lors de la fermeture des ressources : " + e.getMessage());
+                if (cnx != null) cnx.setAutoCommit(true);
+            } catch (SQLException ex) {
+                System.out.println("⚠️ Erreur fermeture : " + ex.getMessage());
             }
         }
     }
-
 
 
 
@@ -95,14 +146,8 @@ public  class ServiceConducteur implements IService<Conducteur> {
             while (rs.next()) {
                 Conducteur c = new Conducteur(
                         //rs.getInt("id_conducteur"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getInt("telephonne"),
-                        rs.getString("photo_profil"),
-                        rs.getString("numero_permis"),
-                        rs.getString("experience")
+                        rs.getInt("nb_trajet_effectues"),
+                        rs.getInt("nb_passagers_transportes")
                 );
                 conducteurs.add(c);
             }
@@ -125,14 +170,8 @@ public  class ServiceConducteur implements IService<Conducteur> {
             if (rs.next()) {
                 conducteur = new Conducteur(
                         rs.getInt("id_conducteur"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getInt("telephonne"),
-                        rs.getString("photo_profil"),
-                        rs.getString("numero_permis"),
-                        rs.getString("experience")
+                        rs.getInt("nb_trajet_effectues"),
+                        rs.getInt("nb_passagers_transportes")
                 );
             }
         } catch (SQLException e) {
@@ -140,11 +179,9 @@ public  class ServiceConducteur implements IService<Conducteur> {
         }
         return conducteur;
     }
+
     @Override
     public void update(Conducteur conducteur) {
-
-
-
         String queryUser = "UPDATE user SET nom = ?, prenom = ?, email = ?, mot_de_passe = ?, telephonne = ?, photo_profil = ? WHERE id_user = ?";
 
         try {
@@ -165,33 +202,25 @@ public  class ServiceConducteur implements IService<Conducteur> {
                 System.out.println("Aucun utilisateur trouvé avec l'ID " + conducteur.getId_user());
             }
 
-
-            String queryConducteur = "UPDATE conducteur SET nom = ?, prenom = ?, email = ?, mot_de_passe = ? , telephonne= ? , photo_profil = ? , numero_permis = ? , experience = ? WHERE id_user = ?";
+            String queryConducteur = "UPDATE conducteur SET nb_trajet_effectues = ?, nb_passagers_transportes = ? WHERE id_user = ?";
             PreparedStatement pstmConducteur = cnx.prepareStatement(queryConducteur);
 
-            pstmConducteur.setString(1, conducteur.getNom());
-            pstmConducteur.setString(2, conducteur.getPrenom());
-            pstmConducteur.setString(3, conducteur.getEmail());
-            pstmConducteur.setString(4, conducteur.getMot_de_passe());
-            pstmConducteur.setInt(5, conducteur.getTelephonne());
-            pstmConducteur.setString(6, conducteur.getPhoto_profil());
-            pstmConducteur.setString(7, conducteur.getNumero_permis());
-            pstmConducteur.setString(8, conducteur.getExperience());
+            pstmConducteur.setInt(1, conducteur.getNb_trajet_effectues());
+            pstmConducteur.setInt(2, conducteur.getNb_passagers_transportes());
 
-            pstmConducteur.setInt(9, conducteur.getId_user());
+            pstmConducteur.setInt(3, conducteur.getId_user());
 
             int rowsUpdatedConducteur = pstmConducteur.executeUpdate();
             if (rowsUpdatedConducteur > 0) {
-                System.out.println("le conducteur avec ID utilisateur " + conducteur.getId_user() + " a été mis à jour avec succès.");
+                System.out.println("Le conducteur avec ID utilisateur " + conducteur.getId_user() + " a été mis à jour avec succès.");
             } else {
-                System.out.println("Aucun Conducteur  trouvé avec l'ID utilisateur " + conducteur.getId_user());
+                System.out.println("Aucun conducteur trouvé avec l'ID utilisateur " + conducteur.getId_user());
             }
 
         } catch (SQLException e) {
             System.out.println("Erreur lors de la mise à jour du conducteur : " + e.getMessage());
         }
     }
-
 
     @Override
     public void delete(Conducteur conducteur) {
@@ -225,6 +254,4 @@ public  class ServiceConducteur implements IService<Conducteur> {
             System.out.println("Erreur lors de la suppression : " + e.getMessage());
         }
     }
-
-
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class MyDataBase {
     private static MyDataBase instance;
     private Connection cnx;
-    final String URL = "jdbc:mysql://127.0.0.1:3306/reclamation1";
+    final String URL = "jdbc:mysql://127.0.0.1:3306/easy_way";
     final String USERNAME = "root";
     final String PASSWORD = "";
 

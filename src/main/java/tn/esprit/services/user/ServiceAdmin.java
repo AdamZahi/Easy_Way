@@ -16,50 +16,110 @@ public class ServiceAdmin implements IService<Admin> {
     }
 
     public void add(Admin admin) {
+        Connection cnx = null;
+        PreparedStatement pstmUser = null;
+        PreparedStatement pstmAdmin = null;
+        ResultSet generatedKeys = null;
+
         try {
-            // 1️⃣ Insérer dans la table 'user' pour ajouter un utilisateur
-            String queryUser = "INSERT INTO user (nom, prenom, email, mot_de_passe, telephonne, photo_profil) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
-            pstmUser.setString(1, admin.getNom());
-            pstmUser.setString(2, admin.getPrenom());
-            pstmUser.setString(3, admin.getEmail());
-            pstmUser.setString(4, admin.getMot_de_passe());
-            pstmUser.setInt(5, admin.getTelephonne());
-            pstmUser.setString(6, admin.getPhoto_profil());
+            cnx = MyDataBase.getInstance().getCnx();
+            cnx.setAutoCommit(false);
 
-            // Exécution de la requête et récupération de l'ID généré
-            int affectedRows = pstmUser.executeUpdate();
-            if (affectedRows > 0) {
-                // Récupérer l'ID généré de l'utilisateur
-                ResultSet generatedKeys = pstmUser.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int id_user = generatedKeys.getInt(1);  // ID généré pour l'utilisateur
-
-                    // 2️⃣ Insérer dans la table 'admin' avec l'ID de l'utilisateur
-                    String queryAdmin = "INSERT INTO admin (id_user , nom , prenom , email, mot_de_passe , telephonne, photo_profil) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement pstmAdmin = cnx.prepareStatement(queryAdmin);
-                    pstmAdmin.setInt(1, id_user);  // ID de l'utilisateur inséré dans la table 'admin'
-                    pstmAdmin.setString(2, admin.getNom());
-                    pstmAdmin.setString(3, admin.getPrenom());
-                    pstmAdmin.setString(4, admin.getEmail());
-                    pstmAdmin.setString(5, admin.getMot_de_passe());
-                    pstmAdmin.setInt(6, admin.getTelephonne());
-                    pstmAdmin.setString(7, admin.getPhoto_profil());
-
-                    int rowsInserted = pstmAdmin.executeUpdate();
-                    if (rowsInserted > 0) {
-                        System.out.println("Admin ajouté avec succès !");
-                    } else {
-                        System.out.println("Erreur lors de l'ajout de l'admin dans la table admin.");
-                    }
-                }
-            } else {
-                System.out.println("Aucune ligne insérée dans la table user.");
+            // Vérification des champs obligatoires
+            if (admin.getNom() == null || admin.getNom().isEmpty() ||
+                    admin.getPrenom() == null || admin.getPrenom().isEmpty() ||
+                    admin.getEmail() == null || admin.getEmail().isEmpty() ||
+                    admin.getMot_de_passe() == null || admin.getMot_de_passe().isEmpty()) {
+                System.out.println("❌ Un champ obligatoire est vide.");
+                return;
             }
+
+            // Vérifier si l'utilisateur existe déjà
+            String checkQuery = "SELECT id_user FROM user WHERE email = ?";
+            pstmUser = cnx.prepareStatement(checkQuery);
+            pstmUser.setString(1, admin.getEmail());
+            ResultSet rs = pstmUser.executeQuery();
+
+            int id_user = -1;
+
+            if (rs.next()) {
+                id_user = rs.getInt("id_user");
+                System.out.println("ℹ️ Utilisateur déjà existant avec ID : " + id_user);
+            } else {
+                // Insertion dans user avec rôle ADMIN
+                String queryUser = "INSERT INTO user (nom, prenom, email, password, telephonne, photo_profil, roles) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                pstmUser = cnx.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+                pstmUser.setString(1, admin.getNom());
+                pstmUser.setString(2, admin.getPrenom());
+                pstmUser.setString(3, admin.getEmail());
+                pstmUser.setString(4, admin.getMot_de_passe());
+                pstmUser.setInt(5, admin.getTelephonne());
+                pstmUser.setString(6, admin.getPhoto_profil() != null ? admin.getPhoto_profil() : "default_profile.png");
+                pstmUser.setString(7, "[\"ROLE_ADMIN\"]");
+
+                int affectedRows = pstmUser.executeUpdate();
+                if (affectedRows == 0) {
+                    System.out.println("❌ Insertion user échouée.");
+                    cnx.rollback();
+                    return;
+                }
+
+                generatedKeys = pstmUser.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    id_user = generatedKeys.getInt(1);
+                    System.out.println("✅ Utilisateur admin créé avec ID : " + id_user);
+                } else {
+                    System.out.println("❌ ID user non généré.");
+                    cnx.rollback();
+                    return;
+                }
+            }
+
+            // Vérifier si admin déjà existant
+            String checkAdminQuery = "SELECT id_admin FROM admin WHERE id_user = ?";
+            PreparedStatement checkAdminStmt = cnx.prepareStatement(checkAdminQuery);
+            checkAdminStmt.setInt(1, id_user);
+            ResultSet rsAdmin = checkAdminStmt.executeQuery();
+
+            if (rsAdmin.next()) {
+                System.out.println("⚠️ Cet admin est déjà enregistré.");
+                cnx.rollback();
+                return;
+            }
+
+            // Insertion dans table admin
+            String queryAdmin = "INSERT INTO admin (id_user) VALUES (?)";
+            pstmAdmin = cnx.prepareStatement(queryAdmin);
+            pstmAdmin.setInt(1, id_user);
+
+            int rowsInserted = pstmAdmin.executeUpdate();
+            if (rowsInserted > 0) {
+                cnx.commit();
+                System.out.println("✅ Admin ajouté avec succès !");
+            } else {
+                System.out.println("❌ Échec insertion admin.");
+                cnx.rollback();
+            }
+
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de l'admin : " + e.getMessage());
+            System.out.println("⚠️ Erreur SQL : " + e.getMessage());
+            try {
+                if (cnx != null) cnx.rollback();
+            } catch (SQLException ex) {
+                System.out.println("⚠️ Erreur rollback : " + ex.getMessage());
+            }
+        } finally {
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+                if (pstmUser != null) pstmUser.close();
+                if (pstmAdmin != null) pstmAdmin.close();
+                if (cnx != null) cnx.setAutoCommit(true);
+            } catch (SQLException ex) {
+                System.out.println("⚠️ Erreur fermeture : " + ex.getMessage());
+            }
         }
     }
+
 
 
     @Override
