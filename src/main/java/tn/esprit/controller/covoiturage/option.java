@@ -19,7 +19,7 @@ public class option {
     @FXML
     private void option(ActionEvent event) {
         try {
-            // Charger le fichier gestioncov.fxml
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Gestioncov.fxml"));
             Parent gestionCovRoot = loader.load();
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
