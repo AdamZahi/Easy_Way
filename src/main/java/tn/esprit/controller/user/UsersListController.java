@@ -37,27 +37,36 @@ public class UsersListController {
             System.out.println("Erreur : GridPane non trouvé.");
             return;
         }
+
+        // Vider le GridPane avant d'ajouter les utilisateurs
+        userGridPane.getChildren().clear();
+
         User currentUser = userService.getById(SessionManager.getInstance().getId_user());
         image.setImage(new Image(new File(currentUser.getPhoto_profil()).toURI().toString()));
-        username.setText(currentUser.getNom()+" "+currentUser.getPrenom());
+        username.setText(currentUser.getNom() + " " + currentUser.getPrenom());
+
         userList = userService.getAll();
         if (userList.isEmpty()) {
             System.out.println("Aucun utilisateur trouvé.");
             return;
         }
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         int row = 1;
         for (User u : userList) {
             final int currentRow = row;
 
-            userGridPane.add(new Label(String.valueOf(u.getId_user())), 0, row);
+            // Conversion des valeurs en String avant de les ajouter au GridPane
+            userGridPane.add(new Label(String.valueOf(u.getId_user())), 0, row);  // id_user est un int
             userGridPane.add(new Label(u.getNom()), 1, row);
             userGridPane.add(new Label(u.getPrenom()), 2, row);
             userGridPane.add(new Label(u.getEmail()), 3, row);
             userGridPane.add(new Label(u.getMot_de_passe()), 4, row);
-            userGridPane.add(new Label(String.valueOf(u.getTelephonne())), 5, row);
+            userGridPane.add(new Label(String.valueOf(u.getTelephonne())), 5, row);  // telephonne est un int
             userGridPane.add(new Label(u.getPhoto_profil()), 6, row);
+
+            // Si roles est un enum, on le convertit en String avec toString()
             userGridPane.add(new Label(u.getRole().toString()), 7, row);
 
             Button deleteButton = new Button("Supprimer");
@@ -74,11 +83,18 @@ public class UsersListController {
         System.out.println("Affichage des utilisateurs terminé !");
     }
 
+    @FXML
     private void deleteUser(User user) {
+        // Appeler le service pour supprimer l'utilisateur
         userService.delete(user);
+
+        // Afficher une alerte pour informer l'utilisateur de la suppression
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Utilisateur supprimé avec succès !");
+
+        // Rafraîchir la liste des utilisateurs après suppression
         refreshUserList();
     }
+
 
     @FXML
     private void handleDeleteUser(ActionEvent event) {

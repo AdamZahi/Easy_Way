@@ -43,50 +43,64 @@ public class SignInController {
     }
 
     @FXML
-    void SignIn(ActionEvent event) {
-        String email = emailField.getText().trim();
-        String mdp = MdpField.getText().trim();
+    private void SignIn(ActionEvent event) {
+        String email = emailField.getText();
+        String mdp = MdpField.getText();
 
+        // Vérifier que les champs ne sont pas vides
         if (email.isEmpty() || mdp.isEmpty()) {
             showAlert("Erreur", "Veuillez remplir tous les champs.", Alert.AlertType.ERROR);
             return;
         }
-        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Erreur", "Format d'e-mail invalide.", Alert.AlertType.ERROR);
+
+        // Rechercher l'utilisateur par email
+        ServiceUser us = new ServiceUser();
+        User user = us.getUserByEmail(email);
+
+        if (user == null) {
+            showAlert("Erreur", "Utilisateur non trouvé.", Alert.AlertType.ERROR);
             return;
         }
 
+        // Vérification du mot de passe (à adapter si tu utilises BCrypt ou un autre mécanisme de hachage)
+        if (!user.getMot_de_passe().equals(mdp)) {
+            showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR);
+            return;
+        }
 
-        // Vérifier si l'utilisateur existe
-        User user = serviceUser.getUserByEmail(email);
+        // Affichage pour débogage
+        System.out.println("Utilisateur trouvé : " + user);
+        System.out.println("Rôle de l'utilisateur : " + user.getRole());
 
-        if (user == null) {
-            showAlert("Erreur", "Utilisateur non trouvé. Vérifiez votre email.", Alert.AlertType.ERROR);
-        } else {
-            // Comparer le mot de passe avec BCrypt
-            if (BCrypt.checkpw(mdp, user.getMot_de_passe())) {
-                showAlert("Succès", "Connexion réussie !", Alert.AlertType.INFORMATION);
+        // Redirection selon le rôle
+        try {
+            FXMLLoader loader;
+            Parent root;
 
-                // Stocker l'utilisateur dans la session
-                SessionManager.getInstance().setId_user(user.getId_user());
-
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/choix.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) signInButton.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    showAlert("Erreur", "Impossible de charger l'interface utilisateur.", Alert.AlertType.ERROR);
-                }
+            // Vérification du rôle et redirection
+            if (user.getRole() == User.Role.ROLE_ADMIN) {
+                loader = new FXMLLoader(getClass().getResource("/user//UsersList.fxml"));
+                System.out.println("Redirection vers AdminDashboard");
+            } else if (user.getRole() == User.Role.ROLE_CONDUCTEUR) {
+                loader = new FXMLLoader(getClass().getResource("/Covoiturage/choix.fxml"));
+                System.out.println("Redirection vers ConducteurDashboard");
+            } else if (user.getRole() == User.Role.ROLE_PASSAGER) {
+                loader = new FXMLLoader(getClass().getResource("/Covoiturage/choix.fxml"));
+                System.out.println("Redirection vers PassagerDashboard");
             } else {
-                showAlert("Erreur de connexion", "Email ou mot de passe incorrect.", Alert.AlertType.ERROR);
+                showAlert("Erreur", "Rôle utilisateur inconnu.", Alert.AlertType.ERROR);
+                return;
             }
+
+            // Charger la vue de la nouvelle page
+            root = loader.load();
+            emailField.getScene().setRoot(root);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger l'interface.", Alert.AlertType.ERROR);
         }
     }
-
-
 
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type); // Utilisation du type passé en paramètre

@@ -15,6 +15,8 @@ public class ServiceAdmin implements IService<Admin> {
         cnx = MyDataBase.getInstance().getCnx();
     }
 
+
+    @Override
     public void add(Admin admin) {
         Connection cnx = null;
         PreparedStatement pstmUser = null;
@@ -75,22 +77,17 @@ public class ServiceAdmin implements IService<Admin> {
                 }
             }
 
-            // Vérifier si admin déjà existant
-            String checkAdminQuery = "SELECT id_admin FROM admin WHERE id_user = ?";
-            PreparedStatement checkAdminStmt = cnx.prepareStatement(checkAdminQuery);
-            checkAdminStmt.setInt(1, id_user);
-            ResultSet rsAdmin = checkAdminStmt.executeQuery();
-
-            if (rsAdmin.next()) {
-                System.out.println("⚠️ Cet admin est déjà enregistré.");
-                cnx.rollback();
-                return;
-            }
-
-            // Insertion dans table admin
-            String queryAdmin = "INSERT INTO admin (id_user) VALUES (?)";
+            // Insertion dans la table admin
+            String queryAdmin = "INSERT INTO admin (id_user, nom, prenom, email, mot_de_passe, telephonne, photo_profil) VALUES (?, ?, ?, ?, ?, ?, ?)";
             pstmAdmin = cnx.prepareStatement(queryAdmin);
-            pstmAdmin.setInt(1, id_user);
+
+            pstmAdmin.setInt(1, id_user); // Utiliser l'ID utilisateur pour lier les deux tables
+            pstmAdmin.setString(2, admin.getNom());
+            pstmAdmin.setString(3, admin.getPrenom());
+            pstmAdmin.setString(4, admin.getEmail());
+            pstmAdmin.setString(5, admin.getMot_de_passe());
+            pstmAdmin.setInt(6, admin.getTelephonne());
+            pstmAdmin.setString(7, admin.getPhoto_profil() != null ? admin.getPhoto_profil() : "default_profile.png");
 
             int rowsInserted = pstmAdmin.executeUpdate();
             if (rowsInserted > 0) {
@@ -119,7 +116,6 @@ public class ServiceAdmin implements IService<Admin> {
             }
         }
     }
-
 
 
     @Override
