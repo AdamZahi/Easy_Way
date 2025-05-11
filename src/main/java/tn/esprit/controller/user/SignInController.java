@@ -62,11 +62,11 @@ public class SignInController {
             return;
         }
 
-        // Vérification du mot de passe (à adapter si tu utilises BCrypt ou un autre mécanisme de hachage)
-        if (!user.getMot_de_passe().equals(mdp)) {
+        if (!BCrypt.checkpw(mdp, user.getMot_de_passe())) {
             showAlert("Erreur", "Mot de passe incorrect.", Alert.AlertType.ERROR);
             return;
         }
+
 
         // Affichage pour débogage
         System.out.println("Utilisateur trouvé : " + user);
