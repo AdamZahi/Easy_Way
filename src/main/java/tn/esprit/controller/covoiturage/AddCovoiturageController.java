@@ -150,10 +150,10 @@ public class AddCovoiturageController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Covoiturage/Choix.fxml"));
             Parent root = loader.load();
 
-            // Get current stage
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Set new scene
+
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {

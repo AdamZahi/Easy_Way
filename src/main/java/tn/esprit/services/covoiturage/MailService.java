@@ -19,7 +19,7 @@
             properties.put("mail.smtp.starttls.enable", "true");
             properties.put("mail.smtp.host", SMTP_HOST);
             properties.put("mail.smtp.port", SMTP_PORT);
-            properties.put("mail.smtp.ssl.trust", SMTP_HOST); // Pour éviter certaines erreurs SSL
+            properties.put("mail.smtp.ssl.trust", SMTP_HOST);
 
             Session session = Session.getInstance(properties, new Authenticator() {
                 @Override
@@ -39,7 +39,7 @@
                 message.setSubject(subject);
                 message.setText(messageText);
 
-                // Pour envoyer un email en HTML (optionnel)
+
                 message.setContent("<h2>" + subject + "</h2><p>" + messageText + "</p>", "text/html");
 
                 Transport.send(message);
